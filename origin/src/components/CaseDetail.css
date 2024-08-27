@@ -1,0 +1,117 @@
+.case-detail {
+  border: 1px solid #ccc;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+
+.button-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.dashboard-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.dashboard-button:hover {
+  background-color: #0056b3;
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 20px;
+  color: "#9900FF";
+}
+
+.tabs button {
+  padding: 10px 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: black;
+}
+
+.tabs button.active {
+  background-color: #ddd;
+  font-weight: bold;
+  color: black;
+}
+
+.tab-content {
+  padding: 20px 0;
+}
+
+.actions {
+  margin-top: 20px;
+}
+
+.actions h3 {
+  margin-bottom: 10px;
+}
+
+.actions button {
+  display: block;
+  margin-bottom: 10px;
+  padding: 10px;
+  width: 100%;
+  max-width: 200px;
+  cursor: pointer;
+}
+
+.text-line {
+  border: 1px solid #000; /* Black border */
+  padding: 10px;
+  width:95%;
+  /*display: inline-block; /* Adjust width to content */
+  box-sizing: border-box; /* Include padding and border in the element's total width */
+}
+.text-box {
+  border: 1px solid #000; /* Black border */
+  padding: 10px;
+  width:95%;
+  height:100px;
+  display: inline-block; /* Adjust width to content */
+  box-sizing: border-box; /* Include padding and border in the element's total width */
+}
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tabs button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #f1f1f1;
+  cursor: pointer;
+}
+
+.tabs button.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.tab-content {
+  border-top: 1px solid #ddd;
+  padding: 20px;
+}
+
+.priority-icon {
+  font-size: 1.2em;
+}
+
+.comments-section {
+  margin-top: 20px;
+}
+
+.actions {
+  margin-top: 20px;
+}

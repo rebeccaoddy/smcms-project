@@ -1,0 +1,92 @@
+/* src/components/AddCase.css */
+.student-results {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #ccc;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.student-results li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.student-results li:hover {
+  background-color: #ddd;
+}
+.priority-dropdown {
+  display: block;
+  margin: 10px 0;
+  padding: 8px;
+  width: 100%;
+  max-width: 400px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.priority-dropdown option {
+  padding: 10px;
+  background-repeat: no-repeat;
+  background-size: 20px 20px;
+  background-position: 10px center;
+  padding-left: 40px;
+}
+
+.priority-dropdown .red-flag {
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIzMCIgY3k9IjMwIiByPSIzMCIgZmlsbD0iI0ZGMDAwMCIvPjwvc3ZnPg==');
+}
+
+.priority-dropdown .yellow-flag {
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIzMCIgY3k9IjMwIiByPSIzMCIgZmlsbD0iI0ZGRjAwMDAiLz48L3N2Zz4=');
+}
+
+.priority-dropdown .green-flag {
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIzMCIgY3k9IjMwIiByPSIzMCIgZmlsbD0iIzAwRkYwMDAiLz48L3N2Zz4=');
+}
+
+.category-dropdown {
+  display: block;
+  margin: 10px 0;
+  padding: 8px;
+  width: 100%;
+  max-width: 400px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.category-dropdown option {
+  padding: 10px;
+  background-repeat: no-repeat;
+  background-size: 20px 20px;
+  background-position: 10px center;
+  padding-left: 40px;
+}
+
+.status-dropdown {
+  display: block;
+  margin: 10px 0;
+  padding: 8px;
+  width: 100%;
+  max-width: 400px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.status-dropdown option {
+  padding: 10px;
+  background-repeat: no-repeat;
+  background-size: 20px 20px;
+  background-position: 10px center;
+  padding-left: 40px;
+}
+
+.error {
+  color: red;
+  font-size: 0.875em;
+  margin-top: 0.25em;
+}
