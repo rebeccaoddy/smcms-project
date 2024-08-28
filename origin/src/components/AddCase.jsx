@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import useSearch from '../hooks/useSearch';
+
 import './AddCase.css';
 
 
@@ -8,9 +10,9 @@ const AddCase = ({ addCase, user, setCurrentView }) => {
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState('');
   const [student, setStudent] = useState(''); //  represents CampusID 
-  const [studentResults, setStudentResults] = useState([]); // State to hold user search results for student
+  // const [studentResults, setStudentResults] = useState([]); // State to hold user search results for student
   const [assignedTo, setAssignedTo] = useState(''); 
-  const [userResults, setUserResults] = useState([]); // State to hold user search results for user
+  // const [userResults, setUserResults] = useState([]); // State to hold user search results for user
 
   const [status, setStatus] = useState('');
   const [notes, setNotes] = useState('');
@@ -21,68 +23,82 @@ const AddCase = ({ addCase, user, setCurrentView }) => {
   const categories = ['Student Wellness Concern', 'Student Misdemeanor', 'Administration Issue','Student Academic Dishonesty','Log Appointment','Other' ]; // Example categories
 
 
-  // search student database for student name **** UPDATE TO NUMBER 
-  //Search by CampusID: The student variable is now assumed to contain a CampusID or a similar identifier, rather than the student's name.
+  // Use the custom hook for searching students and users
+  const studentResults = useSearch(student, 'students');
+  const userResults = useSearch(assignedTo, 'auth');
 
-  useEffect(() => {
-    console.log('Searching for student in AddCase line 28:', student);
-    if (student) {
-      const searchStudents = async () => {
-        try {
-          const token = localStorage.getItem('token');
-          const response = await axios.get(`http://localhost:5001/api/students/search?query=${student}`, {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          });
-          console.log("this is the response data in add case line 38:", response.data) // BLANK
-
-          setStudentResults(response.data);  //setting empty array to response data
-        } catch (error) {
-          console.error('Error searching students', error);
-        }
-      };
-
-
-      searchStudents();
-    } else {
-      setStudentResults([]);
-    }
-  }, [student]);
-
-  // search user database for username
-  useEffect(() => {
-    if (assignedTo) {
-      const searchUsers = async () => {
-        try {
-          const token = localStorage.getItem('token');
-          const response = await axios.get(`http://localhost:5001/api/auth/search?query=${assignedTo}`, {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          });
-          setUserResults(response.data);
-        } catch (error) {
-          console.error('Error searching users', error);
-        }
-      };
-  
-      searchUsers();
-    } else {
-      setUserResults([]);
-    }
-  }, [assignedTo]);
 
   const handleStudentSelect = (selectedStudent) => {
-    //setStudent(selectedStudent.name); 
-    setStudent(selectedStudent._id); // Store object ID 
-    setStudentResults([]);
+    setStudent(selectedStudent._id); // Store object ID
   };
 
   const handleUserSelect = (selectedUser) => {
     setAssignedTo(selectedUser._id); // Store user object ID or username
-    setUserResults([]);
   };
+
+
+  // search student database for student name **** UPDATE TO NUMBER 
+  //Search by CampusID: The student variable is now assumed to contain a CampusID or a similar identifier, rather than the student's name.
+
+  // useEffect(() => {
+  //   console.log('Searching for student in AddCase line 28:', student);
+  //   if (student) {
+  //     const searchStudents = async () => {
+  //       try {
+  //         const token = localStorage.getItem('token');
+  //         const response = await axios.get(`http://localhost:5001/api/students/search?query=${student}`, {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`
+  //           }
+  //         });
+  //         console.log("this is the response data in add case line 38:", response.data) // BLANK
+
+  //         setStudentResults(response.data);  //setting empty array to response data
+  //       } catch (error) {
+  //         console.error('Error searching students', error);
+  //       }
+  //     };
+
+
+  //     searchStudents();
+  //   } else {
+  //     setStudentResults([]);
+  //   }
+  // }, [student]);
+
+  // search user database for username
+  // useEffect(() => {
+  //   if (assignedTo) {
+  //     const searchUsers = async () => {
+  //       try {
+  //         const token = localStorage.getItem('token');
+  //         const response = await axios.get(`http://localhost:5001/api/auth/search?query=${assignedTo}`, {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`
+  //           }
+  //         });
+  //         setUserResults(response.data);
+  //       } catch (error) {
+  //         console.error('Error searching users', error);
+  //       }
+  //     };
+  
+  //     searchUsers();
+  //   } else {
+  //     setUserResults([]);
+  //   }
+  // }, [assignedTo]);
+
+  // // const handleStudentSelect = (selectedStudent) => {
+  // //   //setStudent(selectedStudent.name); 
+  // //   setStudent(selectedStudent._id); // Store object ID 
+  // //   setStudentResults([]);
+  // // };
+
+  // const handleUserSelect = (selectedUser) => {
+  //   setAssignedTo(selectedUser._id); // Store user object ID or username
+  //   setUserResults([]);
+  // };
   
 
 
@@ -144,8 +160,7 @@ const AddCase = ({ addCase, user, setCurrentView }) => {
       setCategory(''); 
       setErrors({}); 
       // setCreatedBy('')
-      // Switch to the case list view if form submission is successful
-      setCurrentView('list');
+      setCurrentView('list');// Switch to the case list view if form submission is successful
   } catch (error) {
     console.error('Error adding case', error);
   }
@@ -222,7 +237,7 @@ const AddCase = ({ addCase, user, setCurrentView }) => {
         <option value="">Select Status</option>
         <option value="Open" >Open</option>
         <option value="Pending" > Pending</option>
-        <option value="Cosed" > Closed</option>
+        <option value="Closed" > Closed</option>
       </select>
       {errors.status && <p className="error">{errors.status}</p>} {/* Display error if any */}
 

@@ -42,16 +42,19 @@ app.use(bodyParser.json());
 
 
 //connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/NewDB')
-// mongoose.connect('mongodb://<username>:<password>@<cluster-url>/<database-name>', {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-// })
-  .then(() => {
-    console.log('Connected to MongoDB');
-  }).catch((error) => {
-    console.error('Error connecting to MongoDB', error);
-  });
+// mongoose.connect('mongodb://localhost:27017/NewDB')
+// // mongoose.connect('mongodb://<username>:<password>@<cluster-url>/<database-name>', {
+// //   useNewUrlParser: true,
+// //   useUnifiedTopology: true,
+// // })
+//   .then(() => {
+//     console.log('Connected to MongoDB');
+//   }).catch((error) => {
+//     console.error('Error connecting to MongoDB', error);
+//   });
+mongoose.connect("mongodb+srv://shrunkslinky:zd8ahxlgfCtgQCKD@cluster0.yg82kew.mongodb.net/MainDB")
+.then(() => console.log('Connected to MongoDB Atlas'))
+.catch((error) => console.error('Error connecting to MongoDB Atlas:', error));
 
 // Serve static files from the "uploads" directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
