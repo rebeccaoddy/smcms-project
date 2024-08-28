@@ -28,6 +28,7 @@
     "jspdf": "^2.5.1",
     "moment": "^2.30.1",
     "mongoose": "^8.3.5",
+    "nodemon": "^3.1.4",
     "react": "^18.3.1",
     "react-big-calendar": "^1.13.1",
     "react-calendar": "^5.0.0",
@@ -43,7 +44,9 @@
     "yup": "^1.4.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "client": "react-scripts start",
+    "server": "nodemon server/index.js",
+    "start": "concurrently \"npm run client\" \"npm run server\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

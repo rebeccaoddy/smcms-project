@@ -38,7 +38,9 @@ app.use(cors({
  
  app.use(bodyParser.json()); 
 
-mongoose.connect("mongodb://127.0.0.1:27017/NewDB")
+ mongoose.connect("mongodb+srv://shrunkslinky:zd8ahxlgfCtgQCKD@cluster0.yg82kew.mongodb.net/MainDB")
+ .then(() => console.log('Connected to MongoDB Atlas'))
+ .catch((error) => console.error('Error connecting to MongoDB Atlas:', error));
 
  
 app.get('/getCourses', (req, res) => {
