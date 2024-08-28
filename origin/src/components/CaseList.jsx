@@ -13,6 +13,26 @@ const CaseList = ({ cases, setCases, selectCase, user, setCurrentView }) => {
   const [searchPriority, setSearchPriority] = useState('');
   const [searchStatus, setSearchStatus] = useState('');
 
+  const [sortConfig, setSortConfig] = useState({ key: '', direction: '' });// sort the cases array based on the selected column and the current sorting direction.
+
+  const handleSort = (key) => {
+    let direction = 'ascending';
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
+    }
+    setSortConfig({ key, direction });
+  };
+  
+  const sortedCases = cases.sort((a, b) => {
+    if (a[sortConfig.key] < b[sortConfig.key]) {
+      return sortConfig.direction === 'ascending' ? -1 : 1;
+    }
+    if (a[sortConfig.key] > b[sortConfig.key]) {
+      return sortConfig.direction === 'ascending' ? 1 : -1;
+    }
+    return 0;
+  });
+
   
   useEffect(() => {
     const fetchCases = async () => {
@@ -47,16 +67,19 @@ const CaseList = ({ cases, setCases, selectCase, user, setCurrentView }) => {
     }
   };
 
-
+//handle search function eg search by category/stuentID/priority/status
   const filterCases = (caseItem) => {
-    return (
-      //(searchTitle === '' || caseItem.title.toLowerCase().includes(searchTitle.toLowerCase())) &&
-      (searchCategory === '' || caseItem.category.toLowerCase().includes(searchCategory.toLowerCase())) &&
-      (searchStudent === '' || (caseItem.student && caseItem.student.CampusID.toLowerCase().includes(searchStudent.toLowerCase()))) &&
-      (searchPriority === '' || caseItem.priority.toLowerCase().includes(searchPriority.toLowerCase())) &&
-      (searchStatus === '' || caseItem.status.toLowerCase().includes(searchStatus.toLowerCase()))
-    );
-  };
+    const lowerSearchQuery = searchQuery.toLowerCase();
+  return (
+    caseItem.category.toLowerCase().includes(lowerSearchQuery) ||
+    (caseItem.student && caseItem.student.CampusID.toLowerCase().includes(lowerSearchQuery)) ||
+    caseItem.priority.toLowerCase().includes(lowerSearchQuery) ||
+    caseItem.status.toLowerCase().includes(lowerSearchQuery)||
+    caseItem.assignedTo.username.toLowerCase().includes(lowerSearchQuery)
+  );
+};
+
+//const filteredCases = sortedCases.filter(filterCases);
 
 //filter cases by assigned to and created by 
   const filteredCases = cases.filter(
@@ -77,41 +100,65 @@ const CaseList = ({ cases, setCases, selectCase, user, setCurrentView }) => {
       <div className="search-container">
   <input
     type="text"
-    placeholder="Search by Category"
-    value={searchCategory}
-    onChange={(e) => setSearchCategory(e.target.value)}
-  />
-  <input
-    type="text"
-    placeholder="Search by Student"
-    value={searchStudent}
-    onChange={(e) => setSearchStudent(e.target.value)}
-  />
-  <input
-    type="text"
-    placeholder="Search by Priority"
-    value={searchPriority}
-    onChange={(e) => setSearchPriority(e.target.value)}
-  />
-  <input
-    type="text"
-    placeholder="Search by Status"
-    value={searchStatus}
-    onChange={(e) => setSearchStatus(e.target.value)}
+    placeholder="Search by ..."
+    value={searchQuery}
+    onChange={(e) => setSearchQuery(e.target.value)}
   />
 </div>
       <h3>My Cases</h3>
       <table>
         <thead>
           <tr>
-          <th>Priority</th>
-            <th>Category</th>
-            <th>Studen Number</th>
-            <th>Assigned To</th>
-            <th>Date Created</th>
-            <th>Status</th>
-            <th>Notes</th>
-            <th>Actions</th>
+          <th
+      onClick={() => handleSort('priority')}
+      className={
+        sortConfig.key === 'priority' ? (sortConfig.direction === 'ascending' ? 'sort-asc' : 'sort-desc') : ''
+      }
+    >
+      Priority
+    </th>
+    <th
+      onClick={() => handleSort('category')}
+      className={
+        sortConfig.key === 'category' ? (sortConfig.direction === 'ascending' ? 'sort-asc' : 'sort-desc') : ''
+      }
+    >
+      Category
+    </th>
+    <th
+      onClick={() => handleSort('student')}
+      className={
+        sortConfig.key === 'student' ? (sortConfig.direction === 'ascending' ? 'sort-asc' : 'sort-desc') : ''
+      }
+    >
+      Student
+    </th>
+    <th
+      onClick={() => handleSort('assignedTo')}
+      className={
+        sortConfig.key === 'assignedTo' ? (sortConfig.direction === 'ascending' ? 'sort-asc' : 'sort-desc') : ''
+      }
+    >
+      Assigned To
+    </th>
+    <th
+      onClick={() => handleSort('dateCreated')}
+      className={
+        sortConfig.key === 'dateCreated' ? (sortConfig.direction === 'ascending' ? 'sort-asc' : 'sort-desc') : ''
+      }
+    >
+      Date Created
+    </th>
+    <th
+      onClick={() => handleSort('status')}
+      className={
+        sortConfig.key === 'status' ? (sortConfig.direction === 'ascending' ? 'sort-asc' : 'sort-desc') : ''
+      }
+    >
+      Status
+    </th>
+          <th>Notes</th>
+          <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -146,14 +193,56 @@ const CaseList = ({ cases, setCases, selectCase, user, setCurrentView }) => {
       <table>
         <thead>
           <tr>
-          <th>Priority</th>
-            <th>Category</th>
-            <th>Student Number</th>
-            <th>Assigned To</th>
-            <th>Date Created</th>
-            <th>Status</th>
-            <th>Notes</th>
-            <th>Actions</th>
+          <th
+      onClick={() => handleSort('priority')}
+      className={
+        sortConfig.key === 'priority' ? (sortConfig.direction === 'ascending' ? 'sort-asc' : 'sort-desc') : ''
+      }
+    >
+      Priority
+    </th>
+    <th
+      onClick={() => handleSort('category')}
+      className={
+        sortConfig.key === 'category' ? (sortConfig.direction === 'ascending' ? 'sort-asc' : 'sort-desc') : ''
+      }
+    >
+      Category
+    </th>
+    <th
+      onClick={() => handleSort('student')}
+      className={
+        sortConfig.key === 'student' ? (sortConfig.direction === 'ascending' ? 'sort-asc' : 'sort-desc') : ''
+      }
+    >
+      Student
+    </th>
+    <th
+      onClick={() => handleSort('assignedTo')}
+      className={
+        sortConfig.key === 'assignedTo' ? (sortConfig.direction === 'ascending' ? 'sort-asc' : 'sort-desc') : ''
+      }
+    >
+      Assigned To
+    </th>
+    <th
+      onClick={() => handleSort('dateCreated')}
+      className={
+        sortConfig.key === 'dateCreated' ? (sortConfig.direction === 'ascending' ? 'sort-asc' : 'sort-desc') : ''
+      }
+    >
+      Date Created
+    </th>
+    <th
+      onClick={() => handleSort('status')}
+      className={
+        sortConfig.key === 'status' ? (sortConfig.direction === 'ascending' ? 'sort-asc' : 'sort-desc') : ''
+      }
+    >
+      Status
+    </th>
+          <th>Notes</th>
+          <th>Actions</th>
           </tr>
         </thead>
         <tbody>
