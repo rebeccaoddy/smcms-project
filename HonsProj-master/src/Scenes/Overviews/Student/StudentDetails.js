@@ -10,6 +10,8 @@ import BarChart from '../../../components/BarChart';
 import GraphToggleButton from '../../../components/GraphToggleButton';
 import Header from '../../../components/Header';
 import RadarChart from '../../../components/RadarChart';
+import { Link } from "react-router-dom";
+
 
 const getRiskColor = (riskLevel) => {
     switch (riskLevel) {
@@ -273,6 +275,24 @@ Object.entries(foundStudent.Years).forEach(([year, yearData]) => {
           <Typography variant="h5">Birth Date: {student.BirthDate.slice(0, 10)}</Typography>
           <Typography variant="h5">Ethnicity: {student.PopulationGrp}</Typography>
           <Typography variant="h5">Gender: {student.Gender}</Typography>
+          <Button
+            variant="contained"
+            onClick={() => {
+                navigate(`/cases?studentId=${student.CampusID}`); // Ensure correct string interpolation
+                console.log("Navigating with student campusID:", student.CampusID);
+            }}
+            sx={{
+                ml: 1,
+                backgroundColor: colors.primary[400],
+                color: colors.grey[100],
+                '&:hover': {
+                backgroundColor: colors.primary[700],
+                },
+                mb: 1,
+            }}
+            >
+            View Student Cases
+            </Button>
           
       </Box>
     </Box>

@@ -134,7 +134,7 @@ const NavBar = () => {
                 icon={<PersonOutlineOutlinedIcon />}
               >
                 <Typography>
-                  <Link to="/secondary" style={{ textDecoration: 'none', color: 'inherit' }}>
+                  <Link to="/cases" style={{ textDecoration: 'none', color: 'inherit' }}>
                     Second Application
                   </Link>
                 </Typography>

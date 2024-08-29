@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import useSearch from '../hooks/useSearch';
+import { useNavigate } from 'react-router-dom';
+
 
 import './AddCase.css';
 
 
-const AddCase = ({ addCase, user, setCurrentView }) => {
+const AddCase = ({ addCase, user }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState('');
@@ -18,6 +20,8 @@ const AddCase = ({ addCase, user, setCurrentView }) => {
   const [notes, setNotes] = useState('');
   const [category, setCategory] = useState(''); // New state for category
   const [errors, setErrors] = useState({}); // State for storing error messages
+  const navigate = useNavigate();
+
 
 
   const categories = ['Student Wellness Concern', 'Student Misdemeanor', 'Administration Issue','Student Academic Dishonesty','Log Appointment','Other' ]; // Example categories
@@ -160,7 +164,8 @@ const AddCase = ({ addCase, user, setCurrentView }) => {
       setCategory(''); 
       setErrors({}); 
       // setCreatedBy('')
-      setCurrentView('list');// Switch to the case list view if form submission is successful
+
+      navigate('/cases');  
   } catch (error) {
     console.error('Error adding case', error);
   }

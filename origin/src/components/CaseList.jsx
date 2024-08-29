@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './CaseList.css';
+import { useNavigate } from 'react-router-dom';
 
-const CaseList = ({ cases, setCases, selectCase, user, setCurrentView }) => {
+
+const CaseList = ({ cases, setCases, selectCase, user }) => {
   //const [searchKeyword, setSearchKeyword] = useState('');
   //const [studentNames, setStudentNames] = useState({});
   //const [filterCriteria, setFilterCriteria] = useState('title'); // Default filter criteria
@@ -12,6 +14,8 @@ const CaseList = ({ cases, setCases, selectCase, user, setCurrentView }) => {
   const [searchStudent, setSearchStudent] = useState('');
   const [searchPriority, setSearchPriority] = useState('');
   const [searchStatus, setSearchStatus] = useState('');
+  const navigate = useNavigate();
+
 
   const [sortConfig, setSortConfig] = useState({ key: '', direction: '' });// sort the cases array based on the selected column and the current sorting direction.
 
@@ -94,7 +98,7 @@ const CaseList = ({ cases, setCases, selectCase, user, setCurrentView }) => {
     <div>
       <h2>Case List</h2>
       {/* Add Case Button */}
-      <button onClick={() => setCurrentView('add')} className="add-case-button">
+      <button onClick={() => navigate('/cases/add')} className="add-case-button">
         New Case
       </button>
       <div className="search-container">
