@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-const Register = ({ setUser, setCurrentView }) => {
+
+const Register = ({ setUser }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -11,7 +15,7 @@ const Register = ({ setUser, setCurrentView }) => {
       const response = await axios.post('http://localhost:5001/api/auth/register', { username, password });
       localStorage.setItem('token', response.data.token); // Store the token
       setUser(response.data);
-      setCurrentView('list');
+      navigate('/cases');
     } catch (error) {
       console.error('Error registering', error);
     }

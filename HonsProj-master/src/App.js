@@ -2,6 +2,7 @@ import React from 'react';
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import Topbar from "./Scenes/Global/TopBar";
 import Sidebar from "./Scenes/Global/NavBar";
 import Faculty from "./Scenes/Overviews/Faculty";
@@ -14,13 +15,29 @@ import CourseDetail from "./Scenes/Overviews/Course/CourseDetail";
 import BarChart from "./components/BarChart";
 import ProgramDetail from "./Scenes/Overviews/Program/ProgramDetail";
 
-const SecondaryApp = () => (
-  <iframe
-    src="http://localhost:5173"  // Change to the port where the secondary app is running
-    style={{ width: '100%', height: '100vh', border: 'none' }}
-    title="Secondary Application"
-  />
-);
+
+//updated this to handle direct link and link with studentId 
+const SecondaryApp = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const studentId = queryParams.get('studentId');
+  
+  console.log("this is the student objectID:", studentId); // This should log the actual studentId
+
+  const iframeSrc = studentId
+    ? `http://localhost:5173/student-details?studentId=${studentId}` // Append studentId to the URL
+    : `http://localhost:5173/cases`;
+
+  console.log("This is the iframe URL:", iframeSrc); // Debugging 
+
+  return (
+    <iframe
+      src={iframeSrc}
+      style={{ width: '100%', height: '100vh', border: 'none' }}
+      title="Secondary Application"
+    />
+  );
+};
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -44,7 +61,7 @@ function App() {
                 <Route path="/Course" element={<Course />} />
                 <Route path="/course/:CourseCode" element={<CourseDetail />} />
                 <Route path="/program/:ProgramCode" element={<ProgramDetail />} />
-                <Route path="/secondary" element={<SecondaryApp />} />  {/* Add this line */}
+                <Route path="/cases" element={<SecondaryApp />} />  {/* Add this line */}
               </Routes>
             </main>
           </div>

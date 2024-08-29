@@ -7,6 +7,8 @@ import SidePanel from './components/SidePanel';
 import Login from './components/Login';
 import Register from './components/Register';
 import StudentDetailPage from './components/StudentDetailPage';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+
 
 ///testing commit to branch
 import './App.css';
@@ -14,10 +16,12 @@ import './App.css';
 const App = () => {
   const [cases, setCases] = useState([]);
   const [selectedCase, setSelectedCase] = useState(null);
-  const [currentView, setCurrentView] = useState('list'); // Initially set to login
+  //const [currentView, setCurrentView] = useState('list'); // Initially set to login
   const [user, setUser] = useState(null);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
   const [selectedStudentNumber, setSelectedStudentNumber] = useState(null);
+  const navigate = useNavigate(); // Use this to navigate programmatically
+
 
 
 
@@ -33,19 +37,19 @@ const App = () => {
             },
           });
           setUser(response.data);
-          setCurrentView('list'); // Set view to 'list' if user is authenticated
+          ////navigate('/cases'); // Navigate to the case list if authenticated
         } catch (error) {
           console.error('Error fetching user', error);
           setUser(null);
-          setCurrentView('login'); // Redirect to login if authentication fails
+          navigate('/login'); // Redirect to login if no token
         }
       } else {
         setUser(null);
-        setCurrentView('login'); // Redirect to login if no token
+        navigate('/login'); // Redirect to login if no token
       }
     };
     fetchUser();
-  }, []);
+  }, [navigate]);
 
   //create a new case 
   const addCase = (newCase) => {
@@ -59,7 +63,7 @@ const App = () => {
     const caseDetail = cases.find((c) => c._id === caseId);
     console.log('Selected Case:', caseDetail); // Add this line for debugging
     setSelectedCase(caseDetail);
-    setCurrentView('detail');
+    navigate('/cases/detail'); // Navigate to case detail view
   };
 
   // //view student id --DELETE ???
@@ -73,7 +77,7 @@ const App = () => {
   const handleLogout = () => {
     localStorage.removeItem('token'); // Clear the token from localStorage
     setUser(null);
-    setCurrentView('login');
+    navigate('/login'); // Redirect to login after logout
   };
 
 
@@ -89,35 +93,44 @@ const App = () => {
     <div className="App">
       <SidePanel 
         user={user} 
-        setCurrentView={setCurrentView} 
+        //setCurrentView={setCurrentView} 
         handleLogout={handleLogout} 
         setSelectedStudentNumber={setSelectedStudentNumber} //pass setter function
         />
       <div className="content">
         <h1>Case Management System</h1>
-        {user ? (
-          <>
-            {currentView === 'add' && <AddCase addCase={addCase} setCurrentView={setCurrentView} user={user} />}
-            {currentView === 'list' && <CaseList cases={cases} setCases={setCases} setCurrentView={setCurrentView} selectCase={selectCase} user={user} />}
-            {currentView === 'detail' && selectedCase && (
-            <CaseDetail caseDetail={selectedCase} onUpdateCase={onUpdateCase} setSelectedStudentNumber={setSelectedStudentNumber} setCurrentView={setCurrentView} 
+          <Routes>
+            <Route
+              path="/login"
+              element={<Login setUser={setUser} />}
             />
-          )}
-            {currentView === 'profile' && <div>Profile View</div>}
-            {currentView === 'studentDetails' && selectedStudentNumber && (
-              <StudentDetailPage CampusID={selectedStudentNumber} selectCase={selectCase} />
-            )}
-          </>
-        ) : (
-          <>
-            {currentView === 'login' && <Login setUser={setUser} setCurrentView={setCurrentView} />}
-            {currentView === 'register' && <Register setUser={setUser} setCurrentView={setCurrentView} />}
-            <button onClick={() => setCurrentView('register')}>Register</button>
-            <button onClick={() => setCurrentView('login')}>Login</button>
-          </>
-        )}
+            <Route
+              path="/register"
+              element={<Register setUser={setUser} />}
+            />
+            <Route
+              path="/cases"
+              element={<CaseList cases={cases} setCases={setCases} selectCase={selectCase} user={user} />}
+            />
+            <Route
+              path="/cases/add"
+              element={<AddCase addCase={addCase} user={user} />}
+            />
+            <Route
+              path="/cases/detail"
+              element={<CaseDetail caseDetail={selectedCase} setSelectedStudentNumber={setSelectedStudentNumber} />}
+            />
+            <Route
+              path="/student-details"
+              element={<StudentDetailPage CampusID={selectedStudentNumber} selectCase={selectCase} />}
+            />
+            {/* <Route
+              path="*"
+              element={user ? <CaseList cases={cases} setCases={setCases} selectCase={selectCase} user={user} /> : <Login setUser={setUser} />}
+            /> */}
+          </Routes>
+        </div>
       </div>
-    </div>
   );
 };
 
