@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getNewStudents } from '../../../Data/StudentDataFolder/StudentData';
-import { Box, Button, Typography, Grid } from '@mui/material';
+import { Box, Button,Divider, Typography, Grid } from '@mui/material';
 import { tokens } from '../../../theme';
 import { useTheme } from '@mui/material/styles';
 import PersonIcon from '@mui/icons-material/Person';
@@ -45,7 +45,8 @@ const getRiskColor = (riskLevel) => {
     const [selectedGrid2, setSelectedGrid2] = useState('NBT');
     const gridOptions2 = ['NBT', 'SCHOOL', 'FA'];
 
-    const [selectedYear, setSelectedYear] = useState('2020'); // Default to 2020 or any year you prefer
+    const [selectedYear, setSelectedYear] = useState('2020');
+    const yearOptions = ['2020', '2021', '2022']; // Default to 2020 or any year you prefer
 
     // Handler for year change
     const handleYearChange = (year) => {
@@ -90,44 +91,60 @@ const getRiskColor = (riskLevel) => {
                 });
                 setGpaData([{ id: "GPA", data: gpaDataArray }]);
         
-                // Marks Extraction
-                const gradeMapping = {
-                    'PA': 50,
-                    'UP': 40,
-                    'DPR': 10,
-                    'AB': 10,
-                };
-        
                 const year1MarksArray = [];
-                const year2MarksArray = [];
-                const year3MarksArray = [];
-                const departmentMarks = {};
-        
-                Object.entries(foundStudent.Years).forEach(([year, yearData]) => {
-                    const courses = yearData.Courses || [];
-                    courses.forEach(course => {
-                        const departmentCode = course.CourseCode.slice(0, 3);
-                        const markValue = gradeMapping[course.GradeCode] !== undefined 
-                            ? gradeMapping[course.GradeCode] 
-                            : parseFloat(course.GradeCode) || 0;
-        
-                        if (!departmentMarks[departmentCode]) {
-                            departmentMarks[departmentCode] = { totalMarks: 0, count: 0 };
-                        }
-        
-                        departmentMarks[departmentCode].totalMarks += markValue;
-                        departmentMarks[departmentCode].count += 1;
-        
-                        const markData = { label: course.CourseCode, value: markValue };
-                        if (year === '2020') {
-                            year1MarksArray.push(markData);
-                        } else if (year === '2021') {
-                            year2MarksArray.push(markData);
-                        } else if (year === '2022') {
-                            year3MarksArray.push(markData);
-                        }
-                    });
-                });
+const year2MarksArray = [];
+const year3MarksArray = [];
+const departmentMarks = {};
+
+Object.entries(foundStudent.Years).forEach(([year, yearData]) => {
+    const courses = yearData.Courses || [];
+    courses.forEach(course => {
+        const departmentCode = course.CourseCode.slice(0, 3);
+
+        // Map categorical grade values to numerical values
+        let markValue;
+        switch (course.GradeCode) {
+            case 'PA':
+                markValue = 50;
+                break;
+            case 'UP':
+            case 'DPR':
+            case 'ABS':
+                markValue = 10;
+                break;
+            default:
+                markValue = parseFloat(course.GradeCode) || 0; // Convert to number if possible, otherwise default to 0
+        }
+
+        // Check if the markValue is numeric and greater than 0
+        const isNumeric = !isNaN(markValue) && markValue > 0;
+
+        // Only aggregate valid marks for department statistics
+        if (isNumeric) {
+            if (!departmentMarks[departmentCode]) {
+                departmentMarks[departmentCode] = { totalMarks: 0, count: 0 };
+            }
+
+            departmentMarks[departmentCode].totalMarks += markValue;
+            departmentMarks[departmentCode].count += 1;
+        }
+    
+
+
+        // Add to the respective year's array
+        const markData = { label: course.CourseCode, value: course.GradeCode };
+        if (year === '2020') {
+            year1MarksArray.push(markData);
+        } else if (year === '2021') {
+            year2MarksArray.push(markData);
+        } else if (year === '2022') {
+            year3MarksArray.push(markData);
+        }
+    });
+});
+
+                
+                
         
                 // Calculate Department Averages
                 const departmentAveragesArray = Object.entries(departmentMarks).map(([dept, data]) => ({
@@ -155,7 +172,7 @@ const getRiskColor = (riskLevel) => {
 }, [id]);
 
     if (!student) return <div>Loading...</div>;
-
+    console.log(year1Marks)
     const availableYears = [
         year1Marks?.length ? '2020' : null,
         year2Marks?.length ? '2021' : null,
@@ -164,21 +181,34 @@ const getRiskColor = (riskLevel) => {
     
     return (
         <Box p={2}>
+        <Box p={0} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        {/* Back Button */}
         <Button
-          variant="contained"
-          onClick={() => navigate(-1)}
-          sx={{
-            ml:1,
+            variant="contained"
+            onClick={() => navigate(-1)}
+            sx={{
             backgroundColor: colors.primary[400], // Set the background color
             color: colors.grey[100], // Set the text color
             '&:hover': {
-              backgroundColor: colors.primary[700], // Set the background color on hover
+                backgroundColor: colors.primary[700], // Set the background color on hover
             },
-            mb: 1 , // Add margin-bottom to create space below the button
-          }}
+            mb: 1, // Add margin-bottom to create space below the button
+            }}
         >
-          Back
+            Back
         </Button>
+
+        {/* Graph Toggle Button */}
+        <GraphToggleButton 
+            options={yearOptions}
+            selectedOption={selectedYear}
+            setSelectedOption={setSelectedYear}
+            sx={{
+            ml: 'auto', // This will push the button to the right if there are elements on its left
+            }}
+        />  
+        </Box>
+        
         <Box
         display="grid"
         gridTemplateColumns="repeat(12, 1fr)"
@@ -271,13 +301,32 @@ const getRiskColor = (riskLevel) => {
         p={2}
         borderRadius="10px"
       
-        > <Typography variant="h3" fontSize="30px" fontWeight="bold" color={colors.grey[100]} mb={1}>
-        Current GPA:
+        > 
+         <Typography variant="h3" fontSize="30px" fontWeight="bold" color={colors.grey[100]} mb={1}>
+            GPA {selectedYear}:
         </Typography>
-        <Typography variant="h1" fontSize="80px" color={colors.grey[100]}>
-        {student.Years["2022"]?.CombinedGPA || student.Years["2021"]?.CombinedGPA || student.Years["2020"]?.CombinedGPA ||'N/A'}
+        <Box sx={{ flexGrow: 1, width: '100%', height: "100%", minHeight: '130px' }}>
+            {selectedYear === '2020' && (
+                <Typography variant="h1" fontSize="80px" color={colors.grey[100]}>
+                {student.Years["2020"]?.CombinedGPA ||'N/A'}
+                </Typography>
+            )}
+
+            {selectedYear === '2021' && (
+                <Typography variant="h1" fontSize="80px" color={colors.grey[100]}>
+                {student.Years["2021"]?.CombinedGPA ||'N/A'}
+                </Typography>
+            )}
+
+            {selectedYear === '2022'  && (
+                <Typography variant="h1" fontSize="80px" color={colors.grey[100]}>
+                {student.Years["2022"]?.CombinedGPA ||'N/A'}
+                </Typography>
+            )}
+        </Box>
         
-        </Typography></Box>
+       
+        </Box>
          <Box
         gridColumn="span 2"
         gridRow="span 1"
@@ -290,18 +339,40 @@ const getRiskColor = (riskLevel) => {
         borderRadius="10px"
       
         >
-          <Typography variant="h3" fontSize="30px" fontWeight="bold" color={colors.grey[100]} mb={2}>
-        Program:
+          <Box>
+      {/* Major */}
+      <Box mb={0}>
+        <Typography variant="h3" fontSize="25px" fontWeight="bold" color={colors.grey[100]} mb={0}>
+          Major: {student.AcademicPlanCode.slice(5, 8)}
         </Typography>
-        <Typography variant="h1" fontSize="25px" color={colors.grey[100]} mb={2}>
-       {student.AcademicPlanCode}
+        <Typography variant="h6" fontSize="18px" color={colors.grey[100]} mb={0}>
+          {student.AcademicPlanCode}
         </Typography>
-        <Typography variant="h3" fontSize="20px" fontWeight="Bold" color={colors.grey[100]} mb={1}>
-        Faculty Scores: 
+      </Box>
+
+      {/* Divider */}
+      <Divider sx={{ backgroundColor: colors.grey[100], mb: 1 }} />
+
+      {/* Admit Year */}
+      <Box mb={0}>
+        <Typography variant="h3" fontSize="25px" fontWeight="bold" color={colors.grey[100]} mb={1}>
+          Admit Year: {student.AdmitTerm}
+        </Typography>
+      </Box>
+
+      {/* Divider */}
+      <Divider sx={{ backgroundColor: colors.grey[100], mb: 1}} />
+
+      {/* Faculty Scores */}
+      <Box mb={0}>
+        <Typography variant="h3" fontSize="25px" fontWeight="bold" color={colors.grey[100]} mb={1}>
+          Faculty Scores:
         </Typography>
         <Typography variant="h1" fontSize="15px" color={colors.grey[100]}>
-        {student.FacultyScores}
+          {student.FacultyScores}
         </Typography>
+      </Box>
+    </Box>
         </Box>
 
         <Box
@@ -369,13 +440,15 @@ const getRiskColor = (riskLevel) => {
 
         <Box sx={{ flexGrow: 1, width: '100%', height: "100%", minHeight: '130px' }}>
             {selectedGrid2 === 'NBT' && year1Marks ? (
-                <BarChart data={NBTMarks} yAxisLabel="NBT Scores"/>
+                <BarChart data={NBTMarks} yAxisLabel="NBT" yScaleMin={0} // Set the Y-axis minimum to 0
+                yScaleMax={100} showYTicks = {true} isMarksData = {true}/>
             ) : selectedGrid2 === 'NBT' && (
                 <Typography>No NBT data available</Typography>
             )}
 
             {selectedGrid2 === 'SCHOOL' && year2Marks ? (
-                <BarChart data={hsResults} yAxisLabel="Marks"/>
+                <BarChart data={hsResults} yAxisLabel="Marks" yScaleMin={0} // Set the Y-axis minimum to 0
+                yScaleMax={100} showYTicks = {true} isMarksData = {true}/>
             ) : selectedGrid2 === 'SCHOOL' && (
                 <Typography>No data available for 2021</Typography>
             )}
@@ -426,24 +499,32 @@ const getRiskColor = (riskLevel) => {
         sx={{ height: 'auto', overflow: 'hidden' }} // Allow the height to adjust automatically
         >
            <div>
-                <GraphToggleButton
-                    selectedOption={selectedYear}
-                    setSelectedOption={handleYearChange}
-                    options={Object.keys(student.Years)} // Pass the available years to the button
-                />
-                {student && student.Years[selectedYear] && (
-                    <Box key={selectedYear} mt={2}>
+            {student && student.Years[selectedYear] && (
+                <Box key={selectedYear} mt={2}>
+
                     <Typography variant="h3" style={{ fontWeight: 'bold' }} color={colors.grey[100]}>
-                        Academic Standing: {student.Years[selectedYear].AcademicStandingAction || 'N/A'}
+                    Enroll Year: {student.Years[selectedYear].EnrolTerm || 'N/A'}
+                </Typography>
+
+                <Divider style={{ backgroundColor: colors.grey[100], margin: '10px 0' }} />
+
+                <Typography variant="h3" style={{ fontWeight: 'bold' }} color={colors.grey[100]}>
+                    Academic Standing: {student.Years[selectedYear].AcademicStandingAction || 'N/A'}
+                </Typography>
+
+                <Divider style={{ backgroundColor: colors.grey[100], margin: '10px 0' }} />
+
+                <Box display="flex" justifyContent="space-between" alignItems="center">
+                    <Typography variant="h4" color={colors.grey[100]} mt={0}>
+                    Total Courses: {student.Years[selectedYear].TotalCourses}
                     </Typography>
-                    <Typography variant="h6" color={colors.grey[100]} mt={1}>
-                        Total Courses: {student.Years[selectedYear].TotalCourses} 
+                    <Typography variant="h4" color={colors.grey[100]} mt={0}>
+                    Passed: {student.Years[selectedYear].CoursesPassed}
                     </Typography>
-                    <Typography variant="h4" color={colors.grey[100]} mt={2}>
-                       Passed: {student.Years[selectedYear].CoursesPassed}
-                    </Typography>
-                    </Box>
-                )}
+                </Box>
+
+                </Box>
+            )}
             </div>
         </Box>
         
@@ -492,24 +573,26 @@ const getRiskColor = (riskLevel) => {
             alignItems="flex-start"
         >
             <Header title="Course Marks" />
-            <GraphToggleButton 
-            options={availableYears}
-            selectedOption={selectedGrid}
-            setSelectedOption={setSelectedGrid}
-            />
+            <Typography variant="h3" fontWeight="bold" mr={2}>
+                {`${selectedYear}`}
+                </Typography>
+            
         </Box>
         
         <Box sx={{ flexGrow: 1, width: '100%', height: "100%", minHeight: '130px' }}>
-            {selectedGrid === '2020' && year1Marks && (
-                <BarChart data={year1Marks} yAxisLabel="Marks"/>
+            {selectedYear === '2020' && year1Marks && (
+                <BarChart data={year1Marks} yAxisLabel="Marks"  yScaleMin={0} // Set the Y-axis minimum to 0
+                yScaleMax={100} showYTicks = {true} isMarksData = {true}/>
             )}
 
-            {selectedGrid === '2021' && year2Marks && (
-                <BarChart data={year2Marks} yAxisLabel="Marks"/>
+            {selectedYear === '2021' && year2Marks && (
+                <BarChart data={year2Marks} yAxisLabel="Marks"  yScaleMin={0} // Set the Y-axis minimum to 0
+                yScaleMax={100} showYTicks = {true} isMarksData = {true}/>
             )}
 
-            {selectedGrid === '2022' && year3Marks && (
-                <BarChart data={year3Marks} yAxisLabel="Marks"/>
+            {selectedYear === '2022' && year3Marks && (
+                <BarChart data={year3Marks} yAxisLabel="Marks"  yScaleMin={0} // Set the Y-axis minimum to 0
+                yScaleMax={100} showYTicks = {true} isMarksData = {true}/>
             )}
         </Box>
 

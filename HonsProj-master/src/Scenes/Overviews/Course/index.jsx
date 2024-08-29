@@ -111,12 +111,12 @@ const Course = () => {
           </FormControl>
           
           <FormControl fullWidth variant="outlined" style={{ margin: '5px 0' }}>
-              <InputLabel id="last-letter-label">Last Letter</InputLabel>
+              <InputLabel id="last-letter-label">Year Portion</InputLabel>
               <Select
                   labelId="last-letter-label"
                   value={selectedLastLetter}
                   onChange={handleLastLetterChange}
-                  label="Last Letter"
+                  label="Year Portion"
               >
                   <MenuItem value=""><em>All</em></MenuItem>
                   <MenuItem value="F">F</MenuItem>

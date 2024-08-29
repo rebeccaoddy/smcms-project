@@ -7,18 +7,22 @@ import { tokens } from '../theme';
 const BarChart = ({ 
   data = [], 
   xAxisLabel, 
-  yAxisLabel, 
+  yAxisLabel,
+  yScaleMin = 'auto', // Default Y-axis scale minimum is 'auto'
+  yScaleMax = 'auto', // Default Y-axis scale maximum is 'auto' 
   showAverageLine, 
   averageValue,
-  title // Add title prop
+  title,
+  isMarksData = false, // New prop to indicate if the data represents marks
+  showYTicks = false, // New prop to control Y-axis ticks visibility
 }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  // Map categorical values to numerical values for the chart
+  // Map categorical values to numerical values for the chart, but preserve the original label
   const mappedData = data.map(item => {
     let value;
-    switch(item.value) {
+    switch (item.value) {
       case 'PA':
         value = 50;
         break;
@@ -30,7 +34,8 @@ const BarChart = ({
       default:
         value = parseFloat(item.value) || 0;
     }
-    return { ...item, value };
+    console.log(item.value);
+    return { ...item, value, originalLabel: item.value }; // Preserve original label
   });
 
   // Sort the data from highest to lowest
@@ -40,63 +45,61 @@ const BarChart = ({
     axis: {
       ticks: {
         text: {
-          fill: colors.grey[100], // Adjust the fill color
+          fill: colors.grey[100],
           fontSize: 12,
         },
       },
       legend: {
         text: {
-          fill: colors.grey[100], // Adjust the fill color
+          fill: colors.grey[100],
           fontSize: 14,
         },
       },
     },
     labels: {
       text: {
-        fill: colors.grey[100], // Adjust the fill color
+        fill: colors.grey[100],
         fontSize: 14,
       },
     },
     legends: {
       text: {
-        fill: colors.grey[100], // Adjust the fill color
+        fill: colors.grey[100],
         fontSize: 14,
       },
     },
     tooltip: {
       container: {
-        background: colors.primary[400], // Adjust the background color of the tooltip
-        color: colors.grey[100], // Adjust the text color of the tooltip
+        background: colors.primary[400],
+        color: colors.grey[100],
         fontSize: 12,
       },
     },
   };
 
-  // Define different shades of blue
   const shadesOfBlue = ['#b3d9ff', '#6699cc', '#336699'];
 
-  // Handle no data case
   if (!Array.isArray(sortedData) || !sortedData.length) {
     return <div>No data available</div>;
   }
 
-  // Find the minimum and maximum values in the data
   const minValue = Math.min(...sortedData.map(d => d.value));
   const maxValue = Math.max(...sortedData.map(d => d.value));
 
-  // Function to normalize data and assign colors dynamically
   const getColor = (bar) => {
+    if (isMarksData && bar.data.value < 50) {
+      return 'red'; // Color bars with values below 50 in red if data represents marks
+    }
     if (maxValue === minValue) {
-      // If all values are the same, return a single color
       return shadesOfBlue[0];
     }
-    const normalizedValue = (bar.data.value - minValue) / (maxValue - minValue); // Normalize between 0 and 1
+    const normalizedValue = (bar.data.value - minValue) / (maxValue - minValue);
     const index = Math.floor(normalizedValue * (shadesOfBlue.length - 1));
     return shadesOfBlue[index];
   };
 
   // Custom Tooltip component for bars
-  const CustomTooltip = ({ id, value, color }) => (
+  const CustomTooltip = ({ id, value, color, data }) => (
     <div
       style={{
         padding: '5px',
@@ -105,19 +108,18 @@ const BarChart = ({
         borderRadius: '3px',
       }}
     >
-      <strong>{id}</strong>: {value} {/* Display value directly */}
+      <strong>{id}</strong>: {data.originalLabel} ({value}) {/* Display original label and value */}
     </div>
   );
 
   return (
     <ThemeProvider theme={createTheme(theme)}>
-      <div style={{ height: '100%', width: '100%' }}> {/* Ensure chart fills the container */}
+      <div style={{ height: '100%', width: '100%' }}>
         {title && (
-          <h4 style={{ 
-            textAlign: 'left', 
-            fontSize: '1.2rem', // Smaller font size
-            margin: '0 0 0px 0', // Reduced margin
-            
+          <h4 style={{
+            textAlign: 'left',
+            fontSize: '1.2rem',
+            margin: '0 0 0px 0',
           }}>
             {title}
           </h4>
@@ -126,47 +128,46 @@ const BarChart = ({
           data={sortedData}
           keys={['value']}
           indexBy="label"
-          margin={{ top: 10, right: 20, bottom: 40, left: 30 }} // Adjust margins for space
+          margin={{ top: 30, right: 20, bottom: 40, left: 50 }}
           padding={0.3}
-          valueScale={{ type: 'linear' }}
+          valueScale={{ type: 'linear', min: yScaleMin, max: yScaleMax }} // Set the Y-axis scale with custom min and max
           indexScale={{ type: 'band', round: true }}
-          colors={getColor} // Ensure this function is used correctly
+          colors={getColor} // Use the getColor function to set bar colors
           borderRadius={2}
           borderWidth={1}
           borderColor={{
             from: 'color',
-            modifiers: [
-              ['darker', '1.3']
-            ]
+            modifiers: [['darker', '1.3']]
           }}
-          theme={nivoTheme} // Apply the nivoTheme here
+          theme={nivoTheme}
           axisTop={null}
           axisRight={null}
           axisLeft={{
             tickSize: 5,
             tickPadding: 10,
             tickRotation: 0,
-            legend: yAxisLabel, // Ensure this is set to display the Y-axis label
+            legend: yAxisLabel,
             legendPosition: 'middle',
-            legendOffset: -20,
-            tickValues: [], // Hide tick values on Y-axis
+            legendOffset: -30,
+            tickValues: showYTicks ? 'auto' : [],
           }}
           axisBottom={{
             tickSize: 5,
             tickPadding: 5,
-            tickRotation: -20, // Rotate x-axis labels to avoid overlap
-            legend: xAxisLabel, // Set x-axis label
+            tickRotation: -20,
+            legend: xAxisLabel,
             legendPosition: 'middle',
             legendOffset: 30,
           }}
+          label={d => d.data.originalLabel}
           labelSkipWidth={12}
           labelSkipHeight={12}
-          tooltip={({ id, value, color }) => (
-            <CustomTooltip id={id} value={value} color={color} />
+          tooltip={({ id, value, color, data }) => (
+            <CustomTooltip id={id} value={value} color={color} data={data} />
           )}
           role="application"
           ariaLabel="Nivo bar chart demo"
-          barAriaLabel={(e) => `${e.id}: ${e.formattedValue} in ${e.indexValue}`} // Show formatted value in aria-label
+          barAriaLabel={(e) => `${e.id}: ${e.formattedValue} in ${e.indexValue}`}
           layers={[
             'grid',
             'axes',

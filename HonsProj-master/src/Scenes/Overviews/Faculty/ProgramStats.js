@@ -124,13 +124,13 @@ const ProgramStats = () => {
       {/* Average GPA Bar Chart */}
       <Grid item xs={12}>
         
-      <Box sx={{ height: 300, width: '100%' }}>
+      <Box sx={{ height: 280, width: '100%' }}>
   <Box 
     sx={{ 
       display: 'flex', 
       alignItems: 'center', 
       justifyContent: 'space-between', // Space between header and toggle button
-      mb: -3 
+      mb: 0
     }}
   >
     <Header title="Programs" />

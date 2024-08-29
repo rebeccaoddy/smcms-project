@@ -12,6 +12,8 @@ import BarChart from '../../../components/BarChart';
 import GraphToggleButton from '../../../components/GraphToggleButton';
 import ProgramRiskKPI from './ProgramRiskKPI';
 import RiskLineGraph from '../../../components/RiskLineGraph';
+import ShowChartIcon from '@mui/icons-material/ShowChart';
+
 
 const calculateBoxPlotStats = (data, type = 'marks') => {
     // Ensure data is an array
@@ -122,6 +124,9 @@ const ProgramDetail = () => {
     const handleToggle = () => {
         setView(view === 'kpi' ? 'line' : 'kpi');
     };
+
+    const [selectedYear, setSelectedYear] = useState('2020');
+    const yearOptions = ['2020', '2021', '2022'];
 
     useEffect(() => {
         const fetchProgramDetails = async () => {
@@ -264,24 +269,32 @@ const ProgramDetail = () => {
     return (
         <Box p={2}>
             {/* Header and Back Button */}
-    <Box display="flex" alignItems="center" mb={0}>
+            <Box p={0} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        {/* Back Button */}
         <Button
             variant="contained"
             onClick={() => navigate(-1)}
             sx={{
-                ml: 1,
-                backgroundColor: colors.primary[400],
-                color: colors.grey[100],
-                '&:hover': {
-                    backgroundColor: colors.primary[700],
-                },
+            backgroundColor: colors.primary[400], // Set the background color
+            color: colors.grey[100], // Set the text color
+            '&:hover': {
+                backgroundColor: colors.primary[700], // Set the background color on hover
+            },
+            mb: 1, // Add margin-bottom to create space below the button
             }}
         >
             Back
         </Button>
-        
-        
-        
+
+        {/* Graph Toggle Button */}
+        <GraphToggleButton 
+            options={yearOptions}
+            selectedOption={selectedYear}
+            setSelectedOption={setSelectedYear}
+            sx={{
+            ml: 'auto', // This will push the button to the right if there are elements on its left
+            }}
+        />  
         </Box>
 
             {/* Master Box */}
@@ -330,9 +343,9 @@ const ProgramDetail = () => {
                         overflow: 'auto',
                     }}
                     >
-                    {RiskToggle === '2020' && <ProgramRiskKPI riskStats={riskData[2020]} />}
-                    {RiskToggle === '2021' && <ProgramRiskKPI riskStats={riskData[2021]} />}
-                    {RiskToggle === '2022' && <ProgramRiskKPI riskStats={riskData[2022]} />}
+                    {selectedYear === '2020' && <ProgramRiskKPI riskStats={riskData[2020]} />}
+                    {selectedYear === '2021' && <ProgramRiskKPI riskStats={riskData[2021]} />}
+                    {selectedYear === '2022' && <ProgramRiskKPI riskStats={riskData[2022]} />}
                     </Box>
                 ) : (
                     <Box
@@ -357,7 +370,7 @@ const ProgramDetail = () => {
                 justifyContent="center"
                 borderRadius="10px"
                 p={2}
-                height={"70%"}
+                height={"30%"}
                 
             > 
             <Box
@@ -369,16 +382,11 @@ const ProgramDetail = () => {
             mb={0} // Add margin at the bottom of the toggle button
             //overflow="hidden" // Hide overflow content for toggle button
                 >
-                <GraphToggleButton 
-                options={RiskToggleOptions} 
-                selectedOption={RiskToggle} 
-                setSelectedOption={setRiskToggle}
-            
-            />
+               
 
-            <Box display="flex" justifyContent="flex-end" mt={2}>
+            <Box display="flex" justifyContent="flex-end" mt={0}>
                 <Button variant="contained" onClick={handleToggle}>
-                Toggle to {view === 'kpi' ? 'Line Graph' : 'KPI Cards'}
+                {view === 'kpi' ? <ShowChartIcon /> : 'KPI'}
                 </Button>
             </Box>
 
@@ -438,19 +446,17 @@ const ProgramDetail = () => {
                borderRadius="10px"
             >
                
-                <Box display="flex"  alignItems="center" justifyContent="space-between" mb={2}>
-                <Typography variant="h5" fontWeight="bold">
-                    Pass/Fail Statistics
+               <Box display="flex"  alignItems="center" justifyContent="space-between" mb={2}>
+            <Typography variant="h5" fontWeight="bold" mb={0}>
+                    Pass / Fail Statistics
                 </Typography>
-                <GraphToggleButton 
-                    options={PassFailToggleOptions} 
-                    selectedOption={PassFailToggle} 
-                    setSelectedOption={setPassFailToggle} 
-                />
-            </Box>
+                <Typography variant="h4" fontWeight="bold" mb={0}>
+                {`${selectedYear}`}
+                </Typography>
+        </Box>
                 
-                {PassFailToggleOptions.map((year) => (
-                    PassFailToggle === year && (
+                {yearOptions.map((year) => (
+                    selectedYear === year && (
                         <Box key={year} mb={0} p={2} borderRadius={4} boxShadow={3} bgcolor="background.paper" width="100%">
                            
 
@@ -529,23 +535,26 @@ const ProgramDetail = () => {
                p={2}
                borderRadius="10px"
             >
-                <Box display="flex"  alignItems="center" justifyContent="space-between" mb={0}>
-                    <Typography variant="h5" fontWeight="bold">
-                        Gender Statistics
-                    </Typography>
-                    <GraphToggleButton options={GenderToggleOptions} selectedOption={GenderToggle} setSelectedOption={setGenderToggle}/>
-                </Box>
+               <Box display="flex"  alignItems="center" justifyContent="space-between" mb={2}>
+            <Typography variant="h5" fontWeight="bold" mb={0}>
+                    Gender Statistics
+                </Typography>
+                <Typography variant="h4" fontWeight="bold" mb={0}>
+                {`${selectedYear}`}
+                </Typography>
+        
+        </Box>
             {/* Bar Charts for Gender Data */}
             <Box sx={{ flexGrow: 1, width: '100%', height: "100%", minHeight: '130px' }}>
-            {GenderToggle === '2020' && (
+            {selectedYear === '2020' && (
                 <BarChart data={GenderData["2020"]}  yAxisLabel="# of Students"/>
             )}
 
-            {GenderToggle === '2021' && (
+            {selectedYear === '2021' && (
                 <BarChart data={GenderData["2021"]}  yAxisLabel="# of Students"/>
             )}
 
-            {GenderToggle === '2022' && (
+            {selectedYear === '2022' && (
                 <BarChart data={GenderData["2022"]}  yAxisLabel="# of Students"/>
             )}
 
@@ -565,24 +574,28 @@ const ProgramDetail = () => {
                p={2}
                borderRadius="10px"
             >
-                <Box display="flex"  alignItems="center" justifyContent="space-between" mb={0}>
-                    <Typography variant="h5" fontWeight="bold">
-                        Race Statistics
-                    </Typography>
-                <GraphToggleButton options={PopulationToggleOptions} selectedOption={PopulationToggle} setSelectedOption={setPopulationToggle}/>
+                <Box display="flex"  alignItems="center" justifyContent="space-between" mb={2}>
+                    <Typography variant="h5" fontWeight="bold" mb={0}>
+                            Race Statistics
+                        </Typography>
+                        <Typography variant="h4" fontWeight="bold" mb={0}>
+                        {`${selectedYear}`}
+                        </Typography>
+                
+                
                 </Box>
 
                 {/* Bar Charts for Population Group Data */}
                 <Box sx={{ flexGrow: 1, width: '100%', height: "100%", minHeight: '130px' }}>
-                    {PopulationToggle === '2020' && (
+                    {selectedYear === '2020' && (
                         <BarChart data={PopulationData["2020"]}  yAxisLabel="# of Students"/>
                     )}
 
-                    {PopulationToggle === '2021' && (
+                    {selectedYear === '2021' && (
                         <BarChart data={PopulationData["2021"]}  yAxisLabel="# of Students"/>
                     )}
 
-                    {PopulationToggle === '2022' && (
+                    {selectedYear === '2022' && (
                         <BarChart data={PopulationData["2022"]}  yAxisLabel="# of Students"/>
                     )}
                 </Box>

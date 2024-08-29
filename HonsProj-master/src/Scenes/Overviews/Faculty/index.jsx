@@ -15,6 +15,8 @@ import RiskLineGraph from '../../../components/RiskLineGraph';
 import { getPrograms } from '../../../Data/ProgramData/ProgramData';
 import ProgramStats from './ProgramStats';
 import ProgramOverviewHeader from '../../../components/ProgramOverviewHeader';
+import ShowChartIcon from '@mui/icons-material/ShowChart';
+
 
 const calculateBoxPlotStats = (data, type = 'marks') => {
   if (!Array.isArray(data)) {
@@ -130,6 +132,9 @@ const Faculty = () => {
   const handleToggle = () => {
       setView(view === 'kpi' ? 'line' : 'kpi');
   };
+
+  const [selectedYear, setSelectedYear] = useState('2020');
+    const yearOptions = ['2020', '2021', '2022'];
 
   useEffect(() => {
       const fetchFacultyDetails = async () => {
@@ -250,12 +255,22 @@ const calculateAverageGPA = (gpaArray) => {
   }[PassFailToggle] || '2020';
 
   return (
-  <Box 
-  p={2}
-  
-     
+  <Box p={2}
   >
-    <ProgramOverviewHeader />
+    <Box p={0} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+
+        <ProgramOverviewHeader />
+        
+        <GraphToggleButton 
+                options={yearOptions}
+                selectedOption={selectedYear}
+                setSelectedOption={setSelectedYear}
+                sx={{
+                
+                ml: 'auto', // This will push the button to the right if there are elements on its left
+                }}
+            />  
+        </Box>
     
 
     {/* Master Box */}
@@ -292,9 +307,9 @@ const calculateAverageGPA = (gpaArray) => {
                 overflow: 'auto',
             }}
             >
-            {RiskToggle === '2020' && <FacultyRiskKPI riskStats={riskData[2020]} />}
-            {RiskToggle === '2021' && <FacultyRiskKPI riskStats={riskData[2021]} />}
-            {RiskToggle === '2022' && <FacultyRiskKPI riskStats={riskData[2022]} />}
+            {selectedYear === '2020' && <FacultyRiskKPI riskStats={riskData[2020]} />}
+            {selectedYear === '2021' && <FacultyRiskKPI riskStats={riskData[2021]} />}
+            {selectedYear === '2022' && <FacultyRiskKPI riskStats={riskData[2022]} />}
             </Box>
         ) : (
             <Box
@@ -319,7 +334,7 @@ const calculateAverageGPA = (gpaArray) => {
         justifyContent="center"
         borderRadius="10px"
         p={2}
-        height={"-70%"}
+        height={"30%"}
         
     > 
     <Box
@@ -331,16 +346,11 @@ const calculateAverageGPA = (gpaArray) => {
     mb={0} // Add margin at the bottom of the toggle button
     //overflow="hidden" // Hide overflow content for toggle button
         >
-        <GraphToggleButton 
-        options={RiskToggleOptions} 
-        selectedOption={RiskToggle} 
-        setSelectedOption={setRiskToggle}
-    
-    />
+       
 
-    <Box display="flex" justifyContent="flex-end" mt={2}>
+    <Box display="flex" justifyContent="flex-end" mt={0}>
         <Button variant="contained" onClick={handleToggle}>
-        Toggle to {view === 'kpi' ? 'Line Graph' : 'KPI Cards'}
+         {view === 'kpi' ? <ShowChartIcon /> : 'KPI'}
         </Button>
     </Box>
 
@@ -384,18 +394,17 @@ const calculateAverageGPA = (gpaArray) => {
     >
        
         <Box display="flex"  alignItems="center" justifyContent="space-between" mb={2}>
-        <Typography variant="h5" fontWeight="bold">
-            Pass/Fail Statistics
-        </Typography>
-        <GraphToggleButton 
-            options={PassFailToggleOptions} 
-            selectedOption={PassFailToggle} 
-            setSelectedOption={setPassFailToggle} 
-        />
-    </Box>
+            <Typography variant="h5" fontWeight="bold" mb={0}>
+                    Pass / Fail Statistics
+                </Typography>
+                <Typography variant="h4" fontWeight="bold" mb={0}>
+                {`${selectedYear}`}
+                </Typography>
         
-        {PassFailToggleOptions.map((year) => (
-            PassFailToggle === year && (
+        </Box>
+        
+        {yearOptions.map((year) => (
+            selectedYear === year && (
                 <Box key={year} mb={0} p={2} borderRadius={4} boxShadow={3} bgcolor="background.paper" width="100%">
                    
 
@@ -443,11 +452,10 @@ const calculateAverageGPA = (gpaArray) => {
           selectedOption={chartType}
           setSelectedOption={setChartType}
         />
-         <GraphToggleButton
-          options={yearToggleOptions}
-          selectedOption={year}
-          setSelectedOption={setYear}
-        />
+                        <Typography variant="h4" fontWeight="bold" mb={0}>
+                {`${selectedYear}`}
+                </Typography>
+         
       </Box>
 
       {/* Year Toggle */}
@@ -460,14 +468,14 @@ const calculateAverageGPA = (gpaArray) => {
       <Box sx={{ flexGrow: 1, width: '100%', height: "100%", minHeight: '130px' }}>
         {chartType === 'Gender' && (
           <BarChart
-            data={GenderData[year] || []}
+            data={GenderData[selectedYear] || []}
             
             yAxisLabel="# Students"
           />
         )}
         {chartType === 'Population' && (
           <BarChart
-            data={PopulationData[year] || []}
+            data={PopulationData[selectedYear] || []}
             
             yAxisLabel="# Students"
           />

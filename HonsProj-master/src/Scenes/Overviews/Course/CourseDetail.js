@@ -12,6 +12,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CourseRiskKPI from './CourseRiskKPI';
 import RiskLineGraph from '../../../components/RiskLineGraph';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import ShowChartIcon from '@mui/icons-material/ShowChart';
 
 
 // Adjust the import as needed
@@ -132,6 +133,9 @@ const CourseDetail = () => {
     const [selectedRiskView, setSelectedRiskView] = useState('2020');
 
     const [view, setView] = useState('kpi');
+
+    const [selectedYear, setSelectedYear] = useState('2020');
+    const yearOptions = ['2020', '2021', '2022'];
     
 
     const handleToggle = () => {
@@ -273,21 +277,35 @@ const CourseDetail = () => {
     return (
         <Box p={2}>
             {/*Back Button */}
+            <Box p={0} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        {/* Back Button */}
         <Button
-          variant="contained"
-          onClick={() => navigate(-1)}
-          sx={{
-            ml:1,
+            variant="contained"
+            onClick={() => navigate(-1)}
+            sx={{
             backgroundColor: colors.primary[400], // Set the background color
             color: colors.grey[100], // Set the text color
             '&:hover': {
-              backgroundColor: colors.primary[700], // Set the background color on hover
+                backgroundColor: colors.primary[700], // Set the background color on hover
             },
-            mb: 1 , // Add margin-bottom to create space below the button
-          }}
+            mb: 1, // Add margin-bottom to create space below the button
+            }}
         >
-          Back
+            Back
         </Button>
+
+        {/* Graph Toggle Button */}
+        <GraphToggleButton 
+            options={yearOptions}
+            selectedOption={selectedYear}
+            setSelectedOption={setSelectedYear}
+            sx={{
+            ml: 'auto', // This will push the button to the right if there are elements on its left
+            }}
+        />
+        </Box>
+
+
         {/*Master Box*/}
         <Box
             display="grid"
@@ -346,15 +364,15 @@ const CourseDetail = () => {
                         overflow: 'auto'
                     }}
                 >
-                    {selectedRiskView === '2020' && (
+                    {selectedYear === '2020' && (
                         <CourseRiskKPI riskStats={riskStats[2020]} />
                     )}
 
-                    {selectedRiskView === '2021' && (
+                    {selectedYear === '2021' && (
                         <CourseRiskKPI riskStats={riskStats[2021]} />
                     )}
 
-                    {selectedRiskView === '2022' && (
+                    {selectedYear === '2022' && (
                         <CourseRiskKPI riskStats={riskStats[2022]} />
                     )}
                 </Box>
@@ -381,18 +399,15 @@ const CourseDetail = () => {
         justifyContent="center" // Align items to the center vertically
         p={2}
         borderRadius="10px"
-        height="70%" // Set a fixed height for the Box
+        height="30%" // Set a fixed height for the Box
         width="100%" // Set width to 100% of the column
         >
-            <GraphToggleButton 
-            options={RiskViewOptions} 
-            selectedOption={selectedRiskView} 
-            setSelectedOption={setSelectedRiskView}
-            sx={{ width: '100%', maxWidth: '300px' }} // Control the width of the toggle button
-        />
-        <Box display="flex" justifyContent="flex-end" mt={2}>
+            
+        <Box display="flex" justifyContent="flex-end" mt={0}>
+        
                 <Button variant="contained" onClick={handleToggle}>
-                    Toggle to {view === 'kpi' ? 'Line Graph' : 'KPI Cards'}
+                    {view === 'kpi' ? <ShowChartIcon /> : 'KPI'}
+                    
                 </Button>
                 </Box>
         </Box>
@@ -440,26 +455,29 @@ const CourseDetail = () => {
             <Typography variant="h5" fontWeight="bold" mb={0}>
                     Gender Statistics
                 </Typography>
-        <GraphToggleButton options={gridOptions} selectedOption={selectedGrid} setSelectedOption={setSelectedGrid}/>
+                <Typography variant="h4" fontWeight="bold" mb={0}>
+                {`${selectedYear}`}
+                </Typography>
+        
         </Box>
 
             {/* Bar Charts for Gender Data */}
             <Box sx={{ flexGrow: 1, width: '100%', height: "100%", minHeight: '130px' }}>
-                {selectedGrid === '2020' && year1GenderData.length > 0 ? (
+                {selectedYear === '2020' && year1GenderData.length > 0 ? (
                     <BarChart data={year1GenderData} yAxisLabel="# of Students" />
-                ) : selectedGrid === '2020' && (
+                ) : selectedYear === '2020' && (
                     <Typography>No data available for 2020</Typography>
                 )}
 
-                {selectedGrid === '2021' && year2GenderData.length > 0 ? (
+                {selectedYear === '2021' && year2GenderData.length > 0 ? (
                     <BarChart data={year2GenderData} yAxisLabel="# of Students" />
-                ) : selectedGrid === '2021' && (
+                ) : selectedYear === '2021' && (
                     <Typography>No data available for 2021</Typography>
                 )}
 
-                {selectedGrid === '2022' && year3GenderData.length > 0 ? (
+                {selectedYear === '2022' && year3GenderData.length > 0 ? (
                     <BarChart data={year3GenderData} yAxisLabel="# of Students" />
-                ) : selectedGrid === '2022' && (
+                ) : selectedYear === '2022' && (
                     <Typography>No data available for 2022</Typography>
                 )}
             </Box>
@@ -483,26 +501,29 @@ const CourseDetail = () => {
             <Typography variant="h5" fontWeight="bold" mb={0}>
                     Race Statistics
                 </Typography>
-        <GraphToggleButton options={gridPopOptions} selectedOption={selectedPopGrid} setSelectedOption={setSelectedPopGrid}/>
+                <Typography variant="h4" fontWeight="bold" mb={0}>
+                {`${selectedYear}`}
+                </Typography>
+        
         
         </Box>
         {/* Bar Charts for Race Data */}
         <Box sx={{ flexGrow: 1, width: '100%', height: "100%", minHeight: '130px' }}>
-            {selectedPopGrid === '2020' && year1PopulationData.length > 0 ? (
+            {selectedYear === '2020' && year1PopulationData.length > 0 ? (
                 <BarChart data={year1PopulationData} yAxisLabel="# of Students" />
-            ) : selectedPopGrid === '2020' && (
+            ) : selectedYear === '2020' && (
                 <Typography>No data available for 2020</Typography>
             )}
 
-            {selectedPopGrid === '2021' && year2PopulationData.length > 0 ? (
+            {selectedYear === '2021' && year2PopulationData.length > 0 ? (
                 <BarChart data={year2PopulationData} yAxisLabel="# of Students" />
-            ) : selectedPopGrid === '2021' && (
+            ) : selectedYear === '2021' && (
                 <Typography>No data available for 2021</Typography>
             )}
 
-            {selectedPopGrid === '2022' && year3PopulationData.length > 0 ? (
+            {selectedYear === '2022' && year3PopulationData.length > 0 ? (
                 <BarChart data={year3PopulationData} yAxisLabel="# of Students" />
-            ) : selectedPopGrid === '2022' && (
+            ) : selectedYear === '2022' && (
                 <Typography>No data available for 2022</Typography>
             )}
         </Box>
@@ -516,7 +537,7 @@ const CourseDetail = () => {
         backgroundColor={colors.primary[400]}
         display="flex"
         flexDirection="column"
-        alignItems="center" // Align items to the center horizontally
+        alignItems="left" // Align items to the center horizontally
         justifyContent="center" // Align items to the center vertically
         p={2}
         borderRadius="10px"
@@ -536,7 +557,7 @@ const CourseDetail = () => {
         backgroundColor={colors.primary[400]}
         display="flex"
         flexDirection="column"
-        alignItems="center" // Align items to the center horizontally
+        alignItems="left" // Align items to the center horizontally
         justifyContent="center" // Align items to the center vertically
         p={2}
         borderRadius="10px"
@@ -564,64 +585,63 @@ const CourseDetail = () => {
         width="100%" // Set width to 100% of the column
         >
         <div style={{ width: '100%', height: '500px' }}> {/* Use a div for more control */}
-        <Box>
-        
-        
-        <Box sx={{ height: '100%', width: '100%' }} id="numStudents">
-    {PFOptions.map((year) => (
-        selectedPF === year && (
-            <Box key={year} mb={0} p={2} borderRadius={4} boxShadow={3} bgcolor="background.paper" >
-        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <Typography variant="h5" fontWeight="bold">
-                {`Year: ${year}`}
-            </Typography>
-        <GraphToggleButton 
-        options={PFOptions}
-        selectedOption={selectedPF}
-        setSelectedOption={setSelectedPF}
-        />
-            
-           
+        <Box display="flex"  alignItems="center" justifyContent="space-between" mb={2}>
+            <Typography variant="h5" fontWeight="bold" mb={0}>
+                    Pass / Fail Statistics
+                </Typography>
+                <Typography variant="h4" fontWeight="bold" mb={0}>
+                {`${selectedYear}`}
+                </Typography>
         </Box>
 
-        {passFailStats.map((stats) => (
-            stats.Year.toString() === year && (
-                <Box key={stats.Year} mb={2}>
-                    <Grid container spacing={2} alignItems="center">
-                        <Grid item>
-                            <Typography variant="h6" fontWeight="bold">
+            <Box sx={{ height: '100%', width: '100%' }} id="numStudents">
+            {yearOptions.map((year) => (
+                selectedYear === year && (
+                <Box key={year} mb={0} p={2} borderRadius={4} boxShadow={3} bgcolor="background.paper">
+                    {passFailStats.map((stats) => (
+                    stats.Year.toString() === year && (
+                        <Box key={stats.Year} mb={2}>
+                        <Grid container spacing={2} alignItems="center">
+                            <Grid item xs={8} container spacing={2}> {/* Grid container for Passes and Fails */}
+                            <Grid item>
+                                <Typography variant="h6" fontWeight="bold">
                                 {`Passes: ${stats.passCount}`}
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h6" fontWeight="bold">
+                                </Typography>
+                            </Grid>
+                            <Grid item>
+                                <Typography variant="h6" fontWeight="bold">
                                 {`Fails: ${stats.failCount}`}
-                            </Typography>
+                                </Typography>
+                            </Grid>
+                            </Grid>
+                            <Grid item xs={4} container justifyContent="flex-end"> {/* Grid container for Year aligned to the right */}
+                            <Grid item>
+                                
+                            </Grid>
+                            </Grid>
                         </Grid>
-                    </Grid>
 
-                    <Grid container spacing={2} mt={1}>
-                        {Object.entries(stats).map(([statusCode, count]) => (
+                        <Grid container spacing={2} mt={1}>
+                            {Object.entries(stats).map(([statusCode, count]) => (
                             !['Year', 'passCount', 'failCount', 'DPRCount'].includes(statusCode) && (
                                 <Grid item key={statusCode}>
-                                    <Typography variant="body2">
-                                        {`${statusCode}: ${count}`}
-                                    </Typography>
+                                <Typography variant="body2">
+                                    {`${statusCode}: ${count}`}
+                                </Typography>
                                 </Grid>
                             )
-                        ))}
-                    </Grid>
+                            ))}
+                        </Grid>
+                        </Box>
+                    )
+                    ))}
                 </Box>
-            )
-        ))}
-    </Box>
-        )
-    ))}
-        </Box>
-    </Box>
-
+                )
+            ))}
+            </Box>
         </div>
         </Box>
+
 
         <Box
         gridColumn="span 4"
@@ -631,35 +651,35 @@ const CourseDetail = () => {
         flexDirection="column"
         alignItems="center" // Align items to the center horizontally
         justifyContent="center" // Align items to the center vertically
-        p={2}
+        p={0}
         borderRadius="10px"
         height="100%" // Set a fixed height for the Box
         width="100%" // Set width to 100% of the column
         >
-           {StudentGraphOptions.map((year) => (
-        selectedStuGraph === year && (
+           {yearOptions.map((year) => (
+        selectedYear === year && (
             <Box 
                 key={year} 
                 p={2} 
-                borderRadius={4} 
-                boxShadow={3} 
-                bgcolor="background.paper"
+                
                 width="100%" // Ensure this inner Box fills the parent Box
                 height="100%" // Ensure this inner Box fills the parent Box
                 display="flex" 
                 flexDirection="column"
                 justifyContent="space-between"
             >
-                <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-                    <Typography variant="h5" fontWeight="bold">
-                        {`Year: ${year}`}
-                    </Typography>
-                    <GraphToggleButton 
-                        options={StudentGraphOptions}
-                        selectedOption={selectedStuGraph}
-                        setSelectedOption={setSelectedStuGraph}
-                    />
-                </Box>
+                
+                <Box display="flex"  alignItems="center" justifyContent="space-between" mb={2}>
+            <Typography variant="h5" fontWeight="bold" mb={0}>
+                    Top Students
+                </Typography>
+                <Typography variant="h4" fontWeight="bold" mb={0}>
+                {`${selectedYear}`}
+                </Typography>
+        </Box>
+
+       
+                    
 
                 {/* Top 5 Students Section */}
                 <Box 
@@ -672,9 +692,8 @@ const CourseDetail = () => {
                     width="100%" // Ensure this section fills the width of the container
                     
                 >
-                    <Typography variant="h6" fontWeight="bold">
-                        Top Students
-                    </Typography>
+                    
+                    
                     <Box display="flex" flexDirection="row" flexWrap="wrap" gap={2}>
                         {topStudentsByYear[year]?.slice(0, 3).map((student, index) => (
                             <Box key={student.CampusID} display="flex" alignItems="center" mx={0}>
