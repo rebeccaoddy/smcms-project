@@ -87,6 +87,26 @@ const Studentpage = () => {
       >
         Back
       </Button>
+
+      {/* New Button to Navigate to App 2 */}
+      <Button
+        variant="contained"
+        onClick={() => {
+          // Navigate to App 2 (secondary route) with student ID as a query parameter
+          navigate("/cases");
+        }}
+        sx={{
+          ml: 1,
+          backgroundColor: colors.primary[400],
+          color: colors.grey[100],
+          '&:hover': {
+            backgroundColor: colors.primary[700],
+          },
+          mb: 1,
+        }}
+      >
+        View in Second Application
+      </Button>
   
       <Box
         display="grid"
