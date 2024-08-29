@@ -268,31 +268,32 @@ Object.entries(foundStudent.Years).forEach(([year, yearData]) => {
         alignItems="flex-start" // Adjust the alignment here
         justifyContent="flex-start"
       >
-        <Typography variant="h2" sx={{ fontWeight: "Bold" , mb: 1 }}>
-            {student.CampusID} 
-          </Typography>
+        <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
+            <Typography variant="h2" sx={{ fontWeight: 'Bold', mb: 1 }}>
+                {student.CampusID}
+            </Typography>
+            <Button
+                variant="contained"
+                onClick={() => {
+                navigate(`/cases?studentId=${student.CampusID}`); // Ensure correct string interpolation
+                console.log("Navigating with student campusID:", student.CampusID);
+                }}
+                sx={{mb: 2,ml:5,
+                backgroundColor: colors.primary[400],
+                color: colors.grey[100],
+                '&:hover': {
+                    backgroundColor: colors.primary[700],
+                },
+                }}
+            >
+                Student Cases
+            </Button>
+            </Box>
           
           <Typography variant="h5">Birth Date: {student.BirthDate.slice(0, 10)}</Typography>
           <Typography variant="h5">Ethnicity: {student.PopulationGrp}</Typography>
           <Typography variant="h5">Gender: {student.Gender}</Typography>
-          <Button
-            variant="contained"
-            onClick={() => {
-                navigate(`/cases?studentId=${student.CampusID}`); // Ensure correct string interpolation
-                console.log("Navigating with student campusID:", student.CampusID);
-            }}
-            sx={{
-                ml: 1,
-                backgroundColor: colors.primary[400],
-                color: colors.grey[100],
-                '&:hover': {
-                backgroundColor: colors.primary[700],
-                },
-                mb: 1,
-            }}
-            >
-            View Student Cases
-            </Button>
+          
           
       </Box>
     </Box>
