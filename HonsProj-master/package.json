@@ -44,10 +44,10 @@
     "yup": "^1.4.0"
   },
   "scripts": {
-    "install-dashboard-server": "cd HonsProj-master/server && npm install",
+    "install-dashboard-server": "cd smcms-project/HonsProj-master/server && npm install",
     "install-casemanagement-server": "cd origin/backend && npm install",
 
-    "start-dashboard-server": "cd HonsProj-master/server && node index.js",
+    "start-dashboard-server": "cd smcms-project/HonsProj-master/server && node index.js",
     "start-casemanagement-server": "cd origin/backend && node server.js",
 
     "install-dashboard-client": "cd HonsProj-master && npm install",
