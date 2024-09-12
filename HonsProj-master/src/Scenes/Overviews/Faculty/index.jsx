@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { getFacultyData } from '../../../Data/FacultyDataFolder/FacultyData'; // Adjust the import based on your data fetching method
+import { getFacultyData } from '../../../Data/FacultyDataFolder/FacultyData'; 
 import { Box, Button, Typography, Grid } from "@mui/material";
 import { tokens } from '../../../theme';
 import { useParams, useNavigate } from 'react-router-dom';
 import Header from '../../../components/Header';
 import { useTheme } from '@mui/material/styles';
-import ScrollList from '../../../components/ScrollList';
 import LineGraph from '../../../components/LineGraph';
 import BoxAndWhisker from '../../../components/BoxAndWhisker';
 import BarChart from '../../../components/BarChart';
 import GraphToggleButton from '../../../components/GraphToggleButton';
 import FacultyRiskKPI from './FacultyRiskKPI';
 import RiskLineGraph from '../../../components/RiskLineGraph';
-import { getPrograms } from '../../../Data/ProgramData/ProgramData';
 import ProgramStats from './ProgramStats';
 import ProgramOverviewHeader from '../../../components/ProgramOverviewHeader';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
 
-
+{/* Function to calculate stats for the box plot chart */}
 const calculateBoxPlotStats = (data, type = 'marks') => {
   if (!Array.isArray(data)) {
       console.warn('Expected an array but got:', data);
@@ -54,8 +52,7 @@ const calculateBoxPlotStats = (data, type = 'marks') => {
   return { min, q1, median, q3, max };
 };
 
-
-
+{/* Function to calculate the pass/fail stats */}
 const calculatePassesAndFails = (marks, passMark = 50) => {
   let passCount = 0;
   let failCount = 0;
@@ -106,27 +103,9 @@ const Faculty = () => {
   const [PopulationData, setPopulationData] = useState({});
   const [PassFailStats, setPassFailStats] = useState([]);
   const [riskData, setRiskData] = useState({});
-  const [programs, setPrograms] = useState([]);
-  const [averageGPAData, setAverageGPAData] = useState([]);
-
-  const [GenderToggle, setGenderToggle] = useState('2020');
-  const GenderToggleOptions = ['2020', '2021', '2022'];
-
-  const [PopulationToggle, setPopulationToggle] = useState('2020');
-  const PopulationToggleOptions = ['2020', '2021', '2022'];
-
-  const [PassFailToggle, setPassFailToggle] = useState('2020');
-  const PassFailToggleOptions = ['2020', '2021', '2022'];
-
-  const [RiskToggle, setRiskToggle] = useState('2020');
-  const RiskToggleOptions = ['2020', '2021', '2022'];
 
   const [chartType, setChartType] = useState('Gender'); // 'Gender' or 'Population'
-  const [year, setYear] = useState('2020'); // '2020', '2021', or '2022'
-
   const chartToggleOptions = ['Gender', 'Population'];
-  const yearToggleOptions = ['2020', '2021', '2022'];
-
   const [view, setView] = useState('kpi'); // State to manage the current view
 
   const handleToggle = () => {
@@ -235,28 +214,10 @@ const Faculty = () => {
     
 }, [FacultyID]);
 
-const calculateAverageGPA = (gpaArray) => {
-  if (!gpaArray.length) return 0;
-  const totalGPA = gpaArray.reduce((acc, gpa) => acc + gpa, 0);
-  return totalGPA / gpaArray.length;
-};
- 
-  const formatAverageGPAData = () => {
-    return Object.keys(averageGPAData).map(year => ({
-      label: year,
-      value: averageGPAData[year]
-    }));
-  };
-
-  const currentYear = {
-      2020: '2020',
-      2021: '2021',
-      2022: '2022'
-  }[PassFailToggle] || '2020';
-
   return (
   <Box p={2}
   >
+    {/*Program header & year toggle button*/}
     <Box p={0} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 
         <ProgramOverviewHeader />
@@ -272,7 +233,6 @@ const calculateAverageGPA = (gpaArray) => {
             />  
         </Box>
     
-
     {/* Master Box */}
     <Box
         display="grid"
@@ -282,8 +242,6 @@ const calculateAverageGPA = (gpaArray) => {
         p={1}
         mt={-3}
     >
-    
-   
     
     {/* Risk Box */}
     <Box
@@ -324,7 +282,7 @@ const calculateAverageGPA = (gpaArray) => {
         )}
     </Box>
 
-    
+    {/* Risk Toggle button */}
     <Box
         gridColumn="span 1"
         gridRow="span 1"
@@ -336,30 +294,23 @@ const calculateAverageGPA = (gpaArray) => {
         p={2}
         height={"30%"}
         
-    > 
-    <Box
-    width="100%"
-    display="flex"
-    justifyContent="center"
-    flexDirection="column"
-    alignItems="center"
-    mb={0} // Add margin at the bottom of the toggle button
-    //overflow="hidden" // Hide overflow content for toggle button
-        >
-       
-
-    <Box display="flex" justifyContent="flex-end" mt={0}>
-        <Button variant="contained" onClick={handleToggle}>
-         {view === 'kpi' ? <ShowChartIcon /> : 'KPI'}
-        </Button>
+    >  
+        <Box
+        width="100%"
+        display="flex"
+        justifyContent="center"
+        flexDirection="column"
+        alignItems="center"
+        mb={0} 
+        >   
+            <Box display="flex" justifyContent="flex-end" mt={0}>
+                <Button variant="contained" onClick={handleToggle}>
+                {view === 'kpi' ? <ShowChartIcon /> : 'KPI'}
+                </Button>
+            </Box>
+        </Box>
     </Box>
-
-    </Box>
-    </Box>
-
-        
-       
-    
+  
     {/*Number of students*/}
     <Box
        gridColumn="span 4"
@@ -432,7 +383,8 @@ const calculateAverageGPA = (gpaArray) => {
             )
         ))}
     </Box>
-
+    
+    {/*Gender / Race charts*/}
     <Box
       gridColumn="span 4"
       gridRow="span 1"
@@ -521,9 +473,7 @@ const calculateAverageGPA = (gpaArray) => {
        <BoxAndWhisker boxPlotData={gpaBoxPlotData} />
     </Box>
         
-    {/*Gender Data*/}
-   
-
+    {/*Program statistics*/}
     <Box
         gridColumn="span 4"
         gridRow="span 2"
@@ -536,9 +486,7 @@ const calculateAverageGPA = (gpaArray) => {
         p={2}
         
     >
-    
-        <ProgramStats />
-        
+        <ProgramStats />   
     </Box>
 
 </Box>

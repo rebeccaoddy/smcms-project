@@ -9,7 +9,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import StudentDetailPage from './components/StudentDetailPage';
 import UserProfile from './components/UserProfile';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 
 
 ///testing commit to branch
@@ -36,6 +36,7 @@ const App = () => {
   const [selectedStudentId, setSelectedStudentId] = useState(null);
   const [selectedStudentNumber, setSelectedStudentNumber] = useState(null);
   const navigate = useNavigate(); // Use this to navigate programmatically
+  const location = useLocation();
 
 
 
@@ -108,63 +109,51 @@ const App = () => {
 
   return (
     <div className="App">
-      {/* <SidePanel 
-        user={user} 
-        //setCurrentView={setCurrentView} 
-        handleLogout={handleLogout} 
-        setSelectedStudentNumber={setSelectedStudentNumber} //pass setter function
-        /> 
-      </div><div className="app-container">*/}
-      <TopNavBar
-        user={user}
-        handleLogout={handleLogout}
-        setSelectedStudentNumber={setSelectedStudentNumber}
-      />
+      {/* Conditionally render TopNavBar only if not on /login route */}
+      {location.pathname !== '/login' && (
+        <TopNavBar
+          user={user}
+          handleLogout={handleLogout}
+          setSelectedStudentNumber={setSelectedStudentNumber}
+        />
+      )}
       <div className="content">
-          <Routes>
-            <Route
-              path="/login"
-              element={<Login setUser={setUser} />}
-            />
-            <Route
-              path="/register"
-              element={<Register setUser={setUser} />}
-            />
-            <Route
-              path="/cases"
-              element={<CaseList cases={cases} setCases={setCases} selectCase={selectCase} user={user} />}
-            />
-            <Route
-              path="/cases/add"
-              element={<AddCase addCase={addCase} user={user} />}
-              
-            />
-            <Route
-              path="/cases/detail"
-              element={<CaseDetail caseDetail={selectedCase} setSelectedStudentNumber={setSelectedStudentNumber} />}
-            />
-            <Route
-              path="/student-details"
-              element={<StudentDetailPage CampusID={selectedStudentNumber} selectCase={selectCase} />}
-            />
-            <Route
-              path="/faculty"
-              element={<MainApp user={user}/>}
-            />
-
-            
-
-            <Route
-              path="/profile"
-              element={<UserProfile user={user} />}
-            />
-            {/* <Route
-              path="*"
-              element={user ? <CaseList cases={cases} setCases={setCases} selectCase={selectCase} user={user} /> : <Login setUser={setUser} />}
-            /> */}
-          </Routes>
-        </div>
+        <Routes>
+          <Route
+            path="/login"
+            element={<Login setUser={setUser} />}
+          />
+          <Route
+            path="/register"
+            element={<Register setUser={setUser} />}
+          />
+          <Route
+            path="/cases"
+            element={<CaseList cases={cases} setCases={setCases} selectCase={selectCase} user={user} />}
+          />
+          <Route
+            path="/cases/add"
+            element={<AddCase addCase={addCase} user={user} />}
+          />
+          <Route
+            path="/cases/detail"
+            element={<CaseDetail caseDetail={selectedCase} setSelectedStudentNumber={setSelectedStudentNumber} />}
+          />
+          <Route
+            path="/student-details"
+            element={<StudentDetailPage CampusID={selectedStudentNumber} selectCase={selectCase} />}
+          />
+          <Route
+            path="/faculty"
+            element={<MainApp user={user}/>}
+          />
+          <Route
+            path="/profile"
+            element={<UserProfile user={user} />}
+          />
+        </Routes>
       </div>
+    </div>
   );
 };
 

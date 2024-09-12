@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { Grid, useTheme, Box, Typography, List, ListItem, ListItemText, Collapse } from '@mui/material';
+import { Grid, useTheme, Box, Typography, List, ListItem, ListItemText } from '@mui/material';
 import KpiCard from '../../../components/KpiCard';
 import PersonIcon from '@mui/icons-material/Person';
-import PercentIcon from '@mui/icons-material/Percent';
 import { useNavigate, Link  } from 'react-router-dom';
 import { tokens } from '../../../theme';
 import { People } from '@mui/icons-material';

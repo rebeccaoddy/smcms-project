@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, Link, RouterLink } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { tokens } from "../../../theme";
 import { useTheme } from "@mui/material/styles";
 import Header from '../../../components/Header';
-import { ButtonBase, List, ListItem, ListItemText, Typography, Box, Grid, Button } from '@mui/material';
+import { ButtonBase, Typography, Box} from '@mui/material';
 import { getPrograms } from '../../../Data/ProgramData/ProgramData'; // Adjust the import based on your data fetching method
 
 const Program = () => {
@@ -13,6 +13,7 @@ const Program = () => {
   const [programs, setPrograms] = useState([]);
 
   useEffect(() => {
+    // Function to fetch programs data from API
     const fetchPrograms = async () => {
       try {
         const data = await getPrograms(); // Fetch program data
@@ -21,12 +22,12 @@ const Program = () => {
         console.error('Error fetching programs:', error);
       }
     };
-
     fetchPrograms();
   }, []);
 
   return (
     <Box p={3}>
+    {/* Header component with title "Program List" */}
     <Header title="Program List" />
     <Box
       display="grid"
@@ -65,6 +66,7 @@ const Program = () => {
               },
             }}
           >
+            {/* Display program code on boxes */}
             <Typography 
               variant="h2" 
               fontWeight="bold" 

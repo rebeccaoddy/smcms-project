@@ -1,16 +1,7 @@
-import { Box, Button, IconButton, Typography, useTheme, List, ListItem, ListItemText, Pagination, Select, MenuItem, InputLabel, FormControl } from "@mui/material";
-import { tokens } from "../../../theme";
+import { Box, List, ListItem, ListItemText, Pagination, Select, MenuItem, InputLabel, FormControl } from "@mui/material";
 import Header from "../../../components/Header";
-import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
-import BarChart from "../../../components/BarChart";
-import LineGraph from "../../../components/LineGraph";
 import React, { useEffect, useState } from 'react';
-import { getUsersData } from '../../../Data/DataFile';
-import ListScrollTest from '../Student/ListScrollTest';
-import CourseListScroll from "./CourseListScroll";
-import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import axios from "axios";
 import { getCourses } from "../../../Data/CourseData/CSCourseData";
 
 const Course = () => {
@@ -21,16 +12,16 @@ const Course = () => {
   const [selectedCourseType, setSelectedCourseType] = useState(''); // State for selected course type
   const [selectedLastLetter, setSelectedLastLetter] = useState(''); // State for selected last letter
 
+  // Fetch courses from API when component mounts
   useEffect(() => {
-      const fetchCourses = async () => {
-          try {
-              const data = await getCourses();
-              setCourses(data);
-          } catch (error) {
-              console.error('Error fetching courses:', error);
-          }
-      };
-
+    const fetchCourses = async () => {
+      try {
+        const data = await getCourses(); // Fetch course data
+        setCourses(data); // Set courses state
+      } catch (error) {
+        console.error('Error fetching courses:', error); // Log any errors
+      }
+    };
       fetchCourses();
   }, []);
 
@@ -73,8 +64,8 @@ const Course = () => {
 
   return (
       <Box
-      p={2}>
-        <Header title="Course List" />
+        p={2}>
+        <Header title="Course List" /> {/* Render header */}
           <input
               type="text"
               placeholder="Search..."
@@ -88,7 +79,8 @@ const Course = () => {
                   borderRadius: '4px',
               }}
           />
-          
+
+          {/* Course type filter */}
           <FormControl fullWidth variant="outlined" style={{ margin: '5px 0' }}>
               <InputLabel id="course-type-label">Course Type</InputLabel>
               <Select
@@ -106,10 +98,11 @@ const Course = () => {
                   <MenuItem value="MCB">MCB</MenuItem>
                   <MenuItem value="AST">AST</MenuItem>
                   <MenuItem value="CEM">CEM</MenuItem>
-                  {/* Add more course types as needed */}
+                  
               </Select>
           </FormControl>
           
+          {/* Last letter filter */}
           <FormControl fullWidth variant="outlined" style={{ margin: '5px 0' }}>
               <InputLabel id="last-letter-label">Year Portion</InputLabel>
               <Select
@@ -127,7 +120,7 @@ const Course = () => {
               </Select>
           </FormControl>
 
-          
+          {/* List of current courses */}
           <List style={{ maxHeight: '400px', overflow: 'auto' }}>
               {currentCourses.map(course => (
                   <ListItem key={course.CourseCode}>
@@ -140,6 +133,8 @@ const Course = () => {
                   </ListItem>
               ))}
           </List>
+
+          {/* Pagination component */}
           <Pagination 
               count={Math.ceil(filteredCourses.length / coursesPerPage)} 
               page={currentPage} 

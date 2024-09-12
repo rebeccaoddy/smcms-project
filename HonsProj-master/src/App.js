@@ -8,7 +8,6 @@ import Faculty from "./Scenes/Overviews/Faculty";
 import Program from "./Scenes/Overviews/Program";
 import Course from "./Scenes/Overviews/Course";
 import Student from "./Scenes/Overviews/Student";
-import Studentpage from "./Scenes/Overviews/Student/Studentpage";
 import StudentDetails from "./Scenes/Overviews/Student/StudentDetails";
 import CourseDetail from "./Scenes/Overviews/Course/CourseDetail";
 import BarChart from "./components/BarChart";
@@ -59,7 +58,6 @@ function App() {
               <Route path="/Program" element={<Program />} />
               <Route path="/Student" element={<Student />} />
               <Route path="/students/:id" element={<StudentDetails />} />
-              <Route path="/Student/:id" element={<Studentpage />} />
               <Route path="/Course" element={<Course />} />
               <Route path="/course/:CourseCode" element={<CourseDetail />} />
               <Route path="/program/:ProgramCode" element={<ProgramDetail />} />

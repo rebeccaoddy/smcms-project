@@ -5,17 +5,15 @@ import Header from '../../../components/Header';
 import { getCourses } from '../../../Data/CourseData/CSCourseData'; 
 import LineGraph from '../../../components/LineGraph';
 import BarChart from '../../../components/BarChart';
-import { Box, Button, IconButton, Typography, useTheme, List,Grid,ListItem, ListItemText } from "@mui/material";
+import { Box, Button, Typography, useTheme, Grid } from "@mui/material";
 import GraphToggleButton from '../../../components/GraphToggleButton';
 import BoxAndWhisker from '../../../components/BoxAndWhisker';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CourseRiskKPI from './CourseRiskKPI';
 import RiskLineGraph from '../../../components/RiskLineGraph';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
 
-
-// Adjust the import as needed
+{/* Function to calculate stats for the box plot chart */}
 const calculateBoxPlotStats = (data, type = 'marks') => {
     // Ensure data is an array
     if (!Array.isArray(data)) {
@@ -55,7 +53,7 @@ const calculateBoxPlotStats = (data, type = 'marks') => {
     return { min, q1, median, q3, max };
 };
 
-
+{/* Function to calculate top students per year */}
 const getTopStudentsByYear = (marksData) => {
     const topStudentsByYear = {};
 
@@ -79,7 +77,7 @@ const getTopStudentsByYear = (marksData) => {
     return topStudentsByYear;
 };
 
-
+{/* Function to calculate the pass/fail stats */}
 const calculatePassesAndFails = (marks, passMark = 50) => {
     let passCount = 0;
     let failCount = 0;
@@ -123,25 +121,17 @@ const CourseDetail = () => {
     const { CourseCode } = useParams();
     const [course, setCourse] = useState(null);
 
-    const medalColors = ['gold', 'silver', '#cd7f32']; // Colors for gold, silver, bronze
+    const medalColors = ['gold', 'silver', '#cd7f32']; // Colors for gold, silver, and bronze
+    const [view, setView] = useState('kpi'); // State to toggle between KPI and line graph views
+    const [selectedYear, setSelectedYear] = useState('2020'); // State for the selected year for filtering
+    const yearOptions = ['2020', '2021', '2022']; // Options for the year filter
 
-
-    const [selectedGrid, setSelectedGrid] = useState('2020');
-    const [selectedPopGrid, setSelectedPopGrid] = useState('2020');
-    const [selectedStuGraph, setSelectedStuGraph] = useState('2020');
-    const [selectedPF, setSelectedPF] = useState('2020');
-    const [selectedRiskView, setSelectedRiskView] = useState('2020');
-
-    const [view, setView] = useState('kpi');
-
-    const [selectedYear, setSelectedYear] = useState('2020');
-    const yearOptions = ['2020', '2021', '2022'];
-    
-
+    // Toggle between KPI and line graph views
     const handleToggle = () => {
         setView((prevView) => (prevView === 'kpi' ? 'line' : 'kpi'));
     };
 
+    // Fetch course details when component mounts or CourseCode changes
     useEffect(() => {
         const fetchCourse = async () => {
             try {
@@ -156,10 +146,12 @@ const CourseDetail = () => {
         fetchCourse();
     }, [CourseCode]);
 
+    // Display a loading message if course data is not yet available
     if (!course) return <div>Loading...</div>;
 
-    const numberOfStudents = course.NumberOfStudents || {};
+    const numberOfStudents = course.NumberOfStudents || {}; // Number of students data or default to empty object
 
+    // Prepare data for line graph
     const lineGraphDataArray = [];
     Object.entries(numberOfStudents).forEach(([year, count]) => {
         lineGraphDataArray.push({
@@ -169,6 +161,7 @@ const CourseDetail = () => {
     });
     const lineGraphData = [{ id: "Number of Students", data: lineGraphDataArray }];
 
+    // Extract and format gender data for each year
     const genderData2020 = course.Genders?.["2020"] || {};
     const genderData2021 = course.Genders?.["2021"] || {};
     const genderData2022 = course.Genders?.["2022"] || {};
@@ -176,12 +169,10 @@ const CourseDetail = () => {
     const year2GenderData = Object.entries(genderData2021).map(([gender, count]) => ({ label:gender, value:count }));
     const year3GenderData = Object.entries(genderData2022).map(([gender, count]) => ({ label:gender, value:count }));
 
-    const gridOptions = ['2020', '2021', '2022'];
-
+    // Extract and format population group data for each year
     const populationData2020 = course.PopulationGroups?.["2020"] || {};
     const populationData2021 = course.PopulationGroups?.["2021"] || {};
     const populationData2022 = course.PopulationGroups?.["2022"] || {};
-
     const year1PopulationData = Object.entries(populationData2020).map(([group, count]) => ({
         label: group,
         value: count
@@ -194,9 +185,8 @@ const CourseDetail = () => {
         label: group,
         value: count
     }));
-    const gridPopOptions = ['2020', '2021', '2022'];
-
-    // Course marks data
+    
+    // Prepare course marks data
     const marksData = {
         2020: Array.isArray(course.Marks?.["2020"]) ? course.Marks["2020"] : [],
         2021: Array.isArray(course.Marks?.["2021"]) ? course.Marks["2021"] : [],
@@ -218,12 +208,6 @@ const CourseDetail = () => {
             ...calculateBoxPlotStats(course.Marks["2022"], 'marks'),
         },
     ];
-    
-    const gpaData = {
-        2020: Array.isArray(course.GPA?.["2020"]) ? course.GPA["2020"] : [],
-        2021: Array.isArray(course.GPA?.["2021"]) ? course.GPA["2021"] : [],
-        2022: Array.isArray(course.GPA?.["2022"]) ? course.GPA["2022"] : [],
-    };
 
     // Construct gpaStats with the new structure
     const gpaStats = [
@@ -241,7 +225,7 @@ const CourseDetail = () => {
         },
     ];
     
-
+    // get pass fail stats
     const passFailStats = [
         {
             Year: 2020,
@@ -257,12 +241,10 @@ const CourseDetail = () => {
         },
     ];
 
-    const StudentGraphOptions = ['2020', '2021', '2022'];
-    const PFOptions = ['2020', '2021', '2022'];
-    const RiskViewOptions = ['2020', '2021', '2022'];
-
+    // Get top students per year
     const topStudentsByYear = getTopStudentsByYear(course.Marks);
 
+    // Risk statistics for each year
     const riskStats = {
         2020: course.RiskStats?.['2020'] || {},
         2021: course.RiskStats?.['2021'] || {},
@@ -270,40 +252,38 @@ const CourseDetail = () => {
     };
     
     
-    //console.log(riskStats2020)
-
-    
-    
     return (
         <Box p={2}>
-            {/*Back Button */}
-            <Box p={0} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        {/* Back Button */}
-        <Button
-            variant="contained"
-            onClick={() => navigate(-1)}
-            sx={{
-            backgroundColor: colors.primary[400], // Set the background color
-            color: colors.grey[100], // Set the text color
-            '&:hover': {
-                backgroundColor: colors.primary[700], // Set the background color on hover
-            },
-            mb: 1, // Add margin-bottom to create space below the button
-            }}
-        >
-            Back
-        </Button>
 
-        {/* Graph Toggle Button */}
-        <GraphToggleButton 
-            options={yearOptions}
-            selectedOption={selectedYear}
-            setSelectedOption={setSelectedYear}
-            sx={{
-            ml: 'auto', // This will push the button to the right if there are elements on its left
-            }}
-        />
-        </Box>
+            <Box p={0} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+
+                {/* Back Button */}
+                <Button
+                    variant="contained"
+                    onClick={() => navigate(-1)}
+                    sx={{
+                    backgroundColor: colors.primary[400], // Set the background color
+                    color: colors.grey[100], // Set the text color
+                    '&:hover': {
+                        backgroundColor: colors.primary[700], // Set the background color on hover
+                    },
+                    mb: 1, // Add margin-bottom to create space below the button
+                    }}
+                >
+                    Back
+                </Button>
+
+                {/* Graph Toggle Button */}
+                <GraphToggleButton 
+                    options={yearOptions}
+                    selectedOption={selectedYear}
+                    setSelectedOption={setSelectedYear}
+                    sx={{
+                    ml: 'auto', // This will push the button to the right if there are elements on its left
+                    }}
+                />
+
+            </Box>
 
 
         {/*Master Box*/}
@@ -316,11 +296,10 @@ const CourseDetail = () => {
             mt={0}
         >
         
-        
+        {/* Header Box */}
         <Box
         gridColumn="span 3"
         gridRow="span 1"
-        //backgroundColor={colors.primary[400]}
         display="flex"
         flexDirection="column"
         alignItems="center" // Align items to the center horizontally
@@ -329,8 +308,11 @@ const CourseDetail = () => {
         borderRadius="10px"
         height="100%" // Set a fixed height for the Box
         width="100%" // Set width to 100% of the column
-        ><Header title={CourseCode} subtitle={"Welcome to your course overview"} /></Box>
-
+        >
+            <Header title={CourseCode} subtitle={"Welcome to your course overview"} />
+        </Box>
+        
+        {/* Risk Box */}
         <Box
             gridColumn="span 8"
             gridRow="span 1"
@@ -388,7 +370,8 @@ const CourseDetail = () => {
                 </Box>
             )}
         </Box>
-
+        
+        {/* Risk Toggle button */}
         <Box
         gridColumn="span 1"
         gridRow="span 1"
@@ -411,8 +394,6 @@ const CourseDetail = () => {
                 </Button>
                 </Box>
         </Box>
-
-
 
         {/*GPA LineGraph*/}
         <Box
@@ -642,7 +623,7 @@ const CourseDetail = () => {
         </div>
         </Box>
 
-
+        {/*Top Students*/}
         <Box
         gridColumn="span 4"
         gridRow="span 1"
@@ -656,65 +637,58 @@ const CourseDetail = () => {
         height="100%" // Set a fixed height for the Box
         width="100%" // Set width to 100% of the column
         >
-           {yearOptions.map((year) => (
+
+        {yearOptions.map((year) => (
         selectedYear === year && (
             <Box 
                 key={year} 
-                p={2} 
-                
-                width="100%" // Ensure this inner Box fills the parent Box
-                height="100%" // Ensure this inner Box fills the parent Box
+                p={2}  
+                width="100%" 
+                height="100%" 
                 display="flex" 
                 flexDirection="column"
                 justifyContent="space-between"
             >
                 
-                <Box display="flex"  alignItems="center" justifyContent="space-between" mb={2}>
-            <Typography variant="h5" fontWeight="bold" mb={0}>
+            <Box display="flex"  alignItems="center" justifyContent="space-between" mb={2}>
+                <Typography variant="h5" fontWeight="bold" mb={0}>
                     Top Students
                 </Typography>
                 <Typography variant="h4" fontWeight="bold" mb={0}>
                 {`${selectedYear}`}
                 </Typography>
-        </Box>
+            </Box>
 
-       
-                    
-
-                {/* Top 5 Students Section */}
-                <Box 
-                    mt={0} 
-                    p={2} 
-                    borderRadius={4} 
-                    boxShadow={3} 
-                    bgcolor="background.default"
-                    flexGrow={1} // Ensure this section grows to fill the space
-                    width="100%" // Ensure this section fills the width of the container
-                    
-                >
-                    
-                    
-                    <Box display="flex" flexDirection="row" flexWrap="wrap" gap={2}>
-                        {topStudentsByYear[year]?.slice(0, 3).map((student, index) => (
-                            <Box key={student.CampusID} display="flex" alignItems="center" mx={0}>
-                                <EmojiEventsIcon sx={{ color: medalColors[index], mr: 1 }} />
-                                <Link 
-                                    to={`/students/${student.CampusID}`} 
-                                    style={{ textDecoration: 'none', color: 'inherit' }}
-                                >
-                                    {`${student.CampusID}: ${student.Grade} %`}
-                                </Link>
-                            </Box>
+            {/* Top 5 Students Section */}
+            <Box 
+            mt={0} 
+            p={2} 
+            borderRadius={4} 
+            boxShadow={3} 
+            bgcolor="background.default"
+            flexGrow={1} 
+            width="100%" 
+            >    
+                <Box display="flex" flexDirection="row" flexWrap="wrap" gap={2}>
+                    {topStudentsByYear[year]?.slice(0, 3).map((student, index) => (
+                        <Box key={student.CampusID} display="flex" alignItems="center" mx={0}>
+                            <EmojiEventsIcon sx={{ color: medalColors[index], mr: 1 }} />
+                            <Link 
+                            to={`/students/${student.CampusID}`} 
+                            style={{ textDecoration: 'none', color: 'inherit' }}
+                            >
+                            {`${student.CampusID}: ${student.Grade} %`}
+                            </Link>
+                        </Box>
                         ))}
-                    </Box>
                 </Box>
             </Box>
+        </Box>
         )
     ))}
         </Box>
 
       </Box>
-
       </Box>
     );
 };

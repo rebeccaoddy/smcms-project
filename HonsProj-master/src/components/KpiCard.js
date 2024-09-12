@@ -1,10 +1,8 @@
 import React from 'react';
 import { Box, Typography, Grid } from '@mui/material';
-import ComputerIcon from '@mui/icons-material/Computer';
-import PersonIcon from '@mui/icons-material/Person';
 import {  useTheme } from "@mui/material";
 import { tokens } from "../theme"
-import PercentIcon from '@mui/icons-material/Percent';
+
 
 const KpiCard = ({ icon, title, subtitle, value, additionalInfo, percentage, iconBackground }) => {
     const theme = useTheme();

@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { List, ListItem, ListItemText,Pagination , Box} from '@mui/material';
-import { getStudents } from '../../../Data/StudentDataFolder/StudentData'; // Adjust the import based on your structure
 import { getNewStudents } from '../../../Data/StudentDataFolder/StudentData';
 import { Link } from 'react-router-dom';
-import ListScrollTest from './ListScrollTest';
-import { useNavigate } from 'react-router-dom';
 import Header from '../../../components/Header';
 
 const Student = () => {

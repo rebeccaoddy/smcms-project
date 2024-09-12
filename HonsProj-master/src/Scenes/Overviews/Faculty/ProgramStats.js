@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Grid } from '@mui/material';
-import BarChart from '../../../components/BarChart'; // Adjust the import path based on your file structure
-import { getPrograms } from '../../../Data/ProgramData/ProgramData'; // Adjust the import based on your data fetching method
+import { Box, Grid } from '@mui/material';
+import BarChart from '../../../components/BarChart'; 
+import { getPrograms } from '../../../Data/ProgramData/ProgramData';
 import GraphToggleButton from '../../../components/GraphToggleButton';
 import Header from '../../../components/Header';
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { getPrograms } from '../../../Data/ProgramData/ProgramData'; // Adjust the import based on your data fetching method
-import { Box, Button, IconButton, Typography, Link, List,Grid,ListItem, ListItemText } from "@mui/material";
+import { getPrograms } from '../../../Data/ProgramData/ProgramData'; 
+import { Box, Button, Typography, Grid} from "@mui/material";
 import { tokens } from '../../../theme';
 import { useParams, useNavigate } from 'react-router-dom';
 import Header from '../../../components/Header';
@@ -14,7 +14,7 @@ import ProgramRiskKPI from './ProgramRiskKPI';
 import RiskLineGraph from '../../../components/RiskLineGraph';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
 
-
+{/* Function to calculate stats for the box plot chart */}
 const calculateBoxPlotStats = (data, type = 'marks') => {
     // Ensure data is an array
     if (!Array.isArray(data)) {
@@ -54,6 +54,7 @@ const calculateBoxPlotStats = (data, type = 'marks') => {
     return { min, q1, median, q3, max };
 };
 
+{/* Function to calculate the pass/fail stats */}
 const calculatePassesAndFails = (marks, passMark = 50) => {
     let passCount = 0;
     let failCount = 0;
@@ -105,21 +106,7 @@ const ProgramDetail = () => {
     const [PassFailStats, setPassFailStats] = useState([]);
     const [riskData, setRiskData] = useState({});
     
-
-
     //Toggle variables
-    const [GenderToggle, setGenderToggle] = useState('2020');
-    const GenderToggleOptions = ['2020', '2021', '2022']
-
-    const [PopulationToggle, setPopulationToggle] = useState('2020');
-    const PopulationToggleOptions = ['2020', '2021', '2022']
-
-    const [PassFailToggle, setPassFailToggle] = useState('2020');
-    const PassFailToggleOptions = ['2020', '2021', '2022']
-
-    const [RiskToggle, setRiskToggle] = useState('2020');
-    const RiskToggleOptions = ['2020', '2021', '2022'];
-
     const [view, setView] = useState('kpi'); // State to manage the current view
     const handleToggle = () => {
         setView(view === 'kpi' ? 'line' : 'kpi');
@@ -268,59 +255,61 @@ const ProgramDetail = () => {
 
     return (
         <Box p={2}>
-            {/* Header and Back Button */}
-            <Box p={0} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        {/* Back Button */}
-        <Button
-            variant="contained"
-            onClick={() => navigate(-1)}
-            sx={{
-            backgroundColor: colors.primary[400], // Set the background color
-            color: colors.grey[100], // Set the text color
-            '&:hover': {
-                backgroundColor: colors.primary[700], // Set the background color on hover
-            },
-            mb: 1, // Add margin-bottom to create space below the button
-            }}
-        >
-            Back
-        </Button>
 
-        {/* Graph Toggle Button */}
-        <GraphToggleButton 
-            options={yearOptions}
-            selectedOption={selectedYear}
-            setSelectedOption={setSelectedYear}
-            sx={{
-            ml: 'auto', // This will push the button to the right if there are elements on its left
-            }}
-        />  
+        {/* Header and Back Button */}
+        <Box p={0} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+
+            {/* Back Button */}
+            <Button
+                variant="contained"
+                onClick={() => navigate(-1)}
+                sx={{
+                backgroundColor: colors.primary[400], // Set the background color
+                color: colors.grey[100], // Set the text color
+                '&:hover': {
+                    backgroundColor: colors.primary[700], // Set the background color on hover
+                },
+                mb: 1, // Add margin-bottom to create space below the button
+                }}
+            >
+                Back
+            </Button>
+
+            {/* Graph Toggle Button */}
+            <GraphToggleButton 
+                options={yearOptions}
+                selectedOption={selectedYear}
+                setSelectedOption={setSelectedYear}
+                sx={{
+                ml: 'auto', // This will push the button to the right if there are elements on its left
+                }}
+            />
+
         </Box>
 
-            {/* Master Box */}
+        {/* Master Box */}
+        <Box
+            display="grid"
+            gridTemplateColumns="repeat(12, 1fr)"
+            gridAutoRows="190px"
+            gap="10px"
+            p={1}
+            mt={0}
+        >
+
+            {/* Header Box */}
             <Box
-                display="grid"
-                gridTemplateColumns="repeat(12, 1fr)"
-                gridAutoRows="190px"
-                gap="10px"
-                p={1}
-                mt={0}
-            >
-                {/* Header Box */}
-                <Box
                 gridColumn="span 3"
                 gridRow="span 1"
-                
                 display="flex"
                 flexDirection="column"
                 alignItems="center" // Align items to the center horizontally
                 justifyContent="center"
                 borderRadius="10px"
                 p={2}
-                
             >
                     <Header title={program.ProgramCode} subtitle={"Welcome to your program overview"} />
-                </Box>
+            </Box>
             
             {/* Risk Box */}
             <Box
@@ -343,6 +332,7 @@ const ProgramDetail = () => {
                         overflow: 'auto',
                     }}
                     >
+                    {/* Risk stats per year */}
                     {selectedYear === '2020' && <ProgramRiskKPI riskStats={riskData[2020]} />}
                     {selectedYear === '2021' && <ProgramRiskKPI riskStats={riskData[2021]} />}
                     {selectedYear === '2022' && <ProgramRiskKPI riskStats={riskData[2022]} />}
@@ -355,24 +345,24 @@ const ProgramDetail = () => {
                         width: '100%',
                     }}
                     >
+                    {/* Risk Line graph */}
                     <RiskLineGraph data={riskData} />
                     </Box>
                 )}
             </Box>
-
             
+            {/* Risk Toggle button */}
             <Box
-                gridColumn="span 1"
-                gridRow="span 1"
-                backgroundColor={colors.primary[400]}
-                display="flex"
-                flexDirection="column"
-                justifyContent="center"
-                borderRadius="10px"
-                p={2}
-                height={"30%"}
-                
-            > 
+            gridColumn="span 1"
+            gridRow="span 1"
+            backgroundColor={colors.primary[400]}
+            display="flex"
+            flexDirection="column"
+            justifyContent="center"
+            borderRadius="10px"
+            p={2}
+            height={"30%"}  
+            >            
             <Box
             width="100%"
             display="flex"
@@ -380,10 +370,7 @@ const ProgramDetail = () => {
             flexDirection="column"
             alignItems="center"
             mb={0} // Add margin at the bottom of the toggle button
-            //overflow="hidden" // Hide overflow content for toggle button
-                >
-               
-
+            >
             <Box display="flex" justifyContent="flex-end" mt={0}>
                 <Button variant="contained" onClick={handleToggle}>
                 {view === 'kpi' ? <ShowChartIcon /> : 'KPI'}
@@ -393,8 +380,8 @@ const ProgramDetail = () => {
             </Box>
             </Box>
 
-                {/*Scroll List */}
-                <Box
+            {/*Scroll List */}
+            <Box
                 gridColumn="span 4"
                 gridRow="span 1"
                 backgroundColor={colors.primary[400]}
@@ -447,13 +434,13 @@ const ProgramDetail = () => {
             >
                
                <Box display="flex"  alignItems="center" justifyContent="space-between" mb={2}>
-            <Typography variant="h5" fontWeight="bold" mb={0}>
-                    Pass / Fail Statistics
-                </Typography>
-                <Typography variant="h4" fontWeight="bold" mb={0}>
-                {`${selectedYear}`}
-                </Typography>
-        </Box>
+                    <Typography variant="h5" fontWeight="bold" mb={0}>
+                        Pass / Fail Statistics
+                    </Typography>
+                    <Typography variant="h4" fontWeight="bold" mb={0}>
+                    {`${selectedYear}`}
+                    </Typography>
+                </Box>
                 
                 {yearOptions.map((year) => (
                     selectedYear === year && (
@@ -536,34 +523,34 @@ const ProgramDetail = () => {
                borderRadius="10px"
             >
                <Box display="flex"  alignItems="center" justifyContent="space-between" mb={2}>
-            <Typography variant="h5" fontWeight="bold" mb={0}>
-                    Gender Statistics
-                </Typography>
-                <Typography variant="h4" fontWeight="bold" mb={0}>
-                {`${selectedYear}`}
-                </Typography>
-        
-        </Box>
-            {/* Bar Charts for Gender Data */}
-            <Box sx={{ flexGrow: 1, width: '100%', height: "100%", minHeight: '130px' }}>
-            {selectedYear === '2020' && (
-                <BarChart data={GenderData["2020"]}  yAxisLabel="# of Students"/>
-            )}
+                    <Typography variant="h5" fontWeight="bold" mb={0}>
+                        Gender Statistics
+                    </Typography>
+                    <Typography variant="h4" fontWeight="bold" mb={0}>
+                    {`${selectedYear}`}
+                    </Typography>
+                </Box>
 
-            {selectedYear === '2021' && (
-                <BarChart data={GenderData["2021"]}  yAxisLabel="# of Students"/>
-            )}
+                    {/* Bar Charts for Gender Data */}
+                    <Box sx={{ flexGrow: 1, width: '100%', height: "100%", minHeight: '130px' }}>
+                    {selectedYear === '2020' && (
+                        <BarChart data={GenderData["2020"]}  yAxisLabel="# of Students"/>
+                    )}
 
-            {selectedYear === '2022' && (
-                <BarChart data={GenderData["2022"]}  yAxisLabel="# of Students"/>
-            )}
+                    {selectedYear === '2021' && (
+                        <BarChart data={GenderData["2021"]}  yAxisLabel="# of Students"/>
+                    )}
 
-        </Box>
+                    {selectedYear === '2022' && (
+                        <BarChart data={GenderData["2022"]}  yAxisLabel="# of Students"/>
+                    )}
+
+                </Box>
                 
             </Box>
+
             {/*Race Data*/}
             <Box
-               
                gridColumn="span 4"
                gridRow="span 1"
                backgroundColor={colors.primary[400]}
