@@ -1,21 +1,5 @@
 /* src/components/AddCase.css */
-.student-results {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  border: 1px solid #ccc;
-  max-height: 150px;
-  overflow-y: auto;
-}
 
-.student-results li {
-  padding: 10px;
-  cursor: pointer;
-}
-
-.student-results li:hover {
-  background-color: #ddd;
-}
 .priority-dropdown {
   display: block;
   margin: 10px 0;

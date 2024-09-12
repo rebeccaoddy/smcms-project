@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import useSearch from '../hooks/useSearch';
 import { useNavigate } from 'react-router-dom';
+import BackButton from './BackButton';
 
 
 import './AddCase.css';
@@ -21,10 +22,12 @@ const AddCase = ({ addCase, user }) => {
   const [category, setCategory] = useState(''); // New state for category
   const [errors, setErrors] = useState({}); // State for storing error messages
   const navigate = useNavigate();
+  const [studentResultsVisible, setStudentResultsVisible] = useState(false);
 
 
 
-  const categories = ['Student Wellness Concern', 'Student Misdemeanor', 'Administration Issue','Student Academic Dishonesty','Log Appointment','Other' ]; // Example categories
+
+  const categories = ['Student Wellness Concern - Mental','Student Wellness Concern - Physical', 'Student Misdemeanor', 'Administration Issue','Student Academic Dishonesty', 'DPR Status/Appeal','Curriculumn advice', 'General advice','Record of Appointment', 'Financial Issue', 'Lost Property', 'URGENT', 'Other' ]; // Example categories
 
 
   // Use the custom hook for searching students and users
@@ -33,79 +36,22 @@ const AddCase = ({ addCase, user }) => {
 
 
   const handleStudentSelect = (selectedStudent) => {
-    setStudent(selectedStudent._id); // Store object ID
+    setStudent(selectedStudent.CampusID); // Store object ID ** change to campusID
   };
 
   const handleUserSelect = (selectedUser) => {
-    setAssignedTo(selectedUser._id); // Store user object ID or username
+    setAssignedTo(selectedUser.username); // Store user username in the input field 
   };
 
 
-  // search student database for student name **** UPDATE TO NUMBER 
-  //Search by CampusID: The student variable is now assumed to contain a CampusID or a similar identifier, rather than the student's name.
+  useEffect(() => {
+    console.log('Student search input:', student); // Logs the current student input
+    console.log('Student search results:', studentResults); // Logs the search results
+  }, [student, studentResults]);
 
-  // useEffect(() => {
-  //   console.log('Searching for student in AddCase line 28:', student);
-  //   if (student) {
-  //     const searchStudents = async () => {
-  //       try {
-  //         const token = localStorage.getItem('token');
-  //         const response = await axios.get(`http://localhost:5001/api/students/search?query=${student}`, {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`
-  //           }
-  //         });
-  //         console.log("this is the response data in add case line 38:", response.data) // BLANK
-
-  //         setStudentResults(response.data);  //setting empty array to response data
-  //       } catch (error) {
-  //         console.error('Error searching students', error);
-  //       }
-  //     };
-
-
-  //     searchStudents();
-  //   } else {
-  //     setStudentResults([]);
-  //   }
-  // }, [student]);
-
-  // search user database for username
-  // useEffect(() => {
-  //   if (assignedTo) {
-  //     const searchUsers = async () => {
-  //       try {
-  //         const token = localStorage.getItem('token');
-  //         const response = await axios.get(`http://localhost:5001/api/auth/search?query=${assignedTo}`, {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`
-  //           }
-  //         });
-  //         setUserResults(response.data);
-  //       } catch (error) {
-  //         console.error('Error searching users', error);
-  //       }
-  //     };
-  
-  //     searchUsers();
-  //   } else {
-  //     setUserResults([]);
-  //   }
-  // }, [assignedTo]);
-
-  // // const handleStudentSelect = (selectedStudent) => {
-  // //   //setStudent(selectedStudent.name); 
-  // //   setStudent(selectedStudent._id); // Store object ID 
-  // //   setStudentResults([]);
-  // // };
-
-  // const handleUserSelect = (selectedUser) => {
-  //   setAssignedTo(selectedUser._id); // Store user object ID or username
-  //   setUserResults([]);
-  // };
-  
-
-
+  useEffect(() => {
+    console.log('studentResults has changed:', studentResults);
+  }, [studentResults]);
 
 // ensure all sections are filled in 
   const validateForm = () => {
@@ -171,25 +117,51 @@ const AddCase = ({ addCase, user }) => {
   }
   };
 
+  console.log('Student Results:', studentResults);
+
   return (
     <form onSubmit={handleSubmit}>
+      <BackButton />      
       <h2>Add Case</h2>
+
+      <label htmlFor="category">Category:</label>
+      <select 
+        id="category"
+        value={category}
+        onChange={(e) => setCategory(e.target.value)}
+        className="category-dropdown"
+      >
+        <option value="">Select Category</option>
+        {categories.map((cat) => (
+          <option key={cat} value={cat}>
+            {cat}
+          </option>
+        ))}
+      </select>
+      {errors.category && <p className="error">{errors.category}</p>}
+
+      <label htmlFor="title">Title:</label>
       <input
+        id="title"
         type="text"
         placeholder="Title"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
-      {errors.title && <p className="error">{errors.title}</p>} {/* Display error if any */}
-      
+      {errors.title && <p className="error">{errors.title}</p>}
+
+      <label htmlFor="description">Description:</label>
       <textarea
+        id="description"
         placeholder="Description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
-      {errors.description && <p className="error">{errors.description}</p>} {/* Display error if any */}
+      {errors.description && <p className="error">{errors.description}</p>}
 
+      <label htmlFor="priority">Priority:</label>
       <select
+        id="priority"
         value={priority}
         onChange={(e) => setPriority(e.target.value)}
         className="priority-dropdown"
@@ -199,26 +171,37 @@ const AddCase = ({ addCase, user }) => {
         <option value="medium" className="yellow-flag">🟡 Medium</option>
         <option value="low" className="green-flag">🟢 Low</option>
       </select>
-      {errors.priority && <p className="error">{errors.priority}</p>} {/* Display error if any */}
+      {errors.priority && <p className="error">{errors.priority}</p>}
 
+      <label htmlFor="student">Student Number:</label>
       <input
+        id="student"
         type="text"
         placeholder="Student Number"
         value={student}
-        onChange={(e) => setStudent(e.target.value)}
+        onChange={(e) => {
+          setStudent(e.target.value);
+          setStudentResultsVisible(true);
+        }}
+        onFocus={() => setStudentResultsVisible(true)}
+        onBlur={() => setTimeout(() => setStudentResultsVisible(false), 200)}
       />
-      {errors.student && <p className="error">{errors.student}</p>} {/* Display error if any */}
+      {errors.student && <p className="error">{errors.student}</p>}
 
-      {studentResults.length > 0 && (
+      {studentResults.length > 0 && studentResultsVisible && (
         <ul className="student-results">
           {studentResults.map((s) => (
-            <li key={s._id} onClick={() => handleStudentSelect(s)}>
-              {s.CampusID}
+            <li key={s._id} onClick={() =>  { console.log('Selected student:', student);
+            handleStudentSelect(s);}} >
+              {s.CampusID} - {s.firstName} {s.lastName}
             </li>
           ))}
         </ul>
       )}
+
+      <label htmlFor="assignedTo">Assigned To:</label>
       <input
+        id="assignedTo"
         type="text"
         placeholder="Assigned To"
         value={assignedTo}
@@ -233,38 +216,30 @@ const AddCase = ({ addCase, user }) => {
           ))}
         </ul>
       )}
-      
+
+      <label htmlFor="status">Status:</label>
       <select
+        id="status"
         value={status}
         onChange={(e) => setStatus(e.target.value)}
         className="status-dropdown"
       >
         <option value="">Select Status</option>
-        <option value="Open" >Open</option>
-        <option value="Pending" > Pending</option>
-        <option value="Closed" > Closed</option>
+        <option value="Open">Open</option>
+        <option value="Pending">Pending</option>
+        <option value="Closed">Closed</option>
       </select>
-      {errors.status && <p className="error">{errors.status}</p>} {/* Display error if any */}
+      {errors.status && <p className="error">{errors.status}</p>}
 
+      <label htmlFor="notes">Notes:</label>
       <textarea
+        id="notes"
         placeholder="Notes"
         value={notes}
         onChange={(e) => setNotes(e.target.value)}
       />
 
-      <select value={category} onChange={(e) => setCategory(e.target.value)}
-      className="category-dropdown">
-        <option value="">Select Category</option>
-        {categories.map((cat) => (
-          <option key={cat} value={cat}>
-            {cat}
-          </option>
-        ))}
-      </select>
-      {errors.category && <p className="error">{errors.category}</p>} {/* Display error if any */}
-
       <button type="submit">Add Case</button>
-      
     </form>
   );
 };

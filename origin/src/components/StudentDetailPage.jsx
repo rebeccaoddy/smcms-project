@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './StudentDetailPage.css';
 import { useLocation } from 'react-router-dom';
+import BackButton from './BackButton';
 
 const StudentDetailPage = ({ CampusID, selectCase }) => {
   const [studentDetail, setStudentDetail] = useState(null);
@@ -89,6 +90,7 @@ const StudentDetailPage = ({ CampusID, selectCase }) => {
   
   return (
     <div className="student-detail">
+      <BackButton />
       <div className="button-container">
         <button className="dashboard-button">Link to Student Dashboard</button>
       </div>
