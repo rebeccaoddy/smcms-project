@@ -15,13 +15,18 @@ import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-route
 ///testing commit to branch
 import './App.css';
 
-const MainApp = () => (
-  <iframe
-    src="http://localhost:3000/faculty"  // Change to the port where the main app is running
-    style={{ width: '100%', height: '100vh', border: 'none' }}
-    title="Main Application"
-  />
-);
+const MainApp = () => {
+  window.location.href = "http://localhost:3000/faculty"
+  // const handleNavigation = () => {
+
+  //   window.location.href = "http://localhost:3000/faculty"
+  // };
+  // return (
+  //   <button onClick={handleNavigation}>
+  //     Go to Dashboard
+  //   </button>
+  // );
+  };
 
 const App = () => {
   const [cases, setCases] = useState([]);
