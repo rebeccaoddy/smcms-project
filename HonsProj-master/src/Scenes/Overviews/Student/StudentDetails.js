@@ -12,6 +12,22 @@ import Header from '../../../components/Header';
 import RadarChart from '../../../components/RadarChart';
 import { Link } from "react-router-dom";
 
+const getOrdinalSuffix = (num) => {
+    if (!num) return 'N/A';
+    const remainder10 = num % 10;
+    const remainder100 = num % 100;
+  
+    if (remainder10 === 1 && remainder100 !== 11) {
+      return `${num}st`;
+    }
+    if (remainder10 === 2 && remainder100 !== 12) {
+      return `${num}nd`;
+    }
+    if (remainder10 === 3 && remainder100 !== 13) {
+      return `${num}rd`;
+    }
+    return `${num}th`;
+  };
 
 const getRiskColor = (riskLevel) => {
     switch (riskLevel) {
@@ -142,6 +158,8 @@ Object.entries(foundStudent.Years).forEach(([year, yearData]) => {
         } else if (year === '2022') {
             year3MarksArray.push(markData);
         }
+
+        
     });
 });
 
@@ -523,9 +541,25 @@ Object.entries(foundStudent.Years).forEach(([year, yearData]) => {
             {student && student.Years[selectedYear] && (
                 <Box key={selectedYear} mt={2}>
 
-                    <Typography variant="h3" style={{ fontWeight: 'bold' }} color={colors.grey[100]}>
-                    Enroll Year: {student.Years[selectedYear].EnrolTerm || 'N/A'}
-                </Typography>
+                <Box display="flex" justifyContent="space-between">
+                    <Typography variant="h3" fontWeight="bold" color={colors.grey[100]} sx={{ marginRight: 1 }}>
+                        Enroll Year: {student.Years[selectedYear].EnrolTerm}
+                    </Typography>
+                    
+                    <Divider 
+        orientation="vertical" 
+        flexItem 
+        sx={{ 
+          backgroundColor: colors.grey[100], 
+          margin: '0 10px',
+          width: '0px' // Controls the thickness of the divider
+        }} 
+      />
+
+                    <Typography variant="h4" fontWeight="bold" color={colors.grey[100]}>
+                    { getOrdinalSuffix((student.Years[selectedYear].EnrolTerm - student.AdmitTerm)+1) || 'N/A'} Year
+                    </Typography>
+                    </Box>
 
                 <Divider style={{ backgroundColor: colors.grey[100], margin: '10px 0' }} />
 
@@ -540,7 +574,7 @@ Object.entries(foundStudent.Years).forEach(([year, yearData]) => {
                     Total Courses: {student.Years[selectedYear].TotalCourses}
                     </Typography>
                     <Typography variant="h4" color={colors.grey[100]} mt={0}>
-                    Passed: {student.Years[selectedYear].CoursesPassed}
+                    Passed: {student.Years[selectedYear].CoursesPassed || 'N/A'}
                     </Typography>
                 </Box>
 

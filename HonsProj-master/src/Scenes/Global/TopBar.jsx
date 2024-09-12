@@ -36,9 +36,17 @@ const Topbar = () => {
         style={{ width: '50px', height: '50px', marginRight: '10px', marginTop: '-5px' }} 
       />
       
-      <Typography variant="h2" color={colors.grey[100]}>
-        Student Analytic Dashboard
-      </Typography>
+      <Typography
+      variant="h1"
+      color={colors.grey[100]}
+      
+      fontWeight="bold"
+      fontFamily="'Arial', sans-serif" // Replace 'Roboto' with the font you prefer
+    >
+      Student Monitoring Dashboard
+    </Typography>
+
+
 
       <Box display="flex" justifyContent="flex-end"> 
         <IconButton onClick={colorMode.toggleColorMode}>

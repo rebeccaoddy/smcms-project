@@ -135,7 +135,7 @@ const NavBar = () => {
               >
                 <Typography>
                   <Link to="/cases" style={{ textDecoration: 'none', color: 'inherit' }}>
-                    Second Application
+                    Case Management
                   </Link>
                 </Typography>
               </MenuItem>

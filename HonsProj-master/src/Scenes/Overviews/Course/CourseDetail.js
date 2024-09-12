@@ -694,7 +694,7 @@ const CourseDetail = () => {
                 >
                     
                     
-                    <Box display="flex" flexDirection="row" flexWrap="wrap" gap={2}>
+                    <Box display="flex" flexDirection="column" flexWrap="wrap" gap={1}>
                         {topStudentsByYear[year]?.slice(0, 3).map((student, index) => (
                             <Box key={student.CampusID} display="flex" alignItems="center" mx={0}>
                                 <EmojiEventsIcon sx={{ color: medalColors[index], mr: 1 }} />
