@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'; // Add this import statement
+import TopNavBar from './components/TopNavBar';
 import CaseList from './components/CaseList';
 import AddCase from './components/AddCase';
 import CaseDetail from './components/CaseDetail';
@@ -7,6 +8,7 @@ import SidePanel from './components/SidePanel';
 import Login from './components/Login';
 import Register from './components/Register';
 import StudentDetailPage from './components/StudentDetailPage';
+import UserProfile from './components/UserProfile';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 
 
@@ -45,7 +47,9 @@ const App = () => {
         }
       } else {
         setUser(null);
+        if (window.location.pathname !== '/register') {
         navigate('/login'); // Redirect to login if no token
+        }
       }
     };
     fetchUser();
@@ -91,14 +95,19 @@ const App = () => {
 
   return (
     <div className="App">
-      <SidePanel 
+      {/* <SidePanel 
         user={user} 
         //setCurrentView={setCurrentView} 
         handleLogout={handleLogout} 
         setSelectedStudentNumber={setSelectedStudentNumber} //pass setter function
-        />
+        /> 
+      </div><div className="app-container">*/}
+      <TopNavBar
+        user={user}
+        handleLogout={handleLogout}
+        setSelectedStudentNumber={setSelectedStudentNumber}
+      />
       <div className="content">
-        <h1>Case Management System</h1>
           <Routes>
             <Route
               path="/login"
@@ -115,6 +124,7 @@ const App = () => {
             <Route
               path="/cases/add"
               element={<AddCase addCase={addCase} user={user} />}
+              
             />
             <Route
               path="/cases/detail"
@@ -123,6 +133,10 @@ const App = () => {
             <Route
               path="/student-details"
               element={<StudentDetailPage CampusID={selectedStudentNumber} selectCase={selectCase} />}
+            />
+            <Route
+              path="/profile"
+              element={<UserProfile user={user} />}
             />
             {/* <Route
               path="*"
