@@ -13,7 +13,7 @@ const Login = ({ setUser }) => {
       const response = await axios.post('http://localhost:5001/api/auth/login', { username, password });
       localStorage.setItem('token', response.data.token); // Store the token
       setUser(response.data);
-      navigate('/cases');
+      navigate('/faculty');
     } catch (error) {
       console.error('Error logging in', error);
       alert('Login failed, please check your credentials and try again.');
