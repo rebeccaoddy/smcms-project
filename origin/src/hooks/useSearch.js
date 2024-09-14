@@ -6,6 +6,7 @@ const useSearch = (query, endpoint) => {
 
   useEffect(() => {
     if (query) {
+      console.log('Query from useSearch.js:', query); // Check the query value
       const search = async () => {
         try {
           const token = localStorage.getItem('token');
@@ -15,6 +16,8 @@ const useSearch = (query, endpoint) => {
             }
           });
           setResults(response.data);
+          console.log('Results from useSearch.js:', response.data); // Check the results returned
+
         } catch (error) {
           console.error(`Error searching ${endpoint}`, error);
         }
