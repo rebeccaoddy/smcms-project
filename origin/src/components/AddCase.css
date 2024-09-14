@@ -74,3 +74,55 @@
   font-size: 0.875em;
   margin-top: 0.25em;
 }
+
+
+
+.add-case-input-container {
+  position: relative; /* This ensures that the dropdown is positioned relative to this container */
+  width: 100%; /* Ensures the container takes full width */
+}
+
+.student-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: white;
+  color: black;
+  border: 1px solid #ccc;
+  max-height: 200px;
+  overflow-y: auto;
+  border-radius: 0 0 4px 4px;
+  z-index: 1000;
+}
+
+.student-results li {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.student-results li:hover {
+  background-color: #f1f1f1;
+}
+
+.user-results {
+  position: absolute; /* Position dropdown absolutely within the container */
+  top: 100%; /* Place it directly below the input field */
+  left: 0; /* Align it with the left of the input */
+  width: 100%; /* Ensure it matches the input's width */
+  background-color: white; /* Ensure it's visible */
+  border: 1px solid #ccc; /* Add a border to separate it */
+  max-height: 200px; /* Limit height to avoid long lists */
+  overflow-y: auto; /* Allow scrolling if there are many results */
+  z-index: 1000; /* Ensure it appears above other elements */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow to make it stand out */
+}
+
+.user-results li {
+  padding: 10px; /* Add padding for better readability */
+  cursor: pointer; /* Show a pointer cursor on hover */
+}
+
+.user-results li:hover {
+  background-color: #f0f0f0; /* Highlight the hovered item */
+}

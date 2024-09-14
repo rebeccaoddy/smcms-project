@@ -46,6 +46,8 @@ const TopNavBar = ({ user, handleLogout, setSelectedStudentNumber }) => {
           onChange={(e) => {
             setStudentNumberInput(e.target.value);
             setStudentResultsVisible(true);
+            console.log('Student Results in TopNavBar:', studentResults);
+
           }}
           onFocus={() => setStudentResultsVisible(true)}
           onBlur={() => setTimeout(() => setStudentResultsVisible(false), 200)}
