@@ -4,27 +4,18 @@ import EditCase from './EditCase'; // Import the EditCase component
 import Attachments from './Attachments'; // Import the Attachments component
 import './CaseDetail.css';
 import BackButton from './BackButton'; // Import the BackButton component
-
-//import { useNavigate } from 'react-router-dom';
-
-import StudentDetailPage from './StudentDetailPage';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 
-
-
-const CaseDetail = ({ caseDetail, onUpdateCase, selectCase, setSelectedStudentNumber }) => {
+const CaseDetail = ({ caseDetail, onUpdateCase, onDeleteCase, selectCase, setSelectedStudentNumber }) => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
-  //const [activeTab, setActiveTab] = useState('details'); // Define the activeTab state
-  const [studentDetail, setStudentDetail] = useState(null); // State for student detail
-  const [studentCases, setStudentCases] = useState([]);
   const [isEditing, setIsEditing] = useState(false); // State to handle edit mode; track whether the user is in edit mode.
-  //const [studentNumberInput, setStudentNumberInput] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
+  const [updatedCaseDetail, setUpdatedCaseDetail] = useState(caseDetail);
 
-  // Get the current tab from the URL
+  // Get the current tab from the URL from SMS
   const queryParams = new URLSearchParams(location.search);
   const activeTab = queryParams.get('tab') || 'details'; 
 
@@ -37,8 +28,6 @@ const CaseDetail = ({ caseDetail, onUpdateCase, selectCase, setSelectedStudentNu
       navigate(`${location.pathname}?tab=${tab}`); // Navigate normally for other tabs
     }
   };
-  
-
 
   const renderTabContent = () => {
     console.log('Student details:', caseDetail.student);
@@ -51,51 +40,31 @@ const CaseDetail = ({ caseDetail, onUpdateCase, selectCase, setSelectedStudentNu
             <div className="text-line">{caseDetail.title}</div>
             <h3>Case Number </h3>
             <div className="text-line">{caseDetail._id}</div>
+            <h3>Student Number </h3>
+            <div className="text-line">{caseDetail.student.CampusID}</div>
             <h3>Details</h3>
             <div className="text-box">{caseDetail.description}</div>
+            <h3>Assigned To </h3>
+            <div className="text-line">{caseDetail.assignedTo.username}</div>
           </div>
         );
       case 'attachments':
-        return <Attachments caseDetail={caseDetail} />; // Render the Attachments component
+        return <Attachments caseDetail={caseDetail} onAttachmentUpload={handleAttachmentUpload}/>; // Render the Attachments component
       case 'edit':
         return <EditCase caseDetail={caseDetail} onUpdate={updatedCase => {{onUpdateCase}
           navigate('/cases/detail'); // Ensure you switch back to 'detail' after edit
-        }} //onUpdateCase} setActiveTab={setActiveTab}  // Render the EditCase component ************* MOVEEEEEEEEE
+        }}
         />;
       case 'studentDetails':
-        //setStudentNumberInput(caseDetail.student.CampusID);
-        console.log('Student Number:', caseDetail.student.CampusID);
+        console.log('Student Number:', caseDetail.student.CampusID); //testing
         setSelectedStudentNumber(caseDetail.student.CampusID);
-        // navigate('/student-details'); //nav to stuentDetails
         return <div>Student Details Content</div>;
-
       default:
         return null;
     }
   };
 
-
-  // // Render content based on active tab
-  // const renderTabContent = () => {
-  //   switch (activeTab) {
-  //     case 'details':
-  //       return <div>Case Details Content</div>;
-  //     case 'attachments':
-  //       return <div>Attachments Content</div>;
-  //     case 'studentDetails':
-  //       return <div>Student Details Content</div>;
-  //     default:
-  //       return <div>Case Details Content</div>;
-  //   }
-  // };
-
-
-  //format caseID for looks
-  // const truncateCaseId = (caseId) => {
-  //   return `${caseId.slice(0, 6)}...${caseId.slice(-4)}`;
-  // };
-
-  
+// retrieve comments for cases 
   useEffect(() => {
     const fetchComments = async () => {
       try {
@@ -110,13 +79,12 @@ const CaseDetail = ({ caseDetail, onUpdateCase, selectCase, setSelectedStudentNu
         console.error('Error fetching comments', error);
       }
     };
-  
     if (caseDetail && caseDetail._id) {
       fetchComments();
     }
   }, [caseDetail]);
 
-
+// add new comment to case details
   const handleAddComment = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -139,8 +107,6 @@ const CaseDetail = ({ caseDetail, onUpdateCase, selectCase, setSelectedStudentNu
   };
 
   const handleSaveEdit = (updatedCase) => {
-    //setCaseDetail(updatedCase);
-
     onUpdateCase(updatedCase); // Update the case with the new details
     setIsEditing(false); // Exit editing mode
   };
@@ -155,69 +121,35 @@ const CaseDetail = ({ caseDetail, onUpdateCase, selectCase, setSelectedStudentNu
     );
   }
 
-  //////CHANGE FORMATTING
-  
-
-//   return (
-//     <div className="case-detail">
-//       <div className="tabs">
-//         <button className={activeTab === 'details' ? 'active' : ''} onClick={() => setActiveTab('details')}>Case Details</button>
-//         <button className={activeTab === 'attachments' ? 'active' : ''} onClick={() => setActiveTab('attachments')}>Attachments</button>
-//         <button className={activeTab === 'studentDetails' ? 'active' : ''} onClick={() => setActiveTab('studentDetails')}>Student Details</button>
-//       </div>
-//       <div className="tab-content">
-//         {renderTabContent()}
-//       </div>
-//       <div className="comments-section">
-//         <h3>Comments</h3>
-//         <ul>
-//           {comments.map(comment => (
-//             <li key={comment._id}>
-//               <strong>{comment.user}</strong>: {comment.text}
-//             </li>
-//           ))}
-//         </ul>
-//         <input
-//           type="text"
-//           value={newComment}
-//           onChange={(e) => setNewComment(e.target.value)}
-//           placeholder="Add a comment"
-//         />
-//         <button onClick={handleAddComment}>Add Comment</button>
-//       </div>
-//       <div className="actions">
-//         <h3>Actions</h3>
-//         <button onClick={handleEditClick}>Edit Case</button>
-//         {/* <button>Assign Member</button>
-//         <button>Update Status</button> */}
-//       </div>
-//     </div>
-//   );
-// };
-
-const handleDeleteCase = (caseId) => {
-  setCases(cases.filter(c => c._id !== caseId)); // Remove the deleted case from the list
-};
-
-const handleDelete = async () => {
-  const confirmDelete = window.confirm('Are you sure you want to delete this case?');
-  if (confirmDelete) {
-    try {
-      const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:5001/api/cases/${caseDetail._id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      // Call the function passed in props to update the parent component
-      onDeleteCase(caseDetail._id); 
-      navigate('/cases'); // Redirect to case list or another view after deletion
-    } catch (error) {
-      console.error('Error deleting case', error);
-      alert('Failed to delete the case. Please try again.');
+  const handleDelete = async () => {
+    const confirmDelete = window.confirm('Are you sure you want to delete this case?'); //popup 
+    if (confirmDelete) {
+      try {
+        const token = localStorage.getItem('token'); // Ensure token is being sent
+        const response = await axios.delete(`http://localhost:5001/api/cases/${caseDetail._id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log('onDeleteCase function:', onDeleteCase); //testing
+        onDeleteCase(caseDetail._id);  // Call the function passed in props to update the parent component
+        navigate('/cases'); // Redirect to case list after deletion
+      } catch (error) {
+        console.error('Error deleting case', error);
+        alert('Failed to delete the case. Please try again.');
+      }
     }
-  }
-};
+  };
+
+  const handleAttachmentUpload = (newAttachment) => {
+    const updatedAttachments = [...upcaseDetail.attachments, newAttachment];     // Update the case details with the new attachment
+    setUpdatedCaseDetail({
+      ...caseDetail,
+      attachments: updatedAttachments
+    });
+    navigate("cases/detail") // nav to case details after submission
+  };
+
 
 return (
   <div className="case-detail">
@@ -229,12 +161,7 @@ return (
       >
         Case Details
         </button>
-      <button
-        className={activeTab === 'history' ? 'active' : ''}
-        onClick={() => handleTabChange('history')}
-      >
-        History
-      </button>
+
       <button
         className={activeTab === 'attachments' ? 'active' : ''}
         onClick={() => handleTabChange('attachments')}
@@ -271,8 +198,6 @@ return (
     <div className="actions">
       <h3>Actions</h3>
       <button onClick={handleEditClick}>Edit Case</button>
-      {/* <button>Assign Member</button>
-      <button>Update Status</button> */}
       <button onClick={handleDelete} className="delete-button">Delete</button>
 
     </div>

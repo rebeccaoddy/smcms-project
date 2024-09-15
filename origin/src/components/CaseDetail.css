@@ -1,5 +1,3 @@
-
-
 /* Ensure headings are aligned to the left */
 .case-detail h3, 
 .case-detail h4, 
@@ -12,19 +10,6 @@
   position: absolute;
   top: 10px;
   right: 10px;
-}
-
-.dashboard-button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.dashboard-button:hover {
-  background-color: #0056b3;
 }
 
 .tabs {
@@ -116,7 +101,7 @@
 }
 
 .tabs button.active {
-  background-color: #007bff;
+  background-color: #014c9c;
   color: white;
 }
 

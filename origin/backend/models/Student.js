@@ -1,12 +1,7 @@
 const mongoose = require('mongoose');
 const { stringify } = require('qs');
 
-// const StudentSchema = new mongoose.Schema({
-//   name: { type: String, required: true },
-//   studentNumber: { type: String },
-//   degree: { type: String },
-//   mark: { type: Number },
-// });
+
 
 const StudentSchema = new mongoose.Schema({
   CampusID: String,

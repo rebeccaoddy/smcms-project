@@ -1,6 +1,5 @@
-/* src/components/BackButton.css */
 .back-button {
-    background-color: #007bff;
+    background-color: #014c9c;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -13,10 +12,10 @@
   }
   
   .back-button svg {
-    margin-right: 5px; /* Add some space between the icon and the text */
+    margin-right: 5px; 
   }
   
   .back-button:hover {
-    background-color: #0056b3;
+    background-color: #014c9c;
   }
   

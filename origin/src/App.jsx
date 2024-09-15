@@ -7,32 +7,23 @@ import CaseDetail from './components/CaseDetail';
 import Login from './components/Login';
 import Register from './components/Register';
 import StudentDetailPage from './components/StudentDetailPage';
-import UserProfile from './components/UserProfile';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
-
-
-///testing commit to branch
 import './App.css';
 
+//handle SMS application navigation afer login 
 const MainApp = () => {
   window.location.href = "http://localhost:3000/faculty"
-
   };
 
 const App = () => {
   const [cases, setCases] = useState([]);
   const [selectedCase, setSelectedCase] = useState(null);
-  //const [currentView, setCurrentView] = useState('list'); // Initially set to login
   const [user, setUser] = useState(null);
-  const [selectedStudentId, setSelectedStudentId] = useState(null);
   const [selectedStudentNumber, setSelectedStudentNumber] = useState(null);
   const navigate = useNavigate(); // Use this to navigate programmatically
 
 // Check if the current route is the login or register page
 const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
-
-
-
 
 //get user details from login
   useEffect(() => {
@@ -46,7 +37,6 @@ const isAuthPage = location.pathname === '/login' || location.pathname === '/reg
             },
           });
           setUser(response.data);
-          ////navigate('/cases'); // Navigate to the case list if authenticated
         } catch (error) {
           console.error('Error fetching user', error);
           setUser(null);
@@ -62,52 +52,42 @@ const isAuthPage = location.pathname === '/login' || location.pathname === '/reg
     fetchUser();
   }, [navigate]);
 
-  //create a new case 
+//create a new case 
   const addCase = (newCase) => {
     setCases([...cases, { ...newCase, assignedTo: user.username }]);
   };
 
-
-  //select a case to view
+//select a case to view
   const selectCase = (caseId) => {
-    console.log('Case ID to Select:', caseId); // Add this line for debugging
+    console.log('Case ID to Select:', caseId); //  debugging
     const caseDetail = cases.find((c) => c._id === caseId);
-    console.log('Selected Case:', caseDetail); // Add this line for debugging
+    console.log('Selected Case:', caseDetail); // debugging
     setSelectedCase(caseDetail);
     navigate('/cases/detail'); // Navigate to case detail view
   };
 
-
-  //logout
+//logout
   const handleLogout = () => {
-    localStorage.removeItem('token'); // Clear the token from localStorage
+    localStorage.removeItem('token'); // clear token from localStorage
     setUser(null);
-    navigate('/login'); // Redirect to login after logout
+    navigate('/login'); // redirect to login after logout
   };
 
-
-  // New function to handle updating a case
+// function to handle updating a case
   const onUpdateCase = (updatedCase) => {
     setCases(cases.map(c => c._id === updatedCase._id ? updatedCase : c));
     setSelectedCase(updatedCase); // Update the selected case with the new details
   };
-  
-  const handleDeleteCase = (caseId) => {
-    setCases(cases.filter(c => c._id !== caseId)); // Remove the deleted case from the list
+
+  //handle deletion of case
+  const onDeleteCase = (deletedCaseId) => {
+    setCases(cases.filter(c => c._id !== deletedCaseId));
+    navigate("/cases")
+
   };
-
-
-
+  
   return (
     <div className="App">
-      {/* <SidePanel 
-        user={user} 
-        //setCurrentView={setCurrentView} 
-        handleLogout={handleLogout} 
-        setSelectedStudentNumber={setSelectedStudentNumber} //pass setter function
-        /> 
-      </div><div className="app-container">*/}
-      {/* Conditionally render TopNavBar only if it's not an auth page */}
       {!isAuthPage && (
       <TopNavBar
         user={user}
@@ -136,9 +116,9 @@ const isAuthPage = location.pathname === '/login' || location.pathname === '/reg
             />
             <Route
               path="/cases/detail"
-              element={<CaseDetail caseDetail={selectedCase} onUpdateCase={onUpdateCase} setSelectedStudentNumber={setSelectedStudentNumber}   onDeleteCase={handleDeleteCase} selectCase={selectCase}
-              />}
+              element={<CaseDetail caseDetail={selectedCase} onUpdateCase={onUpdateCase} setSelectedStudentNumber={setSelectedStudentNumber} onDeleteCase={onDeleteCase} selectCase={selectCase} />}
             />
+
             <Route
               path="/student-details"
               element={<StudentDetailPage CampusID={selectedStudentNumber} selectCase={selectCase} />}
@@ -146,17 +126,7 @@ const isAuthPage = location.pathname === '/login' || location.pathname === '/reg
             <Route
               path="/faculty"
               element={<MainApp user={user}/>}
-            />
-
-
-            <Route
-              path="/profile"
-              element={<UserProfile user={user} />}
-            />
-            {/* <Route
-              path="*"
-              element={user ? <CaseList cases={cases} setCases={setCases} selectCase={selectCase} user={user} /> : <Login setUser={setUser} />}
-            /> */}
+            />  {/* navigate to SMS application */}
           </Routes>
         </div>
       </div>
