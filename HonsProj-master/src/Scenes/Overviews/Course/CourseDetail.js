@@ -569,15 +569,22 @@ const CourseDetail = () => {
         height="100%" // Set a fixed height for the Box
         width="100%" // Set width to 100% of the column
         >
-        <div style={{ width: '100%', height: '500px' }}> {/* Use a div for more control */}
-        <Box display="flex"  alignItems="center" justifyContent="space-between" mb={2}>
+        <Box
+            width="100%"
+            height="500px"
+            display="flex-start"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="space-between"
+        >
+            <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
             <Typography variant="h5" fontWeight="bold" mb={0}>
-                    Pass / Fail Statistics
-                </Typography>
-                <Typography variant="h4" fontWeight="bold" mb={0}>
+                Pass / Fail Statistics
+            </Typography>
+            <Typography variant="h4" fontWeight="bold" mb={0}>
                 {`${selectedYear}`}
-                </Typography>
-        </Box>
+            </Typography>
+            </Box>
 
             <Box sx={{ height: '100%', width: '100%' }} id="numStudents">
             {yearOptions.map((year) => (
@@ -601,7 +608,7 @@ const CourseDetail = () => {
                             </Grid>
                             <Grid item xs={4} container justifyContent="flex-end"> {/* Grid container for Year aligned to the right */}
                             <Grid item>
-                                
+                                {/* Possibly empty space or other content */}
                             </Grid>
                             </Grid>
                         </Grid>
@@ -624,8 +631,9 @@ const CourseDetail = () => {
                 )
             ))}
             </Box>
-        </div>
         </Box>
+        </Box>
+
 
         {/*Top Students*/}
         <Box
