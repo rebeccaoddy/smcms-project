@@ -28,6 +28,8 @@ const App = () => {
   const [selectedStudentNumber, setSelectedStudentNumber] = useState(null);
   const navigate = useNavigate(); // Use this to navigate programmatically
 
+// Check if the current route is the login or register page
+const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
 
 
 
@@ -101,11 +103,14 @@ const App = () => {
         setSelectedStudentNumber={setSelectedStudentNumber} //pass setter function
         /> 
       </div><div className="app-container">*/}
+      {/* Conditionally render TopNavBar only if it's not an auth page */}
+      {!isAuthPage && (
       <TopNavBar
         user={user}
         handleLogout={handleLogout}
         setSelectedStudentNumber={setSelectedStudentNumber}
       />
+      )}
       <div className="content">
           <Routes>
             <Route
