@@ -52,6 +52,25 @@ const LineGraph = ({ data, xAxisLabel, yAxisLabel }) => {
 
   const yTickValues = getUniqueYValues(data);
 
+  // Define a minimum distance between tick values
+  const threshold = (Math.max(...yTickValues) - Math.min(...yTickValues)) * 0.1; // Example: 10% of the range
+
+  // Function to filter tick values based on the threshold
+  const filterTickValues = (ticks) => {
+    let filteredTicks = [];
+    ticks.forEach(tick => {
+      if (
+        filteredTicks.length === 0 || 
+        Math.abs(tick - filteredTicks[filteredTicks.length - 1]) > threshold
+      ) {
+        filteredTicks.push(tick);
+      }
+    });
+    return filteredTicks;
+  };
+
+  const filteredTickValues = filterTickValues(yTickValues);
+
   return (
     <ThemeProvider theme={createTheme(theme)}>
       <ResponsiveLine
@@ -79,7 +98,7 @@ const LineGraph = ({ data, xAxisLabel, yAxisLabel }) => {
           legend: yAxisLabel,
           legendOffset: -50,
           legendPosition: 'middle',
-          tickValues: yTickValues,
+          tickValues: filteredTickValues, // Use the filtered tick values
         }}
         pointSize={5}
         pointColor={{ theme: 'background' }}
@@ -89,7 +108,6 @@ const LineGraph = ({ data, xAxisLabel, yAxisLabel }) => {
         pointLabelYOffset={-12}
         enableCrosshair={true}
         useMesh={true}
-        
       />
     </ThemeProvider>
   );

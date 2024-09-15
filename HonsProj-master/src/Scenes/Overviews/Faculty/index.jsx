@@ -363,14 +363,14 @@ const Faculty = () => {
                 <Box key={year} mb={0} p={2} borderRadius={4} boxShadow={3} bgcolor="background.paper" width="100%">
                    
 
-                    <Box  justifyContent="space-between" alignItems="center" mb={0}>
-                        <Typography variant="h6">
-                            {`Passes: ${PassFailStats[year]?.passCount || 0}`}
-                        </Typography>
-                        <Typography variant="h6">
-                            {`Fails: ${PassFailStats[year]?.failCount || 0}`}
-                        </Typography>
-                    </Box>
+                   <Box flexDirection="column" justifyContent="space-between" alignItems="center" mb={0}>
+                                <Typography variant="h6" fontWeight={"bold"}>
+                                    {`Passes: ${PassFailStats[year]?.passCount || 0}`}
+                                </Typography>
+                                <Typography variant="h6" fontWeight={"bold"}>
+                                    {`Fails: ${PassFailStats[year]?.failCount || 0}`}
+                                </Typography>
+                            </Box>
 
                     <Grid container spacing={2} mt={0}>
                         {Object.entries(PassFailStats[year] || {}).map(([statusCode, count]) => (

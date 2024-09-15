@@ -449,7 +449,7 @@ const CourseDetail = () => {
             {/* Bar Charts for Gender Data */}
             <Box sx={{ flexGrow: 1, width: '100%', height: "100%", minHeight: '130px' }}>
                 {selectedYear === '2020' && year1GenderData.length > 0 ? (
-                    <BarChart data={year1GenderData} yAxisLabel="# of Students" />
+                    <BarChart data={year1GenderData} yAxisLabel="# of Students"  />
                 ) : selectedYear === '2020' && (
                     <Typography>No data available for 2020</Typography>
                 )}
@@ -644,19 +644,18 @@ const CourseDetail = () => {
 
         {yearOptions.map((year) => (
         selectedYear === year && (
-            <Box 
-                key={year} 
-                p={2}  
-                width="100%" 
-                height="100%" 
-                display="flex" 
-                flexDirection="column"
-                justifyContent="space-between"
+            <Box
+            key={year}
+            p={2}
+            width="100%"
+            height="100%"
+            display="flex"
+            flexDirection="column"
+            justifyContent="space-between"
             >
-                
-            <Box display="flex"  alignItems="center" justifyContent="space-between" mb={2}>
+            <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
                 <Typography variant="h5" fontWeight="bold" mb={0}>
-                    Top Students
+                Top Students
                 </Typography>
                 <Typography variant="h4" fontWeight="bold" mb={0}>
                 {`${selectedYear}`}
@@ -664,32 +663,42 @@ const CourseDetail = () => {
             </Box>
 
             {/* Top 5 Students Section */}
-            <Box 
-            mt={0} 
-            p={2} 
-            borderRadius={4} 
-            boxShadow={3} 
-            bgcolor="background.default"
-            flexGrow={1} 
-            width="100%" 
-            >    
-                <Box display="flex" flexDirection="row" flexWrap="wrap" gap={2}>
+            <Box
+                mt={0}
+                p={2}
+                borderRadius={4}
+                boxShadow={3}
+                bgcolor="background.default"
+                flexGrow={1}
+                width="100%"
+            >
+                {topStudentsByYear[year] && topStudentsByYear[year].length > 0 ? (
+                <Box display="flex" flexDirection="column" gap={1}>
                     {topStudentsByYear[year]?.slice(0, 3).map((student, index) => (
-                        <Box key={student.CampusID} display="flex" alignItems="center" mx={0}>
-                            <EmojiEventsIcon sx={{ color: medalColors[index], mr: 1 }} />
-                            <Link 
-                            to={`/students/${student.CampusID}`} 
-                            style={{ textDecoration: 'none', color: 'inherit' }}
-                            >
+                    <Box key={student.CampusID} display="flex" flexDirection="row" alignItems="center" mx={1}>
+                        <EmojiEventsIcon sx={{ color: medalColors[index], mr: 1 }} />
+                        <Link
+                        to={`/students/${student.CampusID}`}
+                        style={{ textDecoration: 'none', color: 'inherit' }}
+                        >
+                        <Typography variant="h6" fontWeight="bold">
                             {`${student.CampusID}: ${student.Grade} %`}
-                            </Link>
-                        </Box>
-                        ))}
+                        </Typography>
+                        </Link>
+                    </Box>
+                    ))}
                 </Box>
+                ) : (
+                <Typography variant="h6" color="textSecondary">
+                    No data available for {year}
+                </Typography>
+                )}
             </Box>
-        </Box>
+            </Box>
         )
-    ))}
+        ))}
+
+
         </Box>
 
       </Box>

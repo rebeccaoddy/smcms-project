@@ -451,11 +451,11 @@ const ProgramDetail = () => {
                         <Box key={year} mb={0} p={2} borderRadius={4} boxShadow={3} bgcolor="background.paper" width="100%">
                            
 
-                            <Box  justifyContent="space-between" alignItems="center" mb={0}>
-                                <Typography variant="h6">
+                            <Box flexDirection="column" justifyContent="space-between" alignItems="center" mb={0}>
+                                <Typography variant="h6" fontWeight={"bold"}>
                                     {`Passes: ${PassFailStats[year]?.passCount || 0}`}
                                 </Typography>
-                                <Typography variant="h6">
+                                <Typography variant="h6" fontWeight={"bold"}>
                                     {`Fails: ${PassFailStats[year]?.failCount || 0}`}
                                 </Typography>
                             </Box>

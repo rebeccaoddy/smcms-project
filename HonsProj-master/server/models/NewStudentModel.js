@@ -45,14 +45,12 @@ const studentSchema = new mongoose.Schema({
     HSResults: {
         type: Object,
         required: true,
-        // Here you can define a schema for each year's data if needed
-        // or keep it as an Object if the structure varies
+        
     },
     Years: {
         type: Object,
         required: true,
-        // Here you can define a schema for each year's data if needed
-        // or keep it as an Object if the structure varies
+        
     },
     RiskLevel: {
         type: String,
@@ -64,6 +62,6 @@ const studentSchema = new mongoose.Schema({
     },
 });
 
-const NewStudentModel = mongoose.model('updatenewstudents', studentSchema);
+const NewStudentModel = mongoose.model('students', studentSchema);
 
 export default NewStudentModel;

@@ -293,7 +293,7 @@ const getRiskColor = (riskLevel) => {
                         },
                         }}
                     >
-                        Student Cases
+                        Cases
                     </Button>
 
 
@@ -547,48 +547,66 @@ const getRiskColor = (riskLevel) => {
         >
         
         <Box>
-            {student && student.Years[selectedYear] && (
+        {student && student.Years[selectedYear] ? (
             <Box key={selectedYear} mt={2}>
 
-                <Box display="flex" justifyContent="space-between">
-
-                {/* Display enroll year*/}
-                <Typography variant="h3" fontWeight="bold" color={colors.grey[100]} sx={{ marginRight: 1 }}>
-                    Enroll Year: {student.Years[selectedYear].EnrolTerm}
+            <Box display="flex" justifyContent="space-between">
+                {/* Display enroll year */}
+                <Typography
+                variant="h3"
+                fontWeight="bold"
+                color={colors.grey[100]}
+                sx={{ marginRight: 1 }}
+                >
+                Enroll Year: {student.Years[selectedYear].EnrolTerm || "N/A"}
                 </Typography>
 
-                <Divider orientation="vertical" flexItem sx={{ backgroundColor: colors.grey[100], margin: '0 10px',width: '0px' }} 
+                <Divider
+                orientation="vertical"
+                flexItem
+                sx={{
+                    backgroundColor: colors.grey[100],
+                    margin: '0 10px',
+                    width: '0px',
+                }}
                 />
 
-                {/* Display what year student is in*/}
+                {/* Display what year student is in */}
                 <Typography variant="h4" fontWeight="bold" color={colors.grey[100]}>
-                    {getOrdinalSuffix((student.Years[selectedYear].EnrolTerm - student.AdmitTerm) + 1) || 'N/A'} Year
+                {student.Years[selectedYear].EnrolTerm && student.AdmitTerm
+                    ? `${getOrdinalSuffix((student.Years[selectedYear].EnrolTerm - student.AdmitTerm) + 1)} Year`
+                    : 'N/A'}
                 </Typography>
-                </Box>
-
-                {/* Divider between sections */}
-                <Divider style={{ backgroundColor: colors.grey[100], margin: '10px 0' }} />
-                
-                {/* Display academic standing */}
-                <Typography variant="h3" style={{ fontWeight: 'bold' }} color={colors.grey[100]}>
-                Academic Standing: {student.Years[selectedYear].AcademicStandingAction || 'N/A'}
-                </Typography>
-                
-                {/* Divider between sections */}
-                <Divider style={{ backgroundColor: colors.grey[100], margin: '10px 0' }} />
-                
-                {/* Display total courses and passed courses */}
-                <Box display="flex" justifyContent="space-between" alignItems="center">
-                <Typography variant="h4" color={colors.grey[100]} mt={0}>
-                    Total Courses: {student.Years[selectedYear].TotalCourses}
-                </Typography>
-                <Typography variant="h4" color={colors.grey[100]} mt={0}>
-                    Passed: {student.Years[selectedYear].CoursesPassed || 'N/A'}
-                </Typography>
-                </Box>
             </Box>
-            )}
+
+            {/* Divider between sections */}
+            <Divider style={{ backgroundColor: colors.grey[100], margin: '10px 0' }} />
+
+            {/* Display academic standing */}
+            <Typography variant="h3" fontWeight="bold" color={colors.grey[100]}>
+                Academic Standing: {student.Years[selectedYear].AcademicStandingAction || 'N/A'}
+            </Typography>
+
+            {/* Divider between sections */}
+            <Divider style={{ backgroundColor: colors.grey[100], margin: '10px 0' }} />
+
+            {/* Display total courses and passed courses */}
+            <Box display="flex" justifyContent="space-between" alignItems="center">
+                <Typography variant="h4" color={colors.grey[100]} mt={0}>
+                Total Courses: {student.Years[selectedYear].TotalCourses || 'N/A'}
+                </Typography>
+                <Typography variant="h4" color={colors.grey[100]} mt={0}>
+                Passed: {student.Years[selectedYear].CoursesPassed || 'N/A'}
+                </Typography>
+            </Box>
+            </Box>
+        ) : (
+            <Typography color={colors.grey[100]}>
+            No data available for {selectedYear}
+            </Typography>
+        )}
         </Box>
+
         </Box>
         
         {/*Program strengths radar chart*/}
@@ -649,20 +667,27 @@ const getRiskColor = (riskLevel) => {
         
         {/*Displaying bar charts*/}
         <Box sx={{ flexGrow: 1, width: '100%', height: "100%", minHeight: '130px' }}>
-            {selectedYear === '2020' && year1Marks && (
+            {selectedYear === '2020' && year1Marks.length > 0 ? (
                 <BarChart data={year1Marks} yAxisLabel="Marks"  yScaleMin={0} // Set the Y-axis minimum to 0
                 yScaleMax={100} showYTicks = {true} isMarksData = {true}/>
+            ): selectedYear === '2020' && (
+                <Typography mt={2}>No Data available for {selectedYear}</Typography>
             )}
 
-            {selectedYear === '2021' && year2Marks && (
+            {selectedYear === '2021' && year2Marks.length > 0 ? (
                 <BarChart data={year2Marks} yAxisLabel="Marks"  yScaleMin={0} // Set the Y-axis minimum to 0
                 yScaleMax={100} showYTicks = {true} isMarksData = {true}/>
+            ): selectedYear === '2021' && (
+                <Typography mt={2}>No Data available for {selectedYear}</Typography>
             )}
 
-            {selectedYear === '2022' && year3Marks && (
+            {selectedYear === '2022' && year3Marks.length > 0 ? (
                 <BarChart data={year3Marks} yAxisLabel="Marks"  yScaleMin={0}
                 yScaleMax={100} showYTicks = {true} isMarksData = {true}/>
-            )}
+            ): selectedYear === '2022' && (
+                    <Typography mt={2}>No Data available for {selectedYear}</Typography>
+                )}
+
         </Box>
 
 

@@ -3,7 +3,7 @@ import { AgCharts } from "ag-charts-react";
 import "ag-charts-enterprise";
 
 const BoxAndWhisker = ({ boxPlotData }) => {
-  // Assuming boxPlotData is an array of objects like [{ Year, min, q1, median, q3, max }, ...]
+  
 
   const options = {
     

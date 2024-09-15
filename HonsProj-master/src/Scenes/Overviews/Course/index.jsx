@@ -36,8 +36,11 @@ const Course = () => {
       (selectedLastLetter ? course.CourseCode.endsWith(selectedLastLetter) : true) // Check for selected last letter
   );
 
+  //sort alphabetically
+  const sortedCourses = filteredCourses.sort((a, b) => a.CourseCode.localeCompare(b.CourseCode));
+
   // Get current courses to display based on pagination
-  const currentCourses = filteredCourses.slice(indexOfFirstCourse, indexOfLastCourse);
+  const currentCourses = sortedCourses.slice(indexOfFirstCourse, indexOfLastCourse);
 
   // Handle page change
   const handlePageChange = (event, value) => {

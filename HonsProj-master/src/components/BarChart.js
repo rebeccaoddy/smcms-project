@@ -24,15 +24,17 @@ const BarChart = ({
     let value;
     switch (item.value) {
       case 'PA':
+      case 'UP':
         value = 50;
         break;
-      case 'UP':
+      case 'LOA':
       case 'DPR':
       case 'ABS':
+      case 'AB':
         value = 10;
         break;
       default:
-        value = parseFloat(item.value) || 0;
+        value = parseFloat(item.value) || 10;
     }
     console.log(item.value);
     return { ...item, value, originalLabel: item.value }; // Preserve original label
@@ -98,6 +100,8 @@ const BarChart = ({
     return shadesOfBlue[index];
   };
 
+  const minBarHeight = 5;
+
   // Custom Tooltip component for bars
   const CustomTooltip = ({ id, value, color, data }) => (
     <div
@@ -132,6 +136,7 @@ const BarChart = ({
           padding={0.3}
           valueScale={{ type: 'linear', min: yScaleMin, max: yScaleMax }} // Set the Y-axis scale with custom min and max
           indexScale={{ type: 'band', round: true }}
+          //height={Math.max({sortedData}, minBarHeight)}
           colors={getColor} // Use the getColor function to set bar colors
           borderRadius={2}
           borderWidth={1}
