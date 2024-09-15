@@ -63,36 +63,7 @@ router.get('/student/:CampusID', protect, async (req, res) => {
   }
 });
 
-// // Get cases by student ID
-// router.get('/student/:studentId', protect, async (req, res) => {
-//   try {
-//     const cases = await Case.find({ student: req.params.studentId });
-//     res.json(cases);
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// });
 
-
-// Get a specific case by ID
-// router.get('/:id', protect, async (req, res) => {
-//   try {
-//     const caseDetail = await Case.findById(req.params.id);
-//     if (!caseDetail) {
-//       return res.status(404).json({ message: 'Case not found' });
-//     }
-
-//     const studentDetail = await Student.findById(caseDetail.student);
-//     if (!studentDetail) {
-//       return res.status(404).json({ message: 'Student not found' });
-//     }
-
-//     res.json({ ...caseDetail._doc, studentDetail });
-//   } catch (error) {
-//     console.error('Error fetching case or student details:', error); // Log the error
-//     res.status(500).json({ message: 'Internal server error', error: error.message });
-//   }
-// });
 
 // Get a specific case by ID
 router.get('/:id', protect, async (req, res) => {
@@ -121,33 +92,7 @@ router.put('/:id', protect, async (req, res) => {
   }
 });
 
-// // Route to handle file uploads for a case
-// router.post('/:caseId/attachments', async (req, res) => {
-//   const caseId = req.params.caseId;
-//   // Logic to handle the file upload and associate it with the case
 
-//   try {
-//     // Assuming you're using multer or similar to handle file uploads
-//     const file = req.file; // if using multer
-//     if (!file) {
-//       return res.status(400).json({ message: 'No file uploaded' });
-//     }
-
-//     const caseItem = await Case.findById(caseId);
-//     if (!caseItem) {
-//       return res.status(404).json({ message: 'Case not found' });
-//     }
-
-//     // Add the file information to the case's attachments array (assuming it exists)
-//     caseItem.attachments.push({ filename: file.filename, path: file.path });
-
-//     await caseItem.save();
-
-//     res.status(200).json({ message: 'File uploaded successfully', caseItem });
-//   } catch (error) {
-//     res.status(500).json({ message: 'Error uploading file', error });
-//   }
-// });
 
 
 // Route to handle file uploads for a case
@@ -177,5 +122,24 @@ router.post('/:id/attachments', protect, upload.single('file'), async (req, res)
     res.status(500).json({ message: 'Error uploading file', error });
   }
 });
+
+//delete case
+router.delete('/:id', protect, async (req, res) => {
+  try {
+    const caseId = req.params.id;
+    const caseToDelete = await Case.findById(caseId);
+
+    if (!caseToDelete) {
+      return res.status(404).json({ message: 'Case not found' });
+    }
+
+    await caseToDelete.remove();
+    res.json({ message: 'Case deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting case:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 
 module.exports = router;
