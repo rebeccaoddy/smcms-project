@@ -4,24 +4,24 @@ import { useNavigate } from 'react-router-dom';
 import useSearch from '../hooks/useSearch';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
-
-
 import './TopNavBar.css';
 
 const TopNavBar = ({ user, handleLogout, setSelectedStudentNumber }) => {
   const navigate = useNavigate();
   const [studentNumberInput, setStudentNumberInput] = useState('');
   const [studentResultsVisible, setStudentResultsVisible] = useState(false);
-
   const studentResults = useSearch(studentNumberInput, 'students');
 
+  // user searchs for a student directly via the navBar
   const handleStudentSelect = (selectedStudent) => {
     setStudentNumberInput(selectedStudent.CampusID);
     setStudentResultsVisible(false);
     setSelectedStudentNumber(selectedStudent.CampusID);
-    navigate('/student-details');
+    navigate('/student-details'); // navigate to student details 
+    setStudentNumberInput(''); // Reset the input field after submission
   };
 
+  //user chooses to manually type instead of selcting from dropdown via navBar
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (studentNumberInput.trim() === '') {
@@ -64,24 +64,6 @@ const TopNavBar = ({ user, handleLogout, setSelectedStudentNumber }) => {
           </ul>
         )}
       </form>
-      {/*<div className="nav-links">
-         <button onClick={() => navigate('/cases')}>          
-        <FontAwesomeIcon icon={faHome} /> {/* Home icon 
-        </button> 
-      */}
-        {/* {user ? (
-          <>
-            <span className="user-info">Hello, {user.username}</span>
-            <button onClick={() => navigate('/profile')}>Profile</button>
-            <button onClick={handleLogout}>Logout</button>
-          </>
-        ) : (
-          <>
-            <button onClick={() => navigate('/login')}>Login</button>
-            <button onClick={() => navigate('/register')}>Register</button>
-          </>
-        )} 
-      </div>*/}
     </div>
   );
 };

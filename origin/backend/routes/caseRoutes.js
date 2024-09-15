@@ -35,7 +35,6 @@ router.get('/', protect, async (req, res) => {
 });
 
 // Create a new case
-
 router.post('/', protect, async (req, res) => {
   const newCase = new Case(req.body);
   try {
@@ -62,7 +61,6 @@ router.get('/student/:CampusID', protect, async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-
 
 
 // Get a specific case by ID
@@ -92,9 +90,6 @@ router.put('/:id', protect, async (req, res) => {
   }
 });
 
-
-
-
 // Route to handle file uploads for a case
 router.post('/:id/attachments', protect, upload.single('file'), async (req, res) => {
   try {
@@ -123,23 +118,27 @@ router.post('/:id/attachments', protect, upload.single('file'), async (req, res)
   }
 });
 
-//delete case
+// Delete case by ID
 router.delete('/:id', protect, async (req, res) => {
   try {
     const caseId = req.params.id;
+
+    console.log('Attempting to delete case with ID:', caseId); // Log the case ID
     const caseToDelete = await Case.findById(caseId);
 
     if (!caseToDelete) {
+      console.log('Case not found:', caseId); // Log if the case isn't found
       return res.status(404).json({ message: 'Case not found' });
     }
 
-    await caseToDelete.remove();
+    await Case.findByIdAndDelete(caseId);
     res.json({ message: 'Case deleted successfully' });
   } catch (error) {
-    console.error('Error deleting case:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error('Error deleting case:', error); // Log detailed error information
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
+
 
 
 module.exports = router;

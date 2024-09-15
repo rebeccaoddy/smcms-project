@@ -1,8 +1,8 @@
 .priority-icon {
     font-size: 1em; /* Adjust size as needed */
   }
-  /* CaseList.css */
-table {
+
+  table {
   width: 100%;
   border-collapse: collapse;
   margin: 1rem 0;
@@ -27,15 +27,15 @@ input {
 
 .search-container {
   display: flex;
-  gap: 10px; /* Adjust the gap as needed */
+  gap: 10px; 
 }
 
 .search-container input {
-  flex: 1; /* Allows inputs to be the same width */
+  flex: 1; 
 }
 
 .add-case-button {
-  background-color: #007bff; /* Bootstrap primary color */
+  background-color: #014c9c; /* Bootstrap primary color */
   color: white;
   padding: 10px 20px;
   border: none;
@@ -45,7 +45,7 @@ input {
 }
 
 .add-case-button:hover {
-  background-color: #0056b3;
+  background-color: #014c9c;
 }
 
 th {

@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import BackButton from './BackButton';
-import './EditCase.css'; // Import the stylesheet for styling
+import './EditCase.css'; 
 import { useNavigate } from 'react-router-dom';
+import useSearch from '../hooks/useSearch'; // Import the custom hook for search
 
 const EditCase = ({ caseDetail, onUpdate = () => {}, setActiveTab }) => {
   const [title, setTitle] = useState(caseDetail.title);
@@ -10,8 +11,14 @@ const EditCase = ({ caseDetail, onUpdate = () => {}, setActiveTab }) => {
   const [priority, setPriority] = useState(caseDetail.priority);
   const [status, setStatus] = useState(caseDetail.status);
   const [category, setCategory] = useState(caseDetail.category);
-  const [error, setError] = useState(null); // State for error handling
+  const [assignedTo, setAssignedTo] = useState(caseDetail.assignedTo?._id || ''); 
+  const [userDisplay, setUserDisplay] = useState(caseDetail.assignedTo?.username || ''); 
+  const [userResultsVisible, setUserResultsVisible] = useState(false); // Control visibility of search results
   const navigate = useNavigate();
+  const [error, setError] = useState(null); // State for error handling
+
+  // Use the custom hook for searching users
+  const userResults = useSearch(assignedTo, 'auth');
 
   // List of categories for the dropdown
   const categories = [
@@ -21,7 +28,7 @@ const EditCase = ({ caseDetail, onUpdate = () => {}, setActiveTab }) => {
     'Administration Issue',
     'Student Academic Dishonesty',
     'DPR Status/Appeal',
-    'Curriculumn advice',
+    'Curriculum advice',
     'General advice',
     'Record of Appointment',
     'Financial Issue',
@@ -30,6 +37,13 @@ const EditCase = ({ caseDetail, onUpdate = () => {}, setActiveTab }) => {
     'Other'
   ];
 
+  // Handle user selection from the search results
+  const handleUserSelect = (selectedUser) => {
+    setAssignedTo(selectedUser._id); // Set the selected user's ID
+    setUserResultsVisible(false); // Hide the search results after selection
+    setUserDisplay(selectedUser.username); // Set the username for display
+  };
+
   const handleSave = async () => {
     const updatedCase = {
       title,
@@ -37,6 +51,7 @@ const EditCase = ({ caseDetail, onUpdate = () => {}, setActiveTab }) => {
       priority,
       status,
       category,
+      assignedTo, 
     };
 
     try {
@@ -51,10 +66,10 @@ const EditCase = ({ caseDetail, onUpdate = () => {}, setActiveTab }) => {
         }
       );
 
-      onUpdate(response.data); // Call the onUpdate prop to notify the parent component about the change
-      navigate('/cases'); // Navigate back to the case list after saving
+      onUpdate(response.data); // call onUpdate prop 
+      navigate('/cases'); // Navigate to case list after saving
     } catch (error) {
-      console.error('Error updating case', error);
+      console.error('Error updating case', error); //error handling 
       setError('Failed to update the case. Please try again.');
     }
   };
@@ -63,7 +78,7 @@ const EditCase = ({ caseDetail, onUpdate = () => {}, setActiveTab }) => {
     <div className="edit-case-container">
       <BackButton />
       <h3>Edit Case</h3>
-      {error && <p className="error-message">{error}</p>} {/* Display error message if any */}
+      {error && <p className="error-message">{error}</p>} 
       
       <div className="form-group">
         <label>Title</label>
@@ -112,6 +127,32 @@ const EditCase = ({ caseDetail, onUpdate = () => {}, setActiveTab }) => {
             </option>
           ))}
         </select>
+      </div>
+
+      <div className="form-group" style={{ position: 'relative' }}>
+        <label>Assigned To</label>
+        <input
+          id="assignedTo"
+          type="text"
+          placeholder="Search for user"
+          value={userDisplay}
+          onChange={(e) => {
+            setAssignedTo(e.target.value);
+            setUserResultsVisible(true);
+            setUserDisplay(e.target.value);
+          }}
+          onFocus={() => setUserResultsVisible(true)}
+          onBlur={() => setTimeout(() => setUserResultsVisible(false), 200)}
+        />
+        {userResultsVisible && userResults.length > 0 && (
+          <ul className="user-results">
+            {userResults.map((user) => (
+              <li key={user._id} onClick={() => handleUserSelect(user)}>
+                {user.username}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       <button className="save-button" onClick={handleSave}>Save</button>

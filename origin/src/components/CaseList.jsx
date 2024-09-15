@@ -5,20 +5,11 @@ import { useNavigate } from 'react-router-dom';
 
 
 const CaseList = ({ cases, setCases, selectCase, user }) => {
-  //const [searchKeyword, setSearchKeyword] = useState('');
-  //const [studentNames, setStudentNames] = useState({});
-  //const [filterCriteria, setFilterCriteria] = useState('title'); // Default filter criteria
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchTitle, setSearchTitle] = useState('');
-  const [searchCategory, setSearchCategory] = useState('');
-  const [searchStudent, setSearchStudent] = useState('');
-  const [searchPriority, setSearchPriority] = useState('');
-  const [searchStatus, setSearchStatus] = useState('');
   const navigate = useNavigate();
-
-
   const [sortConfig, setSortConfig] = useState({ key: '', direction: '' });// sort the cases array based on the selected column and the current sorting direction.
 
+  //filter categories by order 
   const handleSort = (key) => {
     let direction = 'ascending';
     if (sortConfig.key === key && sortConfig.direction === 'ascending') {
@@ -37,7 +28,7 @@ const CaseList = ({ cases, setCases, selectCase, user }) => {
     return 0;
   });
 
-  
+  // retrieve all cases upon loading
   useEffect(() => {
     const fetchCases = async () => {
       try {
@@ -47,7 +38,7 @@ const CaseList = ({ cases, setCases, selectCase, user }) => {
             Authorization: `Bearer ${token}`
           }
         });
-        console.log('Fetched Cases:', response.data); // Log response data for debugging
+        console.log('Fetched Cases:', response.data); // testing
         setCases(response.data);
         console.log("cases set")
       } catch (error) {
@@ -83,13 +74,10 @@ const CaseList = ({ cases, setCases, selectCase, user }) => {
   );
 };
 
-//const filteredCases = sortedCases.filter(filterCases);
-
 //filter cases by assigned to and created by 
   const filteredCases = cases.filter(
     (c) => filterCases(c) && (c.createdBy === user.username || c.assignedTo.username === user.username)
   );
-
 
   const myCases = filteredCases.filter((c) => c.createdBy === user.username); //filter by created by 
   const assignedCases = filteredCases.filter((c) => c.assignedTo.username === user.username); //filter by assigned to
@@ -97,18 +85,17 @@ const CaseList = ({ cases, setCases, selectCase, user }) => {
   return (
     <div>
       <h2>Case List</h2>
-      {/* Add Case Button */}
       <button onClick={() => navigate('/cases/add')} className="add-case-button">
         New Case
       </button>
       <div className="search-container">
-  <input
-    type="text"
-    placeholder="Search by ..."
-    value={searchQuery}
-    onChange={(e) => setSearchQuery(e.target.value)}
-  />
-</div>
+      <input
+        type="text"
+        placeholder="Search by ..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
+    </div>
       <h3>My Cases</h3>
       <table>
         <thead>
@@ -170,7 +157,7 @@ const CaseList = ({ cases, setCases, selectCase, user }) => {
             .filter(c => c.createdBy === user.username && filterCases(c))
             .map((c) => (
             <tr key={c._id}>
-              <td>{getPriorityIcon(c.priority)}</td> {/* Display priority as an icon */}
+              <td>{getPriorityIcon(c.priority)}</td>
               <td>{c.category}</td>
               <td>{c.student?.CampusID || 'N/A'}</td>
 
@@ -193,6 +180,7 @@ const CaseList = ({ cases, setCases, selectCase, user }) => {
         </tbody>
       </table>
 
+{/* seperate table for assigned to me*/}
       <h3>Assigned to Me</h3>
       <table>
         <thead>
@@ -254,9 +242,9 @@ const CaseList = ({ cases, setCases, selectCase, user }) => {
             .map((c) => (
             <tr key={c._id}>
               
-              <td>{getPriorityIcon(c.priority)}</td> {/* Display priority as an icon */}
+              <td>{getPriorityIcon(c.priority)}</td> 
               <td>{c.category}</td>
-              <td>{c.student?.CampusID || 'N/A'}</td> {/* Display student name */}
+              <td>{c.student?.CampusID || 'N/A'}</td> 
               <td>{c.assignedTo.username}</td>
               <td>{c.dateCreated}</td>
               <td>{c.status}</td>

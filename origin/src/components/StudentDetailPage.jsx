@@ -10,20 +10,20 @@ const StudentDetailPage = ({ CampusID, selectCase }) => {
   const [loading, setLoading] = useState(true); // To track loading state
   const [error, setError] = useState(null); // To track error state
 
-  //handle load from dashboard
+  // Handle load from dashboard SMS 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const studentId = queryParams.get('studentId'); // Extract the studentId from the URL query parameters
 
   useEffect(() => {
     if (studentId) {
-      console.log("this is the studentId from app 1", studentId);
+      console.log("This is the studentId from app 1", studentId); //testing
       fetchStudentDetails(studentId);
       fetchStudentCases(studentId);  // Added this call to ensure student cases are fetched for the passed studentId
     }
   }, [studentId]);
 
-  // Define the fetchStudentDetails function at the top
+  // Fetch student details via standard way 
   const fetchStudentDetails = async (id) => {
     try {
       const token = localStorage.getItem('token');
@@ -32,16 +32,17 @@ const StudentDetailPage = ({ CampusID, selectCase }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log('Student details response:', response.data);
+      console.log('Student details response:', response.data); //testing 
       setStudentDetail(response.data);
       setLoading(false);
     } catch (error) {
-      console.error('Error fetching student details', error);
+      console.error('Error fetching student details', error); //testing 
       setError(error);
       setLoading(false);
     }
   };
-
+ 
+  // Fetch student cases for specific student
   const fetchStudentCases = async (id) => {
     try {
       const token = localStorage.getItem('token');
@@ -50,14 +51,15 @@ const StudentDetailPage = ({ CampusID, selectCase }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log('Student cases response:', response.data);
+      console.log('Student cases response:', response.data); //testing
       setStudentCases(response.data);
     } catch (error) {
-      console.error('Error fetching student cases', error);
+      console.error('Error fetching student cases', error); //testing
       setError(error);
     }
   };
 
+  //user selected student details ; actively check for action
   useEffect(() => {
     if (CampusID) {
       console.log('Fetching student details for number:', CampusID);
@@ -66,6 +68,7 @@ const StudentDetailPage = ({ CampusID, selectCase }) => {
     }
   }, [CampusID]);
 
+  //format priority indicators
   const getPriorityIcon = (priority) => {
     switch (priority) {
       case 'high':
@@ -79,6 +82,7 @@ const StudentDetailPage = ({ CampusID, selectCase }) => {
     }
   };
 
+  //neaten appearance of case number
   const truncateCaseId = (caseId) => {
     return `${caseId.slice(0, 6)}...${caseId.slice(-4)}`;
   };
@@ -91,18 +95,31 @@ const StudentDetailPage = ({ CampusID, selectCase }) => {
   return (
     <div className="student-detail">
       <BackButton />
-      <div className="button-container">
-        <button className="dashboard-button">Link to Student Dashboard</button>
-      </div>
       <h3>Student Details</h3>
       {studentDetail ? (
         <div>
-          <p>Name: </p>
-          <p>Student Number: {studentDetail.CampusID}</p>
-          <p>Birth Date: {new Date(studentDetail.BirthDate).toLocaleDateString()}</p>
-          <p>Population Group: {studentDetail.PopulationGrp}</p>
-          <p>Gender: {studentDetail.Gender}</p>
-          <p>Risk Level: {studentDetail.RiskLevel}</p>
+          <div className="student-info">
+            <div className="student-photo">
+              {studentDetail.profilePicture ? (
+                <img 
+                  src={`http://localhost:5001/${studentDetail.profilePicture}`} 
+                  alt={`${studentDetail.CampusID}'s profile`}
+                  className="profile-picture"
+                />
+              ) : (
+                <div className="placeholder-picture">No Picture Available</div>
+              )}
+            </div>
+            <div className="student-data">
+              <p>Name: {studentDetail.firstName} {studentDetail.lastName}</p>
+              <p>Student Number: {studentDetail.CampusID}</p>
+              <p>Birth Date: {new Date(studentDetail.BirthDate).toLocaleDateString()}</p>
+              <p>Population Group: {studentDetail.PopulationGrp}</p>
+              <p>Gender: {studentDetail.Gender}</p>
+              <p>Risk Level: {studentDetail.RiskLevel}</p>
+            </div>
+          </div>
+
           <h3>Cases for {studentDetail.CampusID}</h3>
           <table>
             <thead>
