@@ -86,9 +86,10 @@ const calculatePassesAndFails = (marks, passMark = 50) => {
     let PA = 0;
     let LOA = 0;
     let AB = 0;
-
+    let other = 0;
+  
     marks.forEach(item => {
-        const mark = item.GradeCode; // Access GradeCode directly
+        const mark = item.GradeCode;
         if (mark === "DPR") {
             DPRCount++;
         } else if (mark === "UP") {
@@ -99,6 +100,9 @@ const calculatePassesAndFails = (marks, passMark = 50) => {
             LOA++;
         } else if (mark === "AB") {
             AB++;
+        } else if (!mark || isNaN(parseFloat(mark))) {
+          // If the mark is empty or cannot be parsed into a number
+          other++; 
         } else {
             const numericMark = parseFloat(mark);
             if (!isNaN(numericMark)) {
@@ -110,9 +114,9 @@ const calculatePassesAndFails = (marks, passMark = 50) => {
             }
         }
     });
-    
-    return { passCount, failCount, DPRCount, UP, PA, LOA, AB };
-};
+  
+    return { passCount, failCount, DPRCount, UP, PA, LOA, AB, other };
+  };
 
 const CourseDetail = () => {
     const theme = useTheme();
@@ -604,7 +608,7 @@ const CourseDetail = () => {
 
                         <Grid container spacing={2} mt={1}>
                             {Object.entries(stats).map(([statusCode, count]) => (
-                            !['Year', 'passCount', 'failCount', 'DPRCount'].includes(statusCode) && (
+                            !['Year', 'passCount', 'failCount'].includes(statusCode) && (
                                 <Grid item key={statusCode}>
                                 <Typography variant="body2">
                                     {`${statusCode}: ${count}`}

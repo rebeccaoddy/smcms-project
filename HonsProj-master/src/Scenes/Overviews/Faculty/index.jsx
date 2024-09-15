@@ -61,6 +61,7 @@ const calculatePassesAndFails = (marks, passMark = 50) => {
   let PA = 0;
   let LOA = 0;
   let AB = 0;
+  let other = 0;
 
   marks.forEach(item => {
       const mark = item.GradeCode;
@@ -74,6 +75,9 @@ const calculatePassesAndFails = (marks, passMark = 50) => {
           LOA++;
       } else if (mark === "AB") {
           AB++;
+      } else if (!mark || isNaN(parseFloat(mark))) {
+        // If the mark is empty or cannot be parsed into a number
+        other++; 
       } else {
           const numericMark = parseFloat(mark);
           if (!isNaN(numericMark)) {
@@ -86,7 +90,7 @@ const calculatePassesAndFails = (marks, passMark = 50) => {
       }
   });
 
-  return { passCount, failCount, DPRCount, UP, PA, LOA, AB };
+  return { passCount, failCount, DPRCount, UP, PA, LOA, AB, other };
 };
 
 const Faculty = () => {
@@ -421,8 +425,8 @@ const Faculty = () => {
         {chartType === 'Gender' && (
           <BarChart
             data={GenderData[selectedYear] || []}
-            
             yAxisLabel="# Students"
+            
           />
         )}
         {chartType === 'Population' && (

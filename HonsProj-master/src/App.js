@@ -1,7 +1,8 @@
 import React from 'react';
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import Topbar from "./Scenes/Global/TopBar";
 import Sidebar from "./Scenes/Global/NavBar";
 import Faculty from "./Scenes/Overviews/Faculty";
@@ -10,23 +11,22 @@ import Course from "./Scenes/Overviews/Course";
 import Student from "./Scenes/Overviews/Student";
 import StudentDetails from "./Scenes/Overviews/Student/StudentDetails";
 import CourseDetail from "./Scenes/Overviews/Course/CourseDetail";
-import BarChart from "./components/BarChart";
 import ProgramDetail from "./Scenes/Overviews/Program/ProgramDetail";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome } from '@fortawesome/free-solid-svg-icons';
 
+
+//updated this to handle direct link and link with studentId 
 const SecondaryApp = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const studentId = queryParams.get('studentId');
-
-  console.log("this is the student objectID:", studentId); 
+  
+  console.log("this is the student objectID:", studentId); // This should log the actual studentId
 
   const iframeSrc = studentId
-    ? `http://localhost:5173/student-details?studentId=${studentId}` 
+    ? `http://localhost:5173/student-details?studentId=${studentId}` // Append studentId to the URL
     : `http://localhost:5173/cases`;
 
-  console.log("This is the iframe URL:", iframeSrc);
+  console.log("This is the iframe URL:", iframeSrc); // Debugging 
 
   return (
     <iframe
@@ -43,7 +43,7 @@ function App() {
 
   // Check if the current route is the login route
   const isLoginRoute = location.pathname === "/";
-
+  
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>

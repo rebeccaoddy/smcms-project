@@ -50,14 +50,7 @@ const ProgramRiskKPI = ({ riskStats }) => {
           renderStudentList('Low Risk') // Render student list if 'Low Risk' is selected
         ) : (
           <Box 
-            sx={{ 
-              cursor: 'pointer', // Pointer cursor on hover
-              height: '100%', // Full height
-              transition: 'transform 0.3s, box-shadow 0.3s', // Smooth transition for hover effects
-              '&:hover': {
-                boxShadow: `0px 4px 4px ${colors.grey[400]}`, // Add shadow on hover
-              }
-            }}
+            
             onClick={() => handleCardClick('Low Risk')} // Set 'Low Risk' as selected on click
           >
             <KpiCard
@@ -76,7 +69,7 @@ const ProgramRiskKPI = ({ riskStats }) => {
               }
               title="No Risk Students"
               subtitle=""
-              value={<><People sx={{ verticalAlign: "middle", marginRight: "4px" }} />{riskStats?.['Low Risk']?.Count || 0}</>}
+              value={<><People sx={{ fontSize: "40px", verticalAlign: "middle", marginRight: "15px" }} />{riskStats?.['Low Risk']?.Count || 0}</>}
               additionalInfo={<><PersonIcon sx={{ verticalAlign: "middle", marginRight: "4px" }} /> </>}
               percentage="+9.0%"
               iconBackground={colors.primary[400]}
@@ -92,14 +85,7 @@ const ProgramRiskKPI = ({ riskStats }) => {
           renderStudentList('Medium Risk') // Render student list if 'Medium Risk' is selected
         ) : (
           <Box 
-            sx={{ 
-              cursor: 'pointer', // Pointer cursor on hover
-              height: '100%', // Full height
-              transition: 'transform 0.3s, box-shadow 0.3s', // Smooth transition for hover effects
-              '&:hover': {
-                boxShadow: `0px 4px 4px ${colors.grey[400]}`, // Add shadow on hover
-              }
-            }}
+            
             onClick={() => handleCardClick('Medium Risk')} // Set 'Medium Risk' as selected on click
           >
             <KpiCard
@@ -118,7 +104,7 @@ const ProgramRiskKPI = ({ riskStats }) => {
               }
               title="Potential Risk Students"
               subtitle=""
-              value={<><People sx={{ verticalAlign: "middle", marginRight: "4px" }} />{riskStats?.['Medium Risk']?.Count || 0}</>}
+              value={<><People sx={{ fontSize: "40px", verticalAlign: "middle", marginRight: "15px" }} />{riskStats?.['Medium Risk']?.Count || 0}</>}
               additionalInfo={<><PersonIcon sx={{ verticalAlign: "middle", marginRight: "4px" }} /></>}
               percentage="+1.8%"
               iconBackground={colors.primary[400]}
@@ -134,14 +120,7 @@ const ProgramRiskKPI = ({ riskStats }) => {
           renderStudentList('High Risk') // Render student list if 'High Risk' is selected
         ) : (
           <Box 
-            sx={{ 
-              cursor: 'pointer', // Pointer cursor on hover
-              height: '100%', // Full height
-              transition: 'transform 0.3s, box-shadow 0.3s', // Smooth transition for hover effects
-              '&:hover': {
-                boxShadow: `0px 4px 4px ${colors.grey[400]}`, // Add shadow on hover
-              }
-            }}
+            
             onClick={() => handleCardClick('High Risk')} // Set 'High Risk' as selected on click
           >
             <KpiCard
@@ -160,7 +139,7 @@ const ProgramRiskKPI = ({ riskStats }) => {
               }
               title="At Risk Students"
               subtitle=""
-              value={<><People sx={{ verticalAlign: "middle", marginRight: "4px" }} />{riskStats?.['High Risk']?.Count || 0}</>}
+              value={<><People sx={{ fontSize: "40px", verticalAlign: "middle", marginRight: "15px" }} />{riskStats?.['High Risk']?.Count || 0}</>}
               additionalInfo={<><PersonIcon sx={{ verticalAlign: "middle", marginRight: "4px" }} /></>}
               percentage="+30.8%"
               iconBackground={colors.primary[400]}

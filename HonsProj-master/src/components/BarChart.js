@@ -158,6 +158,7 @@ const BarChart = ({
             legend: xAxisLabel,
             legendPosition: 'middle',
             legendOffset: 30,
+            
           }}
           label={d => d.data.originalLabel}
           labelSkipWidth={12}
