@@ -401,7 +401,7 @@ const Faculty = () => {
       borderRadius="10px"
     >
       {/* Chart Type Toggle */}
-      <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
+      <Box display="flex" alignItems="center" justifyContent="space-between" mb={0}>
         
         <GraphToggleButton
           options={chartToggleOptions}
@@ -432,7 +432,7 @@ const Faculty = () => {
         {chartType === 'Population' && (
           <BarChart
             data={PopulationData[selectedYear] || []}
-            
+            showValues = {false}
             yAxisLabel="# Students"
           />
         )}

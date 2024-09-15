@@ -8,13 +8,14 @@ const BarChart = ({
   data = [], 
   xAxisLabel, 
   yAxisLabel,
-  yScaleMin = 'auto', // Default Y-axis scale minimum is 'auto'
-  yScaleMax = 'auto', // Default Y-axis scale maximum is 'auto' 
+  yScaleMin = 'auto', 
+  yScaleMax = 'auto', 
   showAverageLine, 
   averageValue,
   title,
-  isMarksData = false, // New prop to indicate if the data represents marks
-  showYTicks = false, // New prop to control Y-axis ticks visibility
+  isMarksData = false, 
+  showYTicks = false, 
+  showValues = true, // New prop to control whether values are shown on bars
 }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -36,7 +37,6 @@ const BarChart = ({
       default:
         value = parseFloat(item.value) || 10;
     }
-    console.log(item.value);
     return { ...item, value, originalLabel: item.value }; // Preserve original label
   });
 
@@ -90,7 +90,7 @@ const BarChart = ({
 
   const getColor = (bar) => {
     if (isMarksData && bar.data.value < 50) {
-      return 'red'; // Color bars with values below 50 in red if data represents marks
+      return 'red'; 
     }
     if (maxValue === minValue) {
       return shadesOfBlue[0];
@@ -112,7 +112,7 @@ const BarChart = ({
         borderRadius: '3px',
       }}
     >
-      <strong>{id}</strong>: {data.originalLabel} ({value}) {/* Display original label and value */}
+      <strong>{data.label}</strong>: ({value}) {/* Display original label and value */}
     </div>
   );
 
@@ -134,10 +134,9 @@ const BarChart = ({
           indexBy="label"
           margin={{ top: 30, right: 20, bottom: 40, left: 50 }}
           padding={0.3}
-          valueScale={{ type: 'linear', min: yScaleMin, max: yScaleMax }} // Set the Y-axis scale with custom min and max
+          valueScale={{ type: 'linear', min: yScaleMin, max: yScaleMax }} 
           indexScale={{ type: 'band', round: true }}
-          //height={Math.max({sortedData}, minBarHeight)}
-          colors={getColor} // Use the getColor function to set bar colors
+          colors={getColor} 
           borderRadius={2}
           borderWidth={1}
           borderColor={{
@@ -163,11 +162,11 @@ const BarChart = ({
             legend: xAxisLabel,
             legendPosition: 'middle',
             legendOffset: 30,
-            
           }}
-          label={d => d.data.originalLabel}
-          labelSkipWidth={12}
-          labelSkipHeight={12}
+          // Conditionally render labels based on showValues prop
+          label={showValues ? d => d.data.originalLabel : null}
+          labelSkipWidth={showValues ? 12 : Infinity} // Skip labels if values should not be shown
+          labelSkipHeight={showValues ? 12 : Infinity} // Skip labels if values should not be shown
           tooltip={({ id, value, color, data }) => (
             <CustomTooltip id={id} value={value} color={color} data={data} />
           )}
