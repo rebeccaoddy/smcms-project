@@ -42,7 +42,7 @@ function App() {
   const location = useLocation();
 
   // Check if the current route is the login route
-  const isLoginRoute = location.pathname === "/";
+  const isLoginRoute = location.pathname === "/login";
   
   return (
     <ColorModeContext.Provider value={colorMode}>
@@ -53,7 +53,7 @@ function App() {
           <main className="content">
             {!isLoginRoute && <Topbar />} {/* Render Topbar only if it's not the login route */}
             <Routes>
-              <Route path="/" element={<SecondaryApp />} />
+              {/* <Route path="/login" element={<SecondaryApp />} /> */}
               <Route path="/Faculty" element={<Faculty />} />
               <Route path="/Program" element={<Program />} />
               <Route path="/Student" element={<Student />} />
