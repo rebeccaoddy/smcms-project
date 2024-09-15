@@ -51,7 +51,6 @@ router.get('/student/:CampusID', protect, async (req, res) => {
   
   try {
     const student = await Student.findOne({ CampusID: req.params.CampusID });
-    console.log("this is a student", student)
     if (!student) {
       return res.status(404).json({ message: 'Student not found' });
     }
@@ -89,6 +88,9 @@ router.put('/:id', protect, async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
+
+
+
 
 // Route to handle file uploads for a case
 router.post('/:id/attachments', protect, upload.single('file'), async (req, res) => {
