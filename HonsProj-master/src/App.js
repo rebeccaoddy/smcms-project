@@ -37,12 +37,31 @@ const SecondaryApp = () => {
   );
 };
 
+const Login = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+
+  // // Check if the current route is the login route
+  // const isLoginRoute = location.pathname === "/";
+  // console.log("This is the  URL:", isLoginRoute); // Debugging 
+
+  return (
+    <iframe
+      src={'http://localhost:5173/login'}
+      style={{ width: '100%', height: '100vh', border: 'none' }}
+      title="Login"
+    />
+  );
+}
+  
+
 function App() {
   const [theme, colorMode] = useMode();
   const location = useLocation();
 
-  // Check if the current route is the login route
-  const isLoginRoute = location.pathname === "/login";
+  // // Check if the current route is the login route
+  const isLoginRoute = location.pathname === "/";
+  console.log("This is the  URL:", isLoginRoute); // Debugging 
   
   return (
     <ColorModeContext.Provider value={colorMode}>
@@ -53,7 +72,7 @@ function App() {
           <main className="content">
             {!isLoginRoute && <Topbar />} {/* Render Topbar only if it's not the login route */}
             <Routes>
-              {/* <Route path="/login" element={<SecondaryApp />} /> */}
+              <Route path="/" element={<Login />} />
               <Route path="/Faculty" element={<Faculty />} />
               <Route path="/Program" element={<Program />} />
               <Route path="/Student" element={<Student />} />

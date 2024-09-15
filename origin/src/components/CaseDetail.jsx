@@ -195,6 +195,10 @@ const CaseDetail = ({ caseDetail, onUpdateCase, selectCase, setSelectedStudentNu
 //   );
 // };
 
+const handleDeleteCase = (caseId) => {
+  setCases(cases.filter(c => c._id !== caseId)); // Remove the deleted case from the list
+};
+
 const handleDelete = async () => {
   const confirmDelete = window.confirm('Are you sure you want to delete this case?');
   if (confirmDelete) {
@@ -205,7 +209,9 @@ const handleDelete = async () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      onDeleteCase(caseDetail._id); // Call the function passed in props to update the parent component
+      // Call the function passed in props to update the parent component
+      onDeleteCase(caseDetail._id); 
+      navigate('/cases'); // Redirect to case list or another view after deletion
     } catch (error) {
       console.error('Error deleting case', error);
       alert('Failed to delete the case. Please try again.');
