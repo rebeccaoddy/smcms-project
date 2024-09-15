@@ -19,9 +19,13 @@ To get started with this application, follow these steps:
 
 ### Start the Application
 
-Inside the extracted code directory, locate the start-app.bat file.
-Double-click on start-app.bat to start the application. This script will automatically run the necessary commands to start both the Case Management System and the Student Monitoring Dashboard.
+# Windows
+Inside the extracted code directory, locate the windows-start-app.bat file.
+Double-click on windows-start-app.bat to start the application. This script will automatically run the necessary commands to start both the Case Management System and the Student Monitoring Dashboard.
 The applicaion will automatically be opened in your browser.
+
+# Mac/Linux
+Inside the extracted code directory, locate the mac-start-app.sh file. This script will install all the necessary dependencies, and automatically start the application in your browser/
 
 ## Troubleshooting
 If the application does not start:
