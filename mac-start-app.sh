@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Navigate to the origin directory and install dependencies
-cd origin || exit
-echo "Installing dependencies for origin..."
+# Navigate to the caseManagementSystem directory and install dependencies
+cd caseManagementSystem || exit
+echo "Installing dependencies for caseManagementSystem..."
 npm install
 
-# Start the origin application
-echo "Starting origin application..."
+# Start the caseManagementSystem application
+echo "Starting caseManagementSystem application..."
 npm start &
 
 # Navigate to the StudentMonitoringSystem directory and install dependencies
