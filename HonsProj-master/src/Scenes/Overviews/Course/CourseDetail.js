@@ -562,21 +562,12 @@ const CourseDetail = () => {
         backgroundColor={colors.primary[400]}
         display="flex"
         flexDirection="column"
-        alignItems="center" // Align items to the center horizontally
-        justifyContent="center" // Align items to the center vertically
+        alignItems="stretch"
+        justifyContent="flex-start"
         p={2}
         borderRadius="10px"
-        height="100%" // Set a fixed height for the Box
-        width="100%" // Set width to 100% of the column
         >
-        <Box
-            width="100%"
-            height="500px"
-            display="flex-start"
-            flexDirection="column"
-            alignItems="center"
-            justifyContent="space-between"
-        >
+        
             <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
             <Typography variant="h5" fontWeight="bold" mb={0}>
                 Pass / Fail Statistics
@@ -631,7 +622,7 @@ const CourseDetail = () => {
                 )
             ))}
             </Box>
-        </Box>
+        
         </Box>
 
 
