@@ -31,11 +31,7 @@ const App = () => {
 // Check if the current route is the login or register page
 const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
 
-// // Clear the token when the app starts to force login every time
-// useEffect(() => {
-//   localStorage.removeItem('token'); // Clear token on page load
-//   setUser(null); // Clear user state
-// }, []);
+
 
 
 //get user details from login
@@ -96,6 +92,9 @@ const isAuthPage = location.pathname === '/login' || location.pathname === '/reg
     setSelectedCase(updatedCase); // Update the selected case with the new details
   };
   
+  const handleDeleteCase = (caseId) => {
+    setCases(cases.filter(c => c._id !== caseId)); // Remove the deleted case from the list
+  };
 
 
 
@@ -137,7 +136,8 @@ const isAuthPage = location.pathname === '/login' || location.pathname === '/reg
             />
             <Route
               path="/cases/detail"
-              element={<CaseDetail caseDetail={selectedCase} setSelectedStudentNumber={setSelectedStudentNumber} />}
+              element={<CaseDetail caseDetail={selectedCase} onUpdateCase={onUpdateCase} setSelectedStudentNumber={setSelectedStudentNumber}   onDeleteCase={handleDeleteCase} selectCase={selectCase}
+              />}
             />
             <Route
               path="/student-details"
