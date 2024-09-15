@@ -23,6 +23,9 @@ const AddCase = ({ addCase, user }) => {
   const [errors, setErrors] = useState({}); // State for storing error messages
   const navigate = useNavigate();
   const [studentResultsVisible, setStudentResultsVisible] = useState(false);
+  const [userResultsVisible, setUserResultsVisible] = useState(false)
+  const [studentDisplay, setStudentDisplay] = useState(''); // New state for displaying CampusID
+  const [userDisplay, setUserDisplay] = useState(''); // New state for displaying CampusID
 
 
 
@@ -36,22 +39,28 @@ const AddCase = ({ addCase, user }) => {
 
 
   const handleStudentSelect = (selectedStudent) => {
-    setStudent(selectedStudent.CampusID); // Store object ID ** change to campusID
+    setStudent(selectedStudent._id); // Store object ID ** change to campusID
+    setStudentResultsVisible(false); // Hide the search results after selection
+    setStudentDisplay(selectedStudent.CampusID); // Store the CampusID for display in the UI
+
   };
 
   const handleUserSelect = (selectedUser) => {
-    setAssignedTo(selectedUser.username); // Store user username in the input field 
+    setAssignedTo(selectedUser._id); // Store user username in the input field 
+    setUserResultsVisible(false)
+    setUserDisplay(selectedUser.username); // Store the CampusID for display in the UI
+
   };
 
 
-  useEffect(() => {
-    console.log('Student search input:', student); // Logs the current student input
-    console.log('Student search results:', studentResults); // Logs the search results
-  }, [student, studentResults]);
+  // useEffect(() => {
+  //   console.log('Student search input:', student); // Logs the current student input
+  //   console.log('Student search results:', studentResults); // Logs the search results
+  // }, [student, studentResults]);
 
-  useEffect(() => {
-    console.log('studentResults has changed:', studentResults);
-  }, [studentResults]);
+  // useEffect(() => {
+  //   console.log('studentResults has changed:', studentResults);
+  // }, [studentResults]);
 
 // ensure all sections are filled in 
   const validateForm = () => {
@@ -114,10 +123,11 @@ const AddCase = ({ addCase, user }) => {
       navigate('/cases');  
   } catch (error) {
     console.error('Error adding case', error);
+    console.error('Error adding case', error.response.data); // Log the detailed error response from the server
   }
   };
 
-  console.log('Student Results:', studentResults);
+  console.log('Student Results from AddCase.jsx:', studentResults);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -171,9 +181,9 @@ const AddCase = ({ addCase, user }) => {
         <option value="medium" className="yellow-flag">🟡 Medium</option>
         <option value="low" className="green-flag">🟢 Low</option>
       </select>
-      {errors.priority && <p className="error">{errors.priority}</p>}
+      {/* {errors.priority && <p className="error">{errors.priority}</p>} */}
 
-      <label htmlFor="student">Student Number:</label>
+      {/* <label htmlFor="student">Student Number:</label>
       <input
         id="student"
         type="text"
@@ -181,33 +191,75 @@ const AddCase = ({ addCase, user }) => {
         value={student}
         onChange={(e) => {
           setStudent(e.target.value);
-          setStudentResultsVisible(true);
+          //setStudentResultsVisible(true);
+          console.log("this is the visibility::::", setStudentResultsVisible);
         }}
         onFocus={() => setStudentResultsVisible(true)}
         onBlur={() => setTimeout(() => setStudentResultsVisible(false), 200)}
       />
       {errors.student && <p className="error">{errors.student}</p>}
 
-      {studentResults.length > 0 && studentResultsVisible && (
+      { studentResults.length > 0 && (
         <ul className="student-results">
-          {studentResults.map((s) => (
-            <li key={s._id} onClick={() =>  { console.log('Selected student:', student);
+          {studentResults.map((student) => (
+            <li key={student._id} onClick={() =>  { console.log('Selected student:', student);
             handleStudentSelect(s);}} >
-              {s.CampusID} - {s.firstName} {s.lastName}
+              {student.CampusID} - {student.firstName} {student.lastName}
             </li>
           ))}
         </ul>
-      )}
+      )} */}
+    <div className="add-case-input-container" style={{ position: 'relative' }}>
+      <label htmlFor="student">Student Number:</label>
+      <input
+        id="student"
+        type="text"
+        placeholder="Student Number"
+        value={studentDisplay}
+        onChange={(e) => {
+          setStudent(e.target.value);
+          setStudentResultsVisible(true); // Show results when typing
+          setStudentDisplay(e.target.value)
+          console.log('Student Results in AddCase2:', studentResults);
 
+        }}
+        onFocus={() => setStudentResultsVisible(true)}
+        onBlur={() => setTimeout(() => setStudentResultsVisible(false), 200)}
+        style={{ width: '100%' }} // This makes sure the input takes full container width
+      />
+    
+      {studentResultsVisible && studentResults.length > 0 && (
+        <ul className="student-results">
+          {studentResults.map((student) => (
+            <li key={student._id} onClick={() => {
+              // setStudent(student.CampusID);
+              // setStudentResultsVisible(false);
+              handleStudentSelect(student)
+              console.log('Student set to:', student.CampusID);
+          }}>
+              {student.CampusID} - {student.firstName} {student.lastName}
+          </li>
+
+          ))}
+        </ul>
+      )}
+</div>
+
+<div className="add-case-input-container" style={{ position: 'relative' }}>
       <label htmlFor="assignedTo">Assigned To:</label>
       <input
         id="assignedTo"
         type="text"
         placeholder="Assigned To"
-        value={assignedTo}
-        onChange={(e) => setAssignedTo(e.target.value)}
+        value={userDisplay}
+        onChange={(e) => {
+          setAssignedTo(e.target.value)
+          setUserResultsVisible(true)
+          setUserDisplay(e.target.value)
+
+        }}
       />
-      {userResults.length > 0 && (
+      {userResultsVisible && userResults.length > 0 && (
         <ul className="user-results">
           {userResults.map((user) => (
             <li key={user._id} onClick={() => handleUserSelect(user)}>
@@ -216,6 +268,7 @@ const AddCase = ({ addCase, user }) => {
           ))}
         </ul>
       )}
+    </div>
 
       <label htmlFor="status">Status:</label>
       <select

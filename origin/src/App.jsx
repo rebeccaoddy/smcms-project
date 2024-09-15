@@ -4,7 +4,6 @@ import TopNavBar from './components/TopNavBar';
 import CaseList from './components/CaseList';
 import AddCase from './components/AddCase';
 import CaseDetail from './components/CaseDetail';
-import SidePanel from './components/SidePanel';
 import Login from './components/Login';
 import Register from './components/Register';
 import StudentDetailPage from './components/StudentDetailPage';
