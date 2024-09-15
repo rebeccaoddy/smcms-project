@@ -38,7 +38,7 @@ const SecondaryApp = () => {
 };
 
 const Login = () => {
-  const location = useLocation();
+  //const location = useLocation();
   
   // // Check if the current route is the login route
   // const isLoginRoute = location.pathname === "/";
