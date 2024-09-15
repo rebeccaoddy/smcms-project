@@ -1,8 +1,9 @@
 # Overview
 This project comprises two main components:
 
-Case Management System: A robust system designed to manage and track cases efficiently.
-Student Monitoring Dashboard: A comprehensive dashboard for monitoring and analyzing student performance.
+Case Management System: A system designed to manage and track student cases efficiently.
+
+Student Monitoring Dashboard: This is a web-based application designed to enhance academic tracking and support for the Science Faculty, at the University of Cape Town. It is built on the MERN stack and features a dashboard that provides tracking of individual students, courses, programs, and faculty performance.
 
 # Installation and Setup
 To get started with this application, follow these steps:
@@ -25,7 +26,10 @@ Double-click on windows-start-app.bat to start the application. This script will
 The applicaion will automatically be opened in your browser.
 
 ### Mac/Linux
-Inside the extracted code directory, locate the mac-start-app.sh file. This script will install all the necessary dependencies, and automatically start the application in your browser/
+Inside the extracted code directory, locate the mac-start-app.sh file. This script will install all the necessary dependencies, and automatically start the application in your browser.
+
+## Database
+The application connects to a MongoDB Atlas cluster to store and retrieve its data. The MongoDB Atlas cluster hosts the relevant collections containing all the necessary data for the application. The backend accesses the database through the MongoDB Node.js driver, allowing seamless integration and efficient data management.
 
 ## Troubleshooting
 If the application does not start:

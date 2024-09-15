@@ -9,13 +9,13 @@ npm install
 echo "Starting origin application..."
 npm start &
 
-# Navigate to the HonsProj-master directory and install dependencies
-cd ../HonsProj-master || exit
-echo "Installing dependencies for HonsProj-master..."
+# Navigate to the StudentMonitoringSystem directory and install dependencies
+cd ../StudentMonitoringSystem || exit
+echo "Installing dependencies for StudentMonitoringSystem..."
 npm install
 
-# Start the HonsProj-master application
-echo "Starting HonsProj-master application..."
+# Start the StudentMonitoringSystem application
+echo "Starting StudentMonitoringSystem application..."
 npm start &
 
 # Return to the original directory
