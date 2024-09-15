@@ -31,6 +31,11 @@ const App = () => {
 // Check if the current route is the login or register page
 const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
 
+// // Clear the token when the app starts to force login every time
+// useEffect(() => {
+//   localStorage.removeItem('token'); // Clear token on page load
+//   setUser(null); // Clear user state
+// }, []);
 
 
 //get user details from login
