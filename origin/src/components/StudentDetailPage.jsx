@@ -99,7 +99,7 @@ const StudentDetailPage = ({ CampusID, selectCase }) => {
         <div>
           <p>Name: </p>
           <p>Student Number: {studentDetail.CampusID}</p>
-          <p>Birth Date: {studentDetail.BirthDate}</p>
+          <p>Birth Date: {new Date(studentDetail.BirthDate).toLocaleDateString()}</p>
           <p>Population Group: {studentDetail.PopulationGrp}</p>
           <p>Gender: {studentDetail.Gender}</p>
           <p>Risk Level: {studentDetail.RiskLevel}</p>

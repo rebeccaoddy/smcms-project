@@ -8,7 +8,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import StudentDetailPage from './components/StudentDetailPage';
 import UserProfile from './components/UserProfile';
-import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 
 
 ///testing commit to branch
@@ -16,15 +16,7 @@ import './App.css';
 
 const MainApp = () => {
   window.location.href = "http://localhost:3000/faculty"
-  // const handleNavigation = () => {
 
-  //   window.location.href = "http://localhost:3000/faculty"
-  // };
-  // return (
-  //   <button onClick={handleNavigation}>
-  //     Go to Dashboard
-  //   </button>
-  // );
   };
 
 const App = () => {
@@ -35,7 +27,6 @@ const App = () => {
   const [selectedStudentId, setSelectedStudentId] = useState(null);
   const [selectedStudentNumber, setSelectedStudentNumber] = useState(null);
   const navigate = useNavigate(); // Use this to navigate programmatically
-  const location = useLocation();
 
 
 
@@ -83,12 +74,6 @@ const App = () => {
     navigate('/cases/detail'); // Navigate to case detail view
   };
 
-  // //view student id --DELETE ???
-  // const selectStudent = (studentId) => {
-  //   console.log('Student ID to Select:', studentId);
-  //   setSelectedStudentId(studentId);
-  //   setCurrentView('studentDetails');
-  // };
 
   //logout
   const handleLogout = () => {
@@ -103,56 +88,68 @@ const App = () => {
     setCases(cases.map(c => c._id === updatedCase._id ? updatedCase : c));
     setSelectedCase(updatedCase); // Update the selected case with the new details
   };
+  
 
 
 
   return (
     <div className="App">
-      {/* Conditionally render TopNavBar only if not on /login route */}
-      {location.pathname !== '/login' && (
-        <TopNavBar
-          user={user}
-          handleLogout={handleLogout}
-          setSelectedStudentNumber={setSelectedStudentNumber}
-        />
-      )}
+      {/* <SidePanel 
+        user={user} 
+        //setCurrentView={setCurrentView} 
+        handleLogout={handleLogout} 
+        setSelectedStudentNumber={setSelectedStudentNumber} //pass setter function
+        /> 
+      </div><div className="app-container">*/}
+      <TopNavBar
+        user={user}
+        handleLogout={handleLogout}
+        setSelectedStudentNumber={setSelectedStudentNumber}
+      />
       <div className="content">
-        <Routes>
-          <Route
-            path="/login"
-            element={<Login setUser={setUser} />}
-          />
-          <Route
-            path="/register"
-            element={<Register setUser={setUser} />}
-          />
-          <Route
-            path="/cases"
-            element={<CaseList cases={cases} setCases={setCases} selectCase={selectCase} user={user} />}
-          />
-          <Route
-            path="/cases/add"
-            element={<AddCase addCase={addCase} user={user} />}
-          />
-          <Route
-            path="/cases/detail"
-            element={<CaseDetail caseDetail={selectedCase} setSelectedStudentNumber={setSelectedStudentNumber} />}
-          />
-          <Route
-            path="/student-details"
-            element={<StudentDetailPage CampusID={selectedStudentNumber} selectCase={selectCase} />}
-          />
-          <Route
-            path="/faculty"
-            element={<MainApp user={user}/>}
-          />
-          <Route
-            path="/profile"
-            element={<UserProfile user={user} />}
-          />
-        </Routes>
+          <Routes>
+            <Route
+              path="/login"
+              element={<Login setUser={setUser} />}
+            />
+            <Route
+              path="/register"
+              element={<Register setUser={setUser} />}
+            />
+            <Route
+              path="/cases"
+              element={<CaseList cases={cases} setCases={setCases} selectCase={selectCase} user={user} />}
+            />
+            <Route
+              path="/cases/add"
+              element={<AddCase addCase={addCase} user={user} />}
+              
+            />
+            <Route
+              path="/cases/detail"
+              element={<CaseDetail caseDetail={selectedCase} setSelectedStudentNumber={setSelectedStudentNumber} />}
+            />
+            <Route
+              path="/student-details"
+              element={<StudentDetailPage CampusID={selectedStudentNumber} selectCase={selectCase} />}
+            />
+            <Route
+              path="/faculty"
+              element={<MainApp user={user}/>}
+            />
+
+
+            <Route
+              path="/profile"
+              element={<UserProfile user={user} />}
+            />
+            {/* <Route
+              path="*"
+              element={user ? <CaseList cases={cases} setCases={setCases} selectCase={selectCase} user={user} /> : <Login setUser={setUser} />}
+            /> */}
+          </Routes>
+        </div>
       </div>
-    </div>
   );
 };
 
