@@ -9,7 +9,9 @@ import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import LogoutOutlined from "@mui/icons-material/LogoutOutlined";  
 import { CasesOutlined } from "@mui/icons-material";
+
 
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
@@ -60,79 +62,91 @@ const NavBar = () => {
         }}
       >
         <ProSidebar collapsed={isCollapsed}>
-          <Menu iconShape="square">
-            {/* MENU */}
-            
-            <MenuItem
-              onClick={() => setIsCollapsed(!isCollapsed)}
-              icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
-              style={{
-                margin: "10px 0 20px 0",
-                color: colors.grey[100],
-              }}
-            >
-              {!isCollapsed && (
-                <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  alignItems="center"
-                  ml="15px"
-                >
-                  <Typography variant="h3" color={colors.grey[100]}>
-                    MENU
-                  </Typography>
-                  <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
-                    <MenuOutlinedIcon />
-                  </IconButton>
-                </Box>
-              )}
-            </MenuItem>
-            
-            <Box paddingLeft={isCollapsed ? undefined : "10%"}>
-              <Item
-                title="Science Faculty"
-                to="/faculty"
-                icon={<PeopleOutlinedIcon />}
-                selected={selected}
-                setSelected={setSelected}
-              />
-              <Item
-                title="Program"
-                to="/program"
-                icon={<ReceiptOutlinedIcon />}
-                selected={selected}
-                setSelected={setSelected}
-              />
-              <Item
-                title="Course"
-                to="/course"
-                icon={<SchoolOutlinedIcon />}
-                selected={selected}
-                setSelected={setSelected}
-              />
-              <Item
-                title="Student"
-                to="/student"
-                icon={<PersonOutlineOutlinedIcon />}
-                selected={selected}
-                setSelected={setSelected}
-              />
-
-              {/* Add the link to the secondary application */}
+          {/* Main Menu Area */}
+          <Box flex="1"> {/* Flex-grow to push the bottom items */}
+            <Menu iconShape="square">
               <MenuItem
+                onClick={() => setIsCollapsed(!isCollapsed)}
+                icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
                 style={{
+                  margin: "10px 0 20px 0",
                   color: colors.grey[100],
                 }}
-                icon={<CasesOutlined />}
               >
-                <Typography>
-                  <Link to="/cases" style={{ textDecoration: 'none', color: 'inherit' }}>
-                    Case Management
-                  </Link>
-                </Typography>
+                {!isCollapsed && (
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    ml="15px"
+                  >
+                    <Typography variant="h3" color={colors.grey[100]}>
+                      MENU
+                    </Typography>
+                    <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
+                      <MenuOutlinedIcon />
+                    </IconButton>
+                  </Box>
+                )}
               </MenuItem>
-            </Box>
-          </Menu>
+              
+              <Box paddingLeft={isCollapsed ? undefined : "10%"}>
+                <Item
+                  title="Science Faculty"
+                  to="/faculty"
+                  icon={<PeopleOutlinedIcon />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+                <Item
+                  title="Program"
+                  to="/program"
+                  icon={<ReceiptOutlinedIcon />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+                <Item
+                  title="Course"
+                  to="/course"
+                  icon={<SchoolOutlinedIcon />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+                <Item
+                  title="Student"
+                  to="/student"
+                  icon={<PersonOutlineOutlinedIcon />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+                <Item
+                  title="Case Management"
+                  to="/cases"
+                  icon={<CasesOutlined />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+              </Box>
+            </Menu>
+          </Box>
+
+           {/* Bottom Section - Logout */}
+        <Box paddingLeft={isCollapsed ? undefined : "10%"}>
+          <MenuItem
+            style={{
+              color: colors.grey[100],
+              display: 'flex',
+              justifyContent: isCollapsed ? 'center' : 'start', // Center icon when collapsed
+              padding: "5px 35px 5px 20px", // Same padding as other items
+            }}
+            icon={<LogoutOutlined />} // Standard Logout icon
+            onClick={() => {
+              window.location.href = "http://localhost:5173/login";
+            }}
+          >
+            {!isCollapsed && <Typography>Logout</Typography>} {/* Show only text when not collapsed */}
+          </MenuItem>
+        </Box>
         </ProSidebar>
       </Box>
     );

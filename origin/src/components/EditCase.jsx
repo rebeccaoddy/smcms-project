@@ -4,15 +4,31 @@ import BackButton from './BackButton';
 import './EditCase.css'; // Import the stylesheet for styling
 import { useNavigate } from 'react-router-dom';
 
-const EditCase = ({ caseDetail, onUpdate, setActiveTab }) => {
+const EditCase = ({ caseDetail, onUpdate = () => {}, setActiveTab }) => {
   const [title, setTitle] = useState(caseDetail.title);
   const [description, setDescription] = useState(caseDetail.description);
   const [priority, setPriority] = useState(caseDetail.priority);
   const [status, setStatus] = useState(caseDetail.status);
   const [category, setCategory] = useState(caseDetail.category);
   const [error, setError] = useState(null); // State for error handling
-  
-  
+  const navigate = useNavigate();
+
+  // List of categories for the dropdown
+  const categories = [
+    'Student Wellness Concern - Mental',
+    'Student Wellness Concern - Physical',
+    'Student Misdemeanor',
+    'Administration Issue',
+    'Student Academic Dishonesty',
+    'DPR Status/Appeal',
+    'Curriculumn advice',
+    'General advice',
+    'Record of Appointment',
+    'Financial Issue',
+    'Lost Property',
+    'URGENT',
+    'Other'
+  ];
 
   const handleSave = async () => {
     const updatedCase = {
@@ -35,11 +51,11 @@ const EditCase = ({ caseDetail, onUpdate, setActiveTab }) => {
         }
       );
 
-      onUpdate(response.data); // Update the parent component with the new case details
-      navigate('/cases') // Switch back to the details tab after saving
+      onUpdate(response.data); // Call the onUpdate prop to notify the parent component about the change
+      navigate('/cases'); // Navigate back to the case list after saving
     } catch (error) {
       console.error('Error updating case', error);
-      //setError('Failed to update the case. Please try again.'); // Set error message
+      setError('Failed to update the case. Please try again.');
     }
   };
 
@@ -62,7 +78,6 @@ const EditCase = ({ caseDetail, onUpdate, setActiveTab }) => {
       <div className="form-group">
         <label>Description</label>
         <textarea
-          type = "text"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Description"
@@ -89,12 +104,14 @@ const EditCase = ({ caseDetail, onUpdate, setActiveTab }) => {
 
       <div className="form-group">
         <label>Category</label>
-        <input
-          type="text"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          placeholder="Category"
-        />
+        <select value={category} onChange={(e) => setCategory(e.target.value)}>
+          <option value="">Select Category</option>
+          {categories.map((cat, index) => (
+            <option key={index} value={cat}>
+              {cat}
+            </option>
+          ))}
+        </select>
       </div>
 
       <button className="save-button" onClick={handleSave}>Save</button>

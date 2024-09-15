@@ -30,12 +30,13 @@ const TopNavBar = ({ user, handleLogout, setSelectedStudentNumber }) => {
     }
     setSelectedStudentNumber(studentNumberInput.trim());
     navigate('/student-details');
+    setStudentNumberInput(''); // Reset the input field after submission
     setStudentResultsVisible(false);
   };
 
   return (
     <div className="top-nav-bar">
-      <div className="logo" onClick={() => navigate('/')}>
+      <div className="logo" onClick={() => navigate('/cases')}>
         <h1>Case Management System</h1>
       </div>
       <form className="search-form" onSubmit={handleSearchSubmit}>
@@ -63,11 +64,12 @@ const TopNavBar = ({ user, handleLogout, setSelectedStudentNumber }) => {
           </ul>
         )}
       </form>
-      <div className="nav-links">
-        <button onClick={() => navigate('/cases')}>          
-        <FontAwesomeIcon icon={faHome} /> {/* Home icon */}
-        </button>
-        {user ? (
+      {/*<div className="nav-links">
+         <button onClick={() => navigate('/cases')}>          
+        <FontAwesomeIcon icon={faHome} /> {/* Home icon 
+        </button> 
+      */}
+        {/* {user ? (
           <>
             <span className="user-info">Hello, {user.username}</span>
             <button onClick={() => navigate('/profile')}>Profile</button>
@@ -78,8 +80,8 @@ const TopNavBar = ({ user, handleLogout, setSelectedStudentNumber }) => {
             <button onClick={() => navigate('/login')}>Login</button>
             <button onClick={() => navigate('/register')}>Register</button>
           </>
-        )}
-      </div>
+        )} 
+      </div>*/}
     </div>
   );
 };

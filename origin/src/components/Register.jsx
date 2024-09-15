@@ -15,7 +15,7 @@ const Register = ({ setUser }) => {
       const response = await axios.post('http://localhost:5001/api/auth/register', { username, password });
       localStorage.setItem('token', response.data.token); // Store the token
       setUser(response.data);
-      navigate('/cases');
+      navigate('/faculty');
     } catch (error) {
       console.error('Error registering', error);
     }
