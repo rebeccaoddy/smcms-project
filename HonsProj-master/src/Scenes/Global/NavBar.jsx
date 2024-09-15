@@ -63,7 +63,7 @@ const NavBar = () => {
       >
         <ProSidebar collapsed={isCollapsed}>
           {/* Main Menu Area */}
-          <Box flex="1"> {/* Flex-grow to push the bottom items */}
+          <Box flex="1"> 
             <Menu iconShape="square">
               <MenuItem
                 onClick={() => setIsCollapsed(!isCollapsed)}

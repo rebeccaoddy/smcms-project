@@ -4,7 +4,7 @@ import { tokens } from "../../../theme";
 import { useTheme } from "@mui/material/styles";
 import Header from '../../../components/Header';
 import { ButtonBase, Typography, Box} from '@mui/material';
-import { getPrograms } from '../../../Data/ProgramData/ProgramData'; // Adjust the import based on your data fetching method
+import { getPrograms } from '../../../Data/ProgramData/ProgramData'; 
 
 const Program = () => {
   const theme = useTheme();

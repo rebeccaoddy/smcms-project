@@ -34,15 +34,7 @@ const Topbar = () => {
         Student Analytic Dashboard
       </Typography>
 
-      <Box display="flex" justifyContent="flex-end"> 
-        <IconButton onClick={colorMode.toggleColorMode}>
-          {theme.palette.mode === "dark" ? (
-            <DarkModeOutlinedIcon />
-          ) : (
-            <LightModeOutlinedIcon />
-          )}
-        </IconButton>
-      </Box>  
+        
       
     </Box>
     

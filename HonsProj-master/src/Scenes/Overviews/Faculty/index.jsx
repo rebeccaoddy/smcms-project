@@ -232,7 +232,7 @@ const Faculty = () => {
                 setSelectedOption={setSelectedYear}
                 sx={{
                 
-                ml: 'auto', // This will push the button to the right if there are elements on its left
+                ml: 'auto', 
                 }}
             />  
         </Box>

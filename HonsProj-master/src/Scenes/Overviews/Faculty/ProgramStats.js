@@ -16,7 +16,7 @@ const ProgramStats = () => {
   useEffect(() => {
     const fetchProgramData = async () => {
       try {
-        const data = await getPrograms(); // Fetch program data from your data source
+        const data = await getPrograms(); // Fetch program data 
 
         // Calculate average GPA
         const calculateAverageGPA = (programs) => {
@@ -146,7 +146,7 @@ const ProgramStats = () => {
 
       {Toggle === 'GPA' && <BarChart data={averageGPAData} yScaleMin={0} yScaleMax={100} showYTicks = {true} isMarksData={true} yAxisLabel="Average GPA" title="Average GPA by program" />}
       {Toggle === 'MARKS' && <BarChart data={averageMarksData} yScaleMin={0} yScaleMax={100} showYTicks = {true} isMarksData={true} yAxisLabel="Average Marks" title="Average Marks by program"/>}
-      {Toggle === 'RISK' && <BarChart data={averageAtRiskData} yAxisLabel="Students at Risk" title="Average Risk by program" />}
+      {Toggle === 'RISK' && <BarChart data={averageAtRiskData} yAxisLabel="Students at Risk" title="Students at Risk by program" />}
 </Box>
 
 

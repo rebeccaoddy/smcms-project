@@ -53,7 +53,7 @@ function App() {
           <main className="content">
             {!isLoginRoute && <Topbar />} {/* Render Topbar only if it's not the login route */}
             <Routes>
-              {/* <Route path="/login" element={<SecondaryApp />} /> */}
+              <Route path="/login" element={<SecondaryApp />} /> 
               <Route path="/Faculty" element={<Faculty />} />
               <Route path="/Program" element={<Program />} />
               <Route path="/Student" element={<Student />} />

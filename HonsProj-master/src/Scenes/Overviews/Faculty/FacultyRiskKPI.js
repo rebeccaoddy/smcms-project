@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Grid, useTheme, Box, Typography, List, ListItem, ListItemText } from '@mui/material';
 import KpiCard from '../../../components/KpiCard';
-import PersonIcon from '@mui/icons-material/Person';
 import { Link } from 'react-router-dom';
 import { tokens } from '../../../theme';
 import { People } from '@mui/icons-material';
@@ -16,6 +15,7 @@ const FacultyRiskKPI = ({ riskStats }) => {
     setSelectedRiskLevel(selectedRiskLevel === riskLevel ? null : riskLevel);
   };
 
+  // Function to render a list of students for a given risk level
   const renderStudentList = (riskLevel) => (
     <Box mt={2} p={2} backgroundColor={colors.primary[400]} borderRadius="10px" maxHeight="120px" overflow="auto">
       <Typography variant="h6">Students at {riskLevel} Level:</Typography>
@@ -29,7 +29,7 @@ const FacultyRiskKPI = ({ riskStats }) => {
                   
                   style={{ textDecoration: 'none', color: 'inherit' }}
                 >
-                  {`${student[0]}: ${student[1]}`} {/* Adjust the format as needed */}
+                  {`${student[0]}: ${student[1]}`} 
                 </Link>
               }
             />
@@ -41,6 +41,8 @@ const FacultyRiskKPI = ({ riskStats }) => {
 
   return (
     <Grid container spacing={2} sx={{ width: '100%' }}>
+
+      {/* Low Risk KPI Card */}
       <Grid item xs={4}>
         {selectedRiskLevel === 'Low Risk' ? (
           renderStudentList('Low Risk')
@@ -71,7 +73,8 @@ const FacultyRiskKPI = ({ riskStats }) => {
           </Box>
         )}
       </Grid>
-
+      
+      {/* medium Risk KPI Card */}
       <Grid item xs={4}>
         {selectedRiskLevel === 'Medium Risk' ? (
           renderStudentList('Medium Risk')
@@ -102,7 +105,8 @@ const FacultyRiskKPI = ({ riskStats }) => {
           </Box>
         )}
       </Grid>
-
+      
+      {/* High Risk KPI Card */}
       <Grid item xs={4}>
         {selectedRiskLevel === 'High Risk' ? (
           renderStudentList('High Risk')
